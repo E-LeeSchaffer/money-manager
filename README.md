@@ -1,19 +1,15 @@
-# New Next Project
+# Money Manager
 
-### Local Development
+## Description
 
-To work locally, please install the dependencies using `npm i` first.
+Money Manager empowers users to track, manage, and analyse their expenses and savings with ease, fostering better financial habits and decision-making. The app offers tools for recording, editing, deleting, and filtering transactions, as well as viewing detailed transaction information and budget summaries.
 
-Run `npm run dev` to start a development server and open the displayed URL in a browser.
+### Main Features
 
-Use `npm run test` to run the tests.
-
-### Scripts
-
-You can use the following commands:
-
-- `npm run dev` to start a development server
-- `npm run build` to build the project
-- `npm run start` to start a production server
-- `npm run test` to run the tests
-- `npm run lint` to run the linter
+- **Transactions List:** Browse a well-organised collection of transactions.
+- **Create Transaction:** Record and categorise transactions.
+- **Delete Transaction:** Remove incorrect transactions.
+- **Update Transaction:** Edit and modify existing transactions.
+- **Account Balance:** See the total balance of transactions.
+- **Income/Expense View:** View transactions separated by income and expenses.
+- **Filter Transactions:** Filter transactions based on various criteria.
