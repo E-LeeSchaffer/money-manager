@@ -16,35 +16,47 @@ export default function TransactionItem({ transaction }) {
   };
   return (
     <>
-      <p>{formatDate(transaction.date)}</p>
-
+      <StyledDate>{formatDate(transaction.date)}</StyledDate>
       <StyledCard>
-        <p>{transaction.id}</p>
-        <StyledContainer>
-          <p>{transaction.category}</p>
-
-          <StyledAmount type={transaction.type}>
-            {transaction.amount}
-          </StyledAmount>
-        </StyledContainer>
+        <StyledId className="id">{transaction.id}</StyledId>
+        <StyledCategory className="category">
+          {transaction.category}
+        </StyledCategory>
+        <StyledAmount className="amount" type={transaction.type}>
+          {transaction.amount} €
+        </StyledAmount>
       </StyledCard>
     </>
   );
 }
 
+const StyledCard = styled.div`
+  border: 1px solid black;
+  border-radius: 16px;
+  padding: 4px 16px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: 1fr 1fr;
+  line-height: 0;
+`;
+
+const StyledDate = styled.p`
+  font-size: 12px;
+`;
+
+const StyledId = styled.p`
+  grid-column: 1/2;
+  grid-row: 1;
+  font-weight: bold;
+`;
+
+const StyledCategory = styled.p`
+  grid-column: 1/2;
+  grid-row: 2;
+`;
+
 const StyledAmount = styled.p`
   color: ${(transaction) => (transaction.type === "expense" ? "red" : "green")};
-`;
-
-const StyledCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  border: 1px solid black;
-  border-radius: 4px;
-  padding: 4px 16px;
-`;
-
-const StyledContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
+  grid-column: 2/2;
+  grid-row: 2;
 `;
