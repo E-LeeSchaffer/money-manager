@@ -24,7 +24,7 @@ export default function TransactionItem({ transaction }) {
     <>
       <StyledDate>{formatDate(transaction.date)}</StyledDate>
       <StyledCard>
-        <StyledId>{transaction.id}</StyledId>
+        <StyledName>{transaction.name}</StyledName>
         <StyledCategory>{transaction.category}</StyledCategory>
         <StyledAmount type={transaction.type}>{formatNumber}</StyledAmount>
       </StyledCard>
@@ -46,15 +46,16 @@ const StyledDate = styled.p`
   font-size: 12px;
 `;
 
-const StyledId = styled.p`
+const StyledName = styled.p`
   grid-column: 1/2;
   grid-row: 1;
-  font-weight: bold;
+  font-weight: 500;
 `;
 
 const StyledCategory = styled.p`
   grid-column: 1/2;
   grid-row: 2;
+  font-size: 14px;
 `;
 
 const StyledAmount = styled.p`
