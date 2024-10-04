@@ -58,7 +58,7 @@ const StyledCategory = styled.p`
 `;
 
 const StyledAmount = styled.p`
-  color: ${(transaction) => (transaction.type === "expense" ? "red" : "green")};
+  color: ${(props) => (props.type === "expense" ? "red" : "green")};
   grid-column: 2/2;
   grid-row: 2;
 `;
