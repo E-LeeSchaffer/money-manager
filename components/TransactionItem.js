@@ -18,11 +18,9 @@ export default function TransactionItem({ transaction }) {
     <>
       <StyledDate>{formatDate(transaction.date)}</StyledDate>
       <StyledCard>
-        <StyledId className="id">{transaction.id}</StyledId>
-        <StyledCategory className="category">
-          {transaction.category}
-        </StyledCategory>
-        <StyledAmount className="amount" type={transaction.type}>
+        <StyledId>{transaction.id}</StyledId>
+        <StyledCategory>{transaction.category}</StyledCategory>
+        <StyledAmount type={transaction.type}>
           {transaction.amount} €
         </StyledAmount>
       </StyledCard>
