@@ -1,8 +1,8 @@
 import TransactionForm from "@/components/TransactionForm";
 import TransactionsList from "@/components/TransactionsList";
 import { transactions } from "@/lib/transactions";
+import { ulid } from "ulid";
 import useLocalStorageState from "use-local-storage-state";
-import { v4 as uuidv4 } from "uuid";
 
 export default function HomePage() {
   const [transactionsList, setTransactionsList] = useLocalStorageState(
@@ -11,7 +11,10 @@ export default function HomePage() {
   );
 
   function handleAddTransaction(data) {
-    setTransactionsList([{ ...data, id: uuidv4() }, ...transactionsList]);
+    setTransactionsList([
+      { ...data, id: ulid(), currency: "EUR" },
+      ...transactionsList,
+    ]);
   }
 
   return (

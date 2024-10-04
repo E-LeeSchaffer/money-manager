@@ -1,4 +1,5 @@
 import { categories } from "@/lib/categories";
+import CurrencyInput from "react-currency-input-field";
 
 export default function TransactionForm({ onAdd }) {
   const today = new Date().toISOString().split("T")[0];
@@ -8,7 +9,15 @@ export default function TransactionForm({ onAdd }) {
 
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
+
+    if (data.amount) {
+      data.amount = parseFloat(
+        data.amount.replace(/\./g, "").replace(",", ".")
+      );
+    }
+
     onAdd(data);
+
     event.target.reset();
   }
 
@@ -18,22 +27,31 @@ export default function TransactionForm({ onAdd }) {
         <fieldset>
           <legend>Add a new transaction</legend>
           <label htmlFor="name">Name</label>
-          <input type="text" id="name" name="name" required></input>
-          <label htmlFor="amount">Amount</label>
           <input
-            type="number"
+            type="text"
+            id="name"
+            name="name"
+            maxLength={40}
+            required
+          ></input>
+          <label htmlFor="amount">Amount</label>
+          <CurrencyInput
             id="amount"
             name="amount"
             min="1"
+            maxLength="12"
+            fixedDecimalLength="2"
+            intlConfig={{ locale: "de-DE", currency: "EUR" }}
             required
-          ></input>
+          ></CurrencyInput>
           <label htmlFor="category">Category</label>
           <select id="category" name="category" required>
-            <option value="defaultSelect" disabled selected>
-              Please select an option
-            </option>
             {categories.map((category) => (
-              <option key={category.id} value={category.name}>
+              <option
+                key={category.id}
+                value={category.name}
+                disabled={category.id === "0" ? true : false}
+              >
                 {category.name}
               </option>
             ))}

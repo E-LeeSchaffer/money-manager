@@ -21,15 +21,18 @@ export default createGlobalStyle`
     list-style: none;
    
   }
-h1 {
+
+  h1 {
   text-align: center;
   font-size: 18px;
-}
+  }
 
-h2 {
+ h2 {
   text-align: center;
   font-size: 24px;
+ }
 
-}
-
+ p {
+  margin: 0;
+ }
 `;
