@@ -45,7 +45,12 @@ export default function TransactionForm({ onAdd }) {
             required
           ></CurrencyInput>
           <label htmlFor="category">Category</label>
-          <select id="category" name="category" required>
+          <select
+            id="category"
+            name="category"
+            required
+            defaultValue={categories[0].name}
+          >
             {categories.map((category) => (
               <option
                 key={category.id}
