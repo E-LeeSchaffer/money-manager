@@ -14,15 +14,19 @@ export default function TransactionItem({ transaction }) {
       return format(newDateFormat, "dd.MM.yyyy");
     }
   };
+
+  const formatNumber = new Intl.NumberFormat("de-DE", {
+    style: "currency",
+    currency: "EUR",
+  }).format(transaction.amount);
+
   return (
     <>
       <StyledDate>{formatDate(transaction.date)}</StyledDate>
       <StyledCard>
         <StyledId>{transaction.id}</StyledId>
         <StyledCategory>{transaction.category}</StyledCategory>
-        <StyledAmount type={transaction.type}>
-          {transaction.amount} €
-        </StyledAmount>
+        <StyledAmount type={transaction.type}>{formatNumber}</StyledAmount>
       </StyledCard>
     </>
   );
