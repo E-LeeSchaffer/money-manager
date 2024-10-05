@@ -28,26 +28,30 @@ export default function TransactionForm({ onAdd }) {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <fieldset>
-          <legend>Add a new transaction</legend>
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            maxLength={40}
-            required
-          ></input>
-          <label htmlFor="amount">Amount</label>
-          <CurrencyInput
-            id="amount"
-            name="amount"
-            min="1"
-            maxLength="12"
-            fixedDecimalLength="2"
-            intlConfig={{ locale: "de-DE", currency: "EUR" }}
-            required
-          ></CurrencyInput>
+        <StyledFieldset>
+          <StyledLegend>Add a new transaction</StyledLegend>
+          <div>
+            <label htmlFor="name">Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              maxLength={40}
+              required
+            ></input>
+          </div>
+          <div>
+            <label htmlFor="amount">Amount</label>
+            <CurrencyInput
+              id="amount"
+              name="amount"
+              min="1"
+              maxLength="12"
+              fixedDecimalLength="2"
+              intlConfig={{ locale: "de-DE", currency: "EUR" }}
+              required
+            ></CurrencyInput>
+          </div>
           <label htmlFor="category">Category</label>
           <select
             id="category"
@@ -96,12 +100,25 @@ export default function TransactionForm({ onAdd }) {
             defaultValue={today}
             required
           ></input>
-        </fieldset>
+        </StyledFieldset>
+
         <button type="submit">Add</button>
       </form>
     </>
   );
 }
+
+const StyledFieldset = styled.fieldset`
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledLegend = styled.legend`
+  padding: 6px;
+  text-align: center;
+  font-weight: 500;
+`;
 
 const StyledToggleButton = styled.div`
   display: flex;
