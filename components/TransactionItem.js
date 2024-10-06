@@ -33,7 +33,7 @@ export default function TransactionItem({ transaction }) {
 }
 
 const StyledCard = styled.div`
-  border: 0.1px solid #d4d4d4;
+  border: 0.1px solid var(--dark-grey-color);
   border-radius: 16px;
   padding: 12px 16px;
   display: grid;
@@ -53,23 +53,21 @@ const StyledDate = styled.p`
 `;
 
 const StyledName = styled.p`
-  grid-column: 1/2;
-  grid-row: 1;
   font-weight: 500;
   grid-area: name;
 `;
 
 const StyledCategory = styled.p`
-  grid-column: 1/2;
-  grid-row: 2;
   font-size: 14px;
   grid-area: category;
 `;
 
 const StyledAmount = styled.p`
-  color: ${(props) => (props.type === "expense" ? "#F44336" : "#4CAF50")};
-  grid-column: 2/2;
-  grid-row: 2;
+  color: ${(props) =>
+    props.type === "expense"
+      ? "var(--friendly-red-color)"
+      : "var(--friendly-green-color)"};
+
   grid-area: amount;
   text-align: end;
 `;

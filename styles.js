@@ -7,10 +7,19 @@ export default createGlobalStyle`
     box-sizing: border-box;
   }
 
+  :root {
+  --light-bg-color: #F7F9FB;
+  --dark-grey-color: #d4d4d4;
+  --accent-color: #4686cd;
+  --text-color-dark: #141414;
+  --friendly-red-color: #F44336;
+  --friendly-green-color: #4CAF50;
+  }
+
   body {
     margin: 0;
    font-family: sofia-pro, sans-serif;
-         background: #F7F9FB;
+         background: var(--light-bg-color);
 
   }
 
@@ -39,5 +48,9 @@ export default createGlobalStyle`
 
  p {
   margin: 0;
+ }
+
+ label {
+ font-size: 12px;
  }
 `;
