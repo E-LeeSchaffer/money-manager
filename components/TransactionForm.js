@@ -47,7 +47,7 @@ export default function TransactionForm({ onAdd }) {
               name="amount"
               min="1"
               maxLength="12"
-              fixedDecimalLength="2"
+              decimalsLimit={2}
               intlConfig={{ locale: "de-DE", currency: "EUR" }}
               required
             ></StyledCurrencyInput>
