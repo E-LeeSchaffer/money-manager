@@ -30,7 +30,8 @@ export default createGlobalStyle`
 
   ul {
    padding: 0;
-   margin: 24px;
+      margin: 5px;
+
   }
 
   li {

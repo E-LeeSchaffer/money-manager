@@ -1,13 +1,51 @@
+import { isToday, isYesterday } from "date-fns";
 import TransactionItem from "./TransactionItem";
+import styled from "styled-components";
+import { format } from "date-fns";
+
+const groupTransactionByDate = (transactions) => {
+  return transactions.reduce((groups, transaction) => {
+    const date = new Date(transaction.date);
+    let formatedDate;
+
+    if (isToday(date)) {
+      formatedDate = "Today";
+    } else if (isYesterday(date)) {
+      formatedDate = "Yesterday";
+    } else {
+      formatedDate = format(date, "dd.MM.yyyy");
+    }
+
+    if (!groups[formatedDate]) {
+      groups[formatedDate] = [];
+    }
+
+    groups[formatedDate].push(transaction);
+    return groups;
+  }, {});
+};
 
 export default function TransactionsList({ transactions }) {
+  const groupedTransactions = groupTransactionByDate(transactions);
   return (
     <ul>
-      {transactions.map((transaction) => (
-        <li key={transaction.id}>
-          <TransactionItem transaction={transaction} />
+      {Object.keys(groupedTransactions).map((date) => (
+        <li key={date}>
+          <StyledDate>{date}</StyledDate>
+          <ul>
+            {groupedTransactions[date].map((transaction) => (
+              <li key={transaction.id}>
+                <TransactionItem transaction={transaction} />
+              </li>
+            ))}
+          </ul>
         </li>
       ))}
     </ul>
   );
 }
+
+const StyledDate = styled.h3`
+  font-size: 14px;
+  margin: 16px 0 8px 0;
+`;

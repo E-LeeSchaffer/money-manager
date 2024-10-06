@@ -1,20 +1,6 @@
 import styled from "styled-components";
-import { isToday, isYesterday, format } from "date-fns";
 
 export default function TransactionItem({ transaction }) {
-  const formatDate = (date) => {
-    if (!date) return "";
-    const newDateFormat = new Date(date);
-
-    if (isToday(newDateFormat)) {
-      return "Today";
-    } else if (isYesterday(newDateFormat)) {
-      return "Yesterday";
-    } else {
-      return format(newDateFormat, "dd.MM.yyyy");
-    }
-  };
-
   const formatNumber = new Intl.NumberFormat("de-DE", {
     style: "currency",
     currency: "EUR",
@@ -22,7 +8,7 @@ export default function TransactionItem({ transaction }) {
 
   return (
     <>
-      <StyledDate>{formatDate(transaction.date)}</StyledDate>
+      <StyledDate>{transaction.formatedDate}</StyledDate>
       <StyledCard>
         <StyledName>{transaction.name}</StyledName>
         <StyledCategory>{transaction.category}</StyledCategory>
@@ -37,6 +23,7 @@ const StyledCard = styled.div`
   border-radius: 16px;
   padding: 12px 16px;
   display: grid;
+  width: 20rem;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   align-items: center;
