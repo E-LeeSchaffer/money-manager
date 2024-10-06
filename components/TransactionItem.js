@@ -21,7 +21,7 @@ export default function TransactionItem({ transaction }) {
 const StyledCard = styled.div`
   border: 0.1px solid var(--dark-grey-color);
   border-radius: 16px;
-  padding: 12px 16px;
+  padding: 4px 16px;
   display: grid;
   width: 20rem;
   grid-template-columns: 1fr 1fr;
@@ -36,7 +36,7 @@ const StyledCard = styled.div`
 
 const StyledDate = styled.p`
   font-size: 12px;
-  margin: 12px 0;
+  margin: 4px 0;
 `;
 
 const StyledName = styled.p`
@@ -45,7 +45,7 @@ const StyledName = styled.p`
 `;
 
 const StyledCategory = styled.p`
-  font-size: 14px;
+  font-size: 12px;
   grid-area: category;
 `;
 
