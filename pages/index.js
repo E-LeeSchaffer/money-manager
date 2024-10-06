@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import TransactionForm from "@/components/TransactionForm";
 import TransactionsList from "@/components/TransactionsList";
 import { transactions } from "@/lib/transactions";
@@ -19,9 +20,7 @@ export default function HomePage() {
 
   return (
     <>
-      <header>
-        <h1>Money Manager</h1>
-      </header>
+      <Header />
       <main>
         <h2>Transactions</h2>
         <TransactionForm onAdd={handleAddTransaction} />

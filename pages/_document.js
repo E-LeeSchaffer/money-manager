@@ -26,6 +26,10 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
+        <link
+          rel="stylesheet"
+          href="https://use.typekit.net/xww8hme.css"
+        ></link>
         <Head />
         <body>
           <Main />

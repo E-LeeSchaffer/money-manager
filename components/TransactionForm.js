@@ -27,7 +27,7 @@ export default function TransactionForm({ onAdd }) {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <StyledForm onSubmit={handleSubmit}>
         <StyledFieldset>
           <StyledLegend>Add a new transaction</StyledLegend>
           <div>
@@ -81,6 +81,7 @@ export default function TransactionForm({ onAdd }) {
               onChange={() => setSelectedType("income")}
             />
             <label htmlFor="income">Income</label>
+
             <input
               id="expense"
               name="type"
@@ -100,18 +101,29 @@ export default function TransactionForm({ onAdd }) {
             defaultValue={today}
             required
           ></input>
+          <p>Preview:</p>
         </StyledFieldset>
 
-        <button type="submit">Add</button>
-      </form>
+        <StyledButton type="submit">Add</StyledButton>
+      </StyledForm>
     </>
   );
 }
 
-const StyledFieldset = styled.fieldset`
-  border-radius: 6px;
+const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
+  align-items: center;
+`;
+
+const StyledFieldset = styled.fieldset`
+  border-radius: 16px;
+  border-width: 1px;
+  border-color: #d4d4d4;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 28px;
+  gap: 4px;
 `;
 
 const StyledLegend = styled.legend`
@@ -123,11 +135,14 @@ const StyledLegend = styled.legend`
 const StyledToggleButton = styled.div`
   display: flex;
   justify-content: space-around;
+  align-items: center;
+  font-size: 16x;
   width: 240px;
   height: 24px;
   background-color: #f5f5f5;
-  border: 1px solid #141414;
+  border: 1px solid #d4d4d4;
   border-radius: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   input {
     display: none;
@@ -143,21 +158,36 @@ const StyledToggleButton = styled.div`
 
   label[for="income"] {
     border-radius: 30px 0 0 30px;
-    border: 0.1px solid #141414;
-    background-color: #e8e9f3;
+    border: 0.1px solid #d4d4d4;
+    background-color: white;
   }
 
   label[for="expense"] {
     border-radius: 0 30px 30px 0;
-    border: 0.1px solid #141414;
-    background-color: #f8e8e1;
+    border: 0.1px solid #d4d4d4;
+    background-color: white;
   }
 
   input:checked + label {
-    font-weight: 800;
+    background-color: #4686cd;
+    color: white;
   }
 
   input:not(:checked) + label {
     visitbility: hidden;
+  }
+`;
+const StyledButton = styled.button`
+  border-radius: 24px;
+  background-color: white;
+  padding: 4px 12px;
+  border: 1px solid #d4d4d4;
+  color: #141414;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 12px;
+
+  &:hover {
+    background-color: #4686cd;
+    color: white;
   }
 `;

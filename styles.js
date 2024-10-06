@@ -8,8 +8,15 @@ export default createGlobalStyle`
   }
 
   body {
-    margin: 16px;
-    font-family: system-ui;
+    margin: 0;
+   font-family: sofia-pro, sans-serif;
+         background: #F7F9FB;
+
+  }
+
+  main {
+  padding-inline: 16px;
+
   }
 
   ul {
@@ -22,14 +29,12 @@ export default createGlobalStyle`
    
   }
 
-  h1 {
-  text-align: center;
-  font-size: 18px;
-  }
 
  h2 {
   text-align: center;
   font-size: 24px;
+  font-weight: 700;
+  padding-top: 24px;
  }
 
  p {

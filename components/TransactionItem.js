@@ -33,7 +33,7 @@ export default function TransactionItem({ transaction }) {
 }
 
 const StyledCard = styled.div`
-  border: 1px solid black;
+  border: 0.1px solid #d4d4d4;
   border-radius: 16px;
   padding: 12px 16px;
   display: grid;
@@ -44,6 +44,7 @@ const StyledCard = styled.div`
   grid-template-areas:
     "name name"
     "category amount";
+  background-color: white;
 `;
 
 const StyledDate = styled.p`
@@ -66,7 +67,7 @@ const StyledCategory = styled.p`
 `;
 
 const StyledAmount = styled.p`
-  color: ${(props) => (props.type === "expense" ? "red" : "green")};
+  color: ${(props) => (props.type === "expense" ? "#F44336" : "#4CAF50")};
   grid-column: 2/2;
   grid-row: 2;
   grid-area: amount;
