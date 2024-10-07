@@ -4,7 +4,11 @@ export default function TransactionItem({ transaction }) {
   const formatNumber = new Intl.NumberFormat("de-DE", {
     style: "currency",
     currency: "EUR",
-  }).format(transaction.amount);
+  }).format(
+    transaction.type === "expense"
+      ? -Math.abs(transaction.amount)
+      : transaction.amount
+  );
 
   return (
     <>

@@ -20,7 +20,7 @@ export default function Header() {
     };
   }, []);
 
-  return <StyledHeader isScrolled={isScrolled}>Money Manager</StyledHeader>;
+  return <StyledHeader>Money Manager</StyledHeader>;
 }
 
 const StyledHeader = styled.h1`

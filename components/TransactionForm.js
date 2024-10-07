@@ -6,7 +6,9 @@ import styled from "styled-components";
 export default function TransactionForm({ onAdd }) {
   const today = new Date().toISOString().split("T")[0];
 
-  const [selectedType, setSelectedType] = useState("income");
+  const [selectedType, setSelectedType] = useState("");
+  const [amount, setAmount] = useState("");
+  const [typeError, setTypeError] = useState(false);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -20,9 +22,17 @@ export default function TransactionForm({ onAdd }) {
       );
     }
 
+    if (!selectedType) {
+      setTypeError(true);
+      return;
+    }
+
     onAdd(data);
 
     event.target.reset();
+    setAmount("");
+    setSelectedType("");
+    setSelectedType(false);
   }
 
   return (
@@ -49,6 +59,8 @@ export default function TransactionForm({ onAdd }) {
               maxLength="12"
               decimalsLimit={2}
               intlConfig={{ locale: "de-DE", currency: "EUR" }}
+              value={amount}
+              onValueChange={(value) => setAmount(value)}
               required
             ></StyledCurrencyInput>
           </FormRow>
@@ -58,16 +70,15 @@ export default function TransactionForm({ onAdd }) {
             </StyledCategoryLabel>
             <StyledCategorySelect
               id="category"
+              defaultValue=""
               name="category"
               required
-              defaultValue={categories[0].name}
             >
+              <option value="" disabled>
+                Please select a category
+              </option>
               {categories.map((category) => (
-                <option
-                  key={category.id}
-                  value={category.name}
-                  disabled={category.id === "0" ? true : false}
-                >
+                <option key={category.id} value={category.name}>
                   {category.name}
                 </option>
               ))}
@@ -82,7 +93,10 @@ export default function TransactionForm({ onAdd }) {
                 type="radio"
                 value="income"
                 checked={selectedType === "income"}
-                onChange={() => setSelectedType("income")}
+                onChange={() => {
+                  setSelectedType("income");
+                  setTypeError(false);
+                }}
               />
               <StyledRadioLabel htmlFor="income">Income</StyledRadioLabel>
 
@@ -92,10 +106,16 @@ export default function TransactionForm({ onAdd }) {
                 type="radio"
                 value="expense"
                 checked={selectedType === "expense"}
-                onChange={() => setSelectedType("expense")}
+                onChange={() => {
+                  setSelectedType("expense");
+                  setTypeError(false);
+                }}
               />
               <StyledRadioLabel htmlFor="expense">Expense</StyledRadioLabel>
             </StyledToggleButton>
+            {typeError && (
+              <ErrorMessage>Please select a transaction type.</ErrorMessage>
+            )}
           </FormRow>
           <FormRow>
             <StyledDateLabel htmlFor="date">Date</StyledDateLabel>
@@ -107,7 +127,6 @@ export default function TransactionForm({ onAdd }) {
               required
             ></StyledDateInput>
           </FormRow>
-          <StyledText>Preview:</StyledText>
         </StyledFieldset>
 
         <StyledButton type="submit">Add</StyledButton>
@@ -134,8 +153,8 @@ const StyledFieldset = styled.fieldset`
     "amountLabel amountInput"
     "categoryLabel categoryInput"
     "typeLabel typeToggleButton"
-    "dateLabel dateInput"
-    "previewLabel previewLabel";
+    ". typeErrorMessage"
+    "dateLabel dateInput";
   padding: 12px 16px;
   gap: 4px;
 `;
@@ -231,6 +250,13 @@ const StyledRadioLabel = styled.label`
   grid-area: radioLabel;
 `;
 
+const ErrorMessage = styled.p`
+  grid-area: typeErrorMessage;
+  color: red;
+  font-size: 10px;
+  margin-bottom: 4px;
+`;
+
 const StyledDateLabel = styled.label`
   grid-area: dateLabel;
 `;
@@ -254,10 +280,6 @@ const StyledDateInput = styled.input`
     outline: none;
     box-shadow: 0 0 4px rgba(70, 134, 205, 0.8);
   }
-`;
-
-const StyledText = styled.label`
-  grid-area: previewLabel;
 `;
 
 const StyledLegend = styled.legend`
@@ -306,10 +328,6 @@ const StyledToggleButton = styled.div`
   input:checked + label {
     background-color: var(--accent-color);
     color: white;
-  }
-
-  input:not(:checked) + label {
-    visitbility: hidden;
   }
 `;
 const StyledButton = styled.button`
