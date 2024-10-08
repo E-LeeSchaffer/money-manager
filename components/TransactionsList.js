@@ -34,9 +34,9 @@ export default function TransactionsList({ transactions }) {
           <StyledDate>{date}</StyledDate>
           <ul>
             {groupedTransactions[date].map((transaction) => (
-              <li key={transaction.id}>
+              <StyledList key={transaction.id}>
                 <TransactionItem transaction={transaction} />
-              </li>
+              </StyledList>
             ))}
           </ul>
         </li>
@@ -46,6 +46,10 @@ export default function TransactionsList({ transactions }) {
 }
 
 const StyledDate = styled.h3`
-  font-size: 14px;
+  font-size: 0.8rem;
   margin: 16px 0 8px 0;
+`;
+
+const StyledList = styled.li`
+  margin-bottom: 4px;
 `;

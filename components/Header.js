@@ -20,7 +20,7 @@ export default function Header() {
     };
   }, []);
 
-  return <StyledHeader>Money Manager</StyledHeader>;
+  return <StyledHeader $isScrolled={isScrolled}>Money Manager</StyledHeader>;
 }
 
 const StyledHeader = styled.h1`
@@ -31,7 +31,7 @@ const StyledHeader = styled.h1`
   display: flex;
   justify-content: start;
   align-items: center;
-  font-size: 16px;
+  font-size: 1rem;
   color: #4686cd;
   height: 44px;
   margin: 0;

@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import TransactionForm from "@/components/TransactionForm";
 import TransactionsList from "@/components/TransactionsList";
 import { transactions } from "@/lib/transactions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { ulid } from "ulid";
 import useLocalStorageState from "use-local-storage-state";
@@ -14,15 +14,23 @@ export default function HomePage() {
   );
   const [successMessage, setSuccessMessage] = useState("");
 
+  useEffect(() => {
+    if (successMessage !== "") {
+      console.log("Success Message:", successMessage);
+      const timer = setTimeout(() => {
+        setSuccessMessage("");
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage]);
+
   function handleAddTransaction(data) {
     setTransactionsList([
       { ...data, id: ulid(), currency: "EUR" },
       ...transactionsList,
     ]);
     setSuccessMessage("Transaction successfully added!");
-    setTimeout(() => {
-      setSuccessMessage("");
-    }, 3000);
   }
 
   return (
@@ -46,7 +54,7 @@ const StyleSuccessMessage = styled.p`
   left: 50%;
   transform: translateX(-50%);
   color: var(--text-color-dark);
-  font-size: 12px;
+  font-size: 0.8rem;
   padding: 6px 4px;
   width: 220px;
   font-weight: 800;

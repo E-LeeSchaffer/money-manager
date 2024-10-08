@@ -12,7 +12,6 @@ export default function TransactionItem({ transaction }) {
 
   return (
     <>
-      <StyledDate>{transaction.formatedDate}</StyledDate>
       <StyledCard>
         <StyledName>{transaction.name}</StyledName>
         <StyledCategory>{transaction.category}</StyledCategory>
@@ -38,18 +37,13 @@ const StyledCard = styled.div`
   background-color: white;
 `;
 
-const StyledDate = styled.p`
-  font-size: 12px;
-  margin: 4px 0;
-`;
-
 const StyledName = styled.p`
   font-weight: 500;
   grid-area: name;
 `;
 
 const StyledCategory = styled.p`
-  font-size: 12px;
+  font-size: 0.75rem;
   grid-area: category;
 `;
 

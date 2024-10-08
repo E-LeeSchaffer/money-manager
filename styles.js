@@ -42,7 +42,7 @@ export default createGlobalStyle`
 
  h2 {
   text-align: center;
-  font-size: 24px;
+  font-size: 1.7rem;
   font-weight: 700;
   padding-top: 24px;
  }
@@ -52,6 +52,6 @@ export default createGlobalStyle`
  }
 
  label {
- font-size: 12px;
+ font-size: 0.8rem;
  }
 `;

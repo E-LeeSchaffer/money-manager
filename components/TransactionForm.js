@@ -253,7 +253,7 @@ const StyledRadioLabel = styled.label`
 const ErrorMessage = styled.p`
   grid-area: typeErrorMessage;
   color: red;
-  font-size: 10px;
+  font-size: 0.6rem;
   margin-bottom: 4px;
 `;
 
@@ -292,7 +292,7 @@ const StyledToggleButton = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  font-size: 16x;
+  font-size: 1rem;
   height: 24px;
   background-color: var(--light-bg-color);
   border: 1px solid var(--dark-grey-color);
@@ -315,14 +315,14 @@ const StyledToggleButton = styled.div`
     border-radius: 30px 0 0 30px;
     border: 0.1px solid var(--dark-grey-color);
     background-color: white;
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 
   label[for="expense"] {
     border-radius: 0 30px 30px 0;
     border: 0.1px solid var(--dark-grey-color);
     background-color: white;
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 
   input:checked + label {
@@ -330,6 +330,7 @@ const StyledToggleButton = styled.div`
     color: white;
   }
 `;
+
 const StyledButton = styled.button`
   border-radius: 24px;
   background-color: white;
