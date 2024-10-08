@@ -55,12 +55,16 @@ export default function TransactionForm({ onAdd }) {
             <StyledCurrencyInput
               id="amount"
               name="amount"
-              min="1"
               maxLength="12"
-              decimalsLimit={2}
               intlConfig={{ locale: "de-DE", currency: "EUR" }}
               value={amount}
-              onValueChange={(value) => setAmount(value)}
+              onValueChange={(value) => {
+                if (value > 0) {
+                  setAmount(value);
+                } else {
+                  setAmount("");
+                }
+              }}
               required
             ></StyledCurrencyInput>
           </FormRow>
