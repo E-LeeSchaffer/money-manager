@@ -7,29 +7,51 @@ export default createGlobalStyle`
     box-sizing: border-box;
   }
 
+  :root {
+  --light-bg-color: #F7F9FB;
+  --dark-grey-color: #d4d4d4;
+  --accent-color: #4686cd;
+  --text-color-dark: #141414;
+  --friendly-red-color: #F44336;
+  --friendly-green-color: #4CAF50;
+  }
+
   body {
-    margin: 16px;
-    font-family: system-ui;
+    margin: 0;
+   font-family: sofia-pro, sans-serif;
+         background: var(--light-bg-color);
+
+  }
+
+  main {
+  padding-inline: 16px;
+
   }
 
   ul {
    padding: 0;
-   margin: 24px;
+      margin: 5px;
+
   }
 
   li {
     list-style: none;
    
   }
-h1 {
+
+
+ h2 {
   text-align: center;
-  font-size: 18px;
-}
+  font-size: 1.7rem;
+  font-weight: 700;
+  padding-top: 24px;
+ }
 
-h2 {
-  text-align: center;
-  font-size: 24px;
+ p {
+  margin: 0;
+ }
 
-}
-
+ label {
+ font-size: 0.8rem;
+ }
 `;

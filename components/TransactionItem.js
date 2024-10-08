@@ -1,30 +1,19 @@
 import styled from "styled-components";
-import { isToday, isYesterday, format } from "date-fns";
 
 export default function TransactionItem({ transaction }) {
-  const formatDate = (date) => {
-    if (!date) return "";
-    const newDateFormat = new Date(date);
-
-    if (isToday(newDateFormat)) {
-      return "Today";
-    } else if (isYesterday(newDateFormat)) {
-      return "Yesterday";
-    } else {
-      return format(newDateFormat, "dd.MM.yyyy");
-    }
-  };
-
   const formatNumber = new Intl.NumberFormat("de-DE", {
     style: "currency",
     currency: "EUR",
-  }).format(transaction.amount);
+  }).format(
+    transaction.type === "expense"
+      ? -Math.abs(transaction.amount)
+      : transaction.amount
+  );
 
   return (
     <>
-      <StyledDate>{formatDate(transaction.date)}</StyledDate>
       <StyledCard>
-        <StyledId>{transaction.id}</StyledId>
+        <StyledName>{transaction.name}</StyledName>
         <StyledCategory>{transaction.category}</StyledCategory>
         <StyledAmount type={transaction.type}>{formatNumber}</StyledAmount>
       </StyledCard>
@@ -33,32 +22,37 @@ export default function TransactionItem({ transaction }) {
 }
 
 const StyledCard = styled.div`
-  border: 1px solid black;
+  border: 0.1px solid var(--dark-grey-color);
   border-radius: 16px;
   padding: 4px 16px;
   display: grid;
-  grid-template-columns: 1fr auto;
+  width: 20rem;
+  grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  line-height: 0;
+  align-items: center;
+  row-gap: 8px;
+  grid-template-areas:
+    "name name"
+    "category amount";
+  background-color: white;
 `;
 
-const StyledDate = styled.p`
-  font-size: 12px;
-`;
-
-const StyledId = styled.p`
-  grid-column: 1/2;
-  grid-row: 1;
-  font-weight: bold;
+const StyledName = styled.p`
+  font-weight: 500;
+  grid-area: name;
 `;
 
 const StyledCategory = styled.p`
-  grid-column: 1/2;
-  grid-row: 2;
+  font-size: 0.75rem;
+  grid-area: category;
 `;
 
 const StyledAmount = styled.p`
-  color: ${(props) => (props.type === "expense" ? "red" : "green")};
-  grid-column: 2/2;
-  grid-row: 2;
+  color: ${(props) =>
+    props.type === "expense"
+      ? "var(--friendly-red-color)"
+      : "var(--friendly-green-color)"};
+
+  grid-area: amount;
+  text-align: end;
 `;

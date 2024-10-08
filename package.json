@@ -15,8 +15,12 @@
     "eslint-config-next": "13.4.8",
     "next": "13.4.8",
     "react": "18.2.0",
+    "react-currency-input-field": "^3.8.0",
     "react-dom": "18.2.0",
-    "styled-components": "^6.0.2"
+    "styled-components": "^6.0.2",
+    "ulid": "^2.3.0",
+    "use-local-storage-state": "^19.4.0",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.0.1",
