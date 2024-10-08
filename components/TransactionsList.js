@@ -28,7 +28,7 @@ const groupTransactionByDate = (transactions) => {
 export default function TransactionsList({ transactions }) {
   const groupedTransactions = groupTransactionByDate(transactions);
   return (
-    <ul>
+    <StyledListContainer>
       {Object.keys(groupedTransactions).map((date) => (
         <li key={date}>
           <StyledDate>{date}</StyledDate>
@@ -41,9 +41,15 @@ export default function TransactionsList({ transactions }) {
           </ul>
         </li>
       ))}
-    </ul>
+    </StyledListContainer>
   );
 }
+
+const StyledListContainer = styled.ul`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const StyledDate = styled.h3`
   font-size: 0.8rem;
