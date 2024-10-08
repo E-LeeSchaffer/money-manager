@@ -16,7 +16,6 @@ export default function HomePage() {
 
   useEffect(() => {
     if (successMessage !== "") {
-      console.log("Success Message:", successMessage);
       const timer = setTimeout(() => {
         setSuccessMessage("");
       }, 3000);

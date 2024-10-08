@@ -48,7 +48,7 @@ export default function TransactionForm({ onAdd }) {
               name="name"
               maxLength={40}
               required
-            ></StyledNameInput>
+            />
           </FormRow>
           <FormRow>
             <StyledAmountLabel htmlFor="amount">Amount</StyledAmountLabel>
@@ -56,17 +56,14 @@ export default function TransactionForm({ onAdd }) {
               id="amount"
               name="amount"
               maxLength="12"
+              allowNegativeValue={false}
               intlConfig={{ locale: "de-DE", currency: "EUR" }}
               value={amount}
               onValueChange={(value) => {
-                if (value > 0) {
-                  setAmount(value);
-                } else {
-                  setAmount("");
-                }
+                setAmount(value);
               }}
               required
-            ></StyledCurrencyInput>
+            />
           </FormRow>
           <FormRow>
             <StyledCategoryLabel htmlFor="category">
@@ -129,7 +126,7 @@ export default function TransactionForm({ onAdd }) {
               name="date"
               defaultValue={today}
               required
-            ></StyledDateInput>
+            />
           </FormRow>
         </StyledFieldset>
 
