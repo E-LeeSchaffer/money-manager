@@ -1,3 +1,4 @@
+import createGlobalStyle from "styled-components";
 import { isToday, isYesterday } from "date-fns";
 import TransactionItem from "./TransactionItem";
 import styled from "styled-components";
@@ -51,7 +52,9 @@ export default function TransactionsList({
           );
         })
       ) : (
-        <p>No transactions available. Please add a new transaction.</p>
+        <StyledEmptyListMessage>
+          No transactions available. Please add a new transaction.
+        </StyledEmptyListMessage>
       )}
     </StyledListContainer>
   );
@@ -70,4 +73,11 @@ const StyledDate = styled.h3`
 
 const StyledList = styled.li`
   margin-bottom: 4px;
+`;
+
+const StyledEmptyListMessage = styled.p`
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: var(--dark-grey-color);
 `;
