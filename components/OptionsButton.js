@@ -1,13 +1,9 @@
-import DeleteButton from "./DeleteButton";
 import styled from "styled-components";
 import Image from "next/image";
 
 export default function OptionsButton({
-  handleDelete,
-  handleCancel,
-  handleConfirmDelete,
+  onHandleDelete,
   onToggleOptions,
-  isDeleting,
   isOptionSelect,
 }) {
   return (
@@ -22,12 +18,9 @@ export default function OptionsButton({
       </StyledToggleButton>
       {isOptionSelect ? (
         <StyledOptionsModal>
-          <DeleteButton
-            onHandleCancel={handleCancel}
-            onHandleDelete={handleDelete}
-            onHandleConfirmDelete={handleConfirmDelete}
-            isDeleting={isDeleting}
-          />
+          <StyledDeleteButton onClick={onHandleDelete}>
+            Delete
+          </StyledDeleteButton>
         </StyledOptionsModal>
       ) : null}
     </>
@@ -54,4 +47,10 @@ const StyledOptionsModal = styled.div`
   border-radius: 4px;
   gap: 2px;
   padding: 2px;
+`;
+
+const StyledDeleteButton = styled.button`
+  border: none;
+  background-color: transparent;
+  text-align: end;
 `;

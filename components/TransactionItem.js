@@ -40,11 +40,8 @@ export default function TransactionItem({
         <StyledCard>
           <StyledOptionsContainer>
             <OptionsButton
-              handleDelete={handleDelete}
-              handleConfirmDelete={handleConfirmDelete}
-              handleCancel={handleCancel}
+              onHandleDelete={handleDelete}
               onToggleOptions={toggleOptions}
-              isDeleting={isDeleting}
               isOptionSelect={isOptionSelect}
             />
           </StyledOptionsContainer>
