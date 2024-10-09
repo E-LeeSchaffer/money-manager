@@ -25,7 +25,10 @@ const groupTransactionByDate = (transactions) => {
   }, {});
 };
 
-export default function TransactionsList({ transactions }) {
+export default function TransactionsList({
+  transactions,
+  handleDeleteTransaction,
+}) {
   const groupedTransactions = groupTransactionByDate(transactions);
   return (
     <StyledListContainer>
@@ -35,7 +38,10 @@ export default function TransactionsList({ transactions }) {
           <ul>
             {groupedTransactions[date].map((transaction) => (
               <StyledList key={transaction.id}>
-                <TransactionItem transaction={transaction} />
+                <TransactionItem
+                  handleDeleteTransaction={handleDeleteTransaction}
+                  transaction={transaction}
+                />
               </StyledList>
             ))}
           </ul>

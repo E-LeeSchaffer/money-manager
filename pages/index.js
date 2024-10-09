@@ -32,6 +32,12 @@ export default function HomePage() {
     setSuccessMessage("Transaction successfully added!");
   }
 
+  function handleDeleteTransaction(id) {
+    setTransactionsList(
+      transactions.filter((transaction) => transaction.id !== id)
+    );
+  }
+
   return (
     <>
       <Header />
@@ -41,7 +47,10 @@ export default function HomePage() {
         {successMessage && (
           <StyleSuccessMessage>{successMessage}</StyleSuccessMessage>
         )}
-        <TransactionsList transactions={transactionsList} />
+        <TransactionsList
+          handleDeleteTransaction={handleDeleteTransaction}
+          transactions={transactionsList}
+        />
       </main>
     </>
   );

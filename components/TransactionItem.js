@@ -1,6 +1,11 @@
 import styled from "styled-components";
+import Button from "./DeleteButton";
+import OptionsButton from "./OptionsButton";
 
-export default function TransactionItem({ transaction }) {
+export default function TransactionItem({
+  transaction,
+  handleDeleteTransaction,
+}) {
   const formatNumber = new Intl.NumberFormat("de-DE", {
     style: "currency",
     currency: "EUR",
@@ -13,6 +18,10 @@ export default function TransactionItem({ transaction }) {
   return (
     <>
       <StyledCard>
+        <OptionsButton
+          id={transaction.id}
+          handleDeleteTransaction={handleDeleteTransaction}
+        />
         <StyledName>{transaction.name}</StyledName>
         <StyledCategory>{transaction.category}</StyledCategory>
         <StyledAmount type={transaction.type}>{formatNumber}</StyledAmount>
