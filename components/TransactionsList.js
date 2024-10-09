@@ -2,7 +2,6 @@ import { isToday, isYesterday } from "date-fns";
 import TransactionItem from "./TransactionItem";
 import styled from "styled-components";
 import { format } from "date-fns";
-import { transactions } from "@/lib/transactions";
 
 const groupTransactionByDate = (transactions) => {
   return transactions.reduce((groups, transaction) => {
@@ -42,7 +41,7 @@ export default function TransactionsList({
                 {groupedTransactions[date].map((transaction) => (
                   <StyledList key={transaction.id}>
                     <TransactionItem
-                      handleDeleteTransaction={handleDeleteTransaction}
+                      onHandleDeleteTransaction={handleDeleteTransaction}
                       transaction={transaction}
                     />
                   </StyledList>

@@ -43,7 +43,7 @@ export default function HomePage() {
     <>
       <Header />
       <main>
-        <h2>Transactions</h2>
+        <StyledTitle>Transactions</StyledTitle>
         <TransactionForm onAdd={handleAddTransaction} />
         {successMessage && (
           <StyleSuccessMessage>{successMessage}</StyleSuccessMessage>
@@ -56,6 +56,13 @@ export default function HomePage() {
     </>
   );
 }
+
+const StyledTitle = styled.h2`
+  text-align: center;
+  font-size: 1.7rem;
+  font-weight: 700;
+  padding-top: 24px;
+`;
 
 const StyleSuccessMessage = styled.p`
   position: fixed;

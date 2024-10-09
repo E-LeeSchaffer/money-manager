@@ -1,35 +1,33 @@
-import { useState } from "react";
+import styled from "styled-components";
 
-export default function DeleteButton({ onDeleteTransaction, id }) {
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  function handleDelete() {
-    setIsDeleting(true);
-  }
-
-  function handleConfirmDelete() {
-    onDeleteTransaction(id);
-  }
-
-  function handleCancel() {
-    setIsDeleting(false);
-  }
+export default function DeleteButton({
+  onHandleCancel,
+  onHandleConfirmDelete,
+  isDeleting,
+  onHandleDelete,
+}) {
   return (
     <>
       {isDeleting ? (
         <>
-          <button type="button" onClick={handleCancel}>
+          <button type="button" onClick={onHandleCancel}>
             Cancel
           </button>
-          <button type="button" onClick={handleConfirmDelete}>
+          <button type="button" onClick={onHandleConfirmDelete}>
             Really Delete
           </button>
         </>
       ) : (
-        <button type="button" onClick={handleDelete}>
+        <StyledButton type="button" onClick={onHandleDelete}>
           Delete
-        </button>
+        </StyledButton>
       )}
     </>
   );
 }
+
+const StyledButton = styled.button`
+  border: none;
+  background-color: transparent;
+  text-align: end;
+`;

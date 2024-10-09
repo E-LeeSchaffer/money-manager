@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import Button from "./DeleteButton";
 import OptionsButton from "./OptionsButton";
+import { useState } from "react";
 
 export default function TransactionItem({
   transaction,
-  handleDeleteTransaction,
+  onHandleDeleteTransaction,
 }) {
   const formatNumber = new Intl.NumberFormat("de-DE", {
     style: "currency",
@@ -14,21 +14,54 @@ export default function TransactionItem({
       ? -Math.abs(transaction.amount)
       : transaction.amount
   );
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isOptionSelect, setIsOptionSelect] = useState(false);
+
+  function toggleOptions() {
+    setIsOptionSelect(!isOptionSelect);
+  }
+
+  function handleDelete() {
+    setIsDeleting(true);
+  }
+
+  function handleConfirmDelete() {
+    onHandleDeleteTransaction(transaction.id);
+  }
+
+  function handleCancel() {
+    setIsDeleting(false);
+    setIsOptionSelect(false);
+  }
 
   return (
     <>
-      <StyledCard>
-        <StyledOptionsButton>
-          <OptionsButton
-            id={transaction.id}
-            handleDeleteTransaction={handleDeleteTransaction}
-          />
-        </StyledOptionsButton>
-
-        <StyledName>{transaction.name}</StyledName>
-        <StyledCategory>{transaction.category}</StyledCategory>
-        <StyledAmount type={transaction.type}>{formatNumber}</StyledAmount>
-      </StyledCard>
+      {!isDeleting ? (
+        <StyledCard>
+          <StyledOptionsContainer>
+            <OptionsButton
+              handleDelete={handleDelete}
+              handleConfirmDelete={handleConfirmDelete}
+              handleCancel={handleCancel}
+              onToggleOptions={toggleOptions}
+              isDeleting={isDeleting}
+              isOptionSelect={isOptionSelect}
+            />
+          </StyledOptionsContainer>
+          <StyledName>{transaction.name}</StyledName>
+          <StyledCategory>{transaction.category}</StyledCategory>
+          <StyledAmount type={transaction.type}>{formatNumber}</StyledAmount>
+        </StyledCard>
+      ) : (
+        <StyledConfirmActionContainer>
+          <StyledCancelButton type="button" onClick={handleCancel}>
+            Cancel
+          </StyledCancelButton>
+          <StyledConfirmButton type="button" onClick={handleConfirmDelete}>
+            Really Delete
+          </StyledConfirmButton>
+        </StyledConfirmActionContainer>
+      )}
     </>
   );
 }
@@ -36,41 +69,66 @@ export default function TransactionItem({
 const StyledCard = styled.div`
   border: 0.1px solid var(--dark-grey-color);
   border-radius: 16px;
-  padding: 4px 16px;
+  padding: 8px 16px;
   display: grid;
   width: 20rem;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  align-items: center;
-
-  row-gap: 8px;
+  min-height: 4rem;
   grid-template-areas:
     "name options"
     "category amount";
   background-color: white;
 `;
 
-const StyledOptionsButton = styled.div`
+const StyledOptionsContainer = styled.div`
   grid-area: options;
-  justify-self: end;
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
 `;
 
-const StyledName = styled.p`
-  font-weight: 500;
+const StyledName = styled.div`
   grid-area: name;
 `;
 
-const StyledCategory = styled.p`
-  font-size: 0.75rem;
+const StyledCategory = styled.div`
   grid-area: category;
+  font-size: x-small;
+  display: flex;
 `;
 
-const StyledAmount = styled.p`
+const StyledAmount = styled.div`
   color: ${(props) =>
     props.type === "expense"
       ? "var(--friendly-red-color)"
       : "var(--friendly-green-color)"};
-
   grid-area: amount;
-  text-align: end;
+  display: flex;
+  justify-content: end;
+`;
+
+const StyledConfirmActionContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  border: 0.1px solid var(--dark-grey-color);
+  border-radius: 16px;
+  padding: 8px 16px;
+  width: 20rem;
+  min-height: 4rem;
+  background-color: white;
+`;
+
+const StyledCancelButton = styled.button`
+  border: none;
+  border-radius: 4px;
+  background-color: red;
+  color: white;
+  height: fit-content;
+`;
+
+const StyledConfirmButton = styled.button`
+  border: none;
+  background-color: transparent;
+  height: fit-content;
 `;

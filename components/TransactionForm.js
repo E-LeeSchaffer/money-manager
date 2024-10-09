@@ -55,7 +55,7 @@ export default function TransactionForm({ onAdd }) {
             <StyledCurrencyInput
               id="amount"
               name="amount"
-              maxLength="12"
+              maxLength="9"
               allowNegativeValue={false}
               intlConfig={{ locale: "de-DE", currency: "EUR" }}
               value={amount}
