@@ -34,8 +34,9 @@ export default function HomePage() {
 
   function handleDeleteTransaction(id) {
     setTransactionsList(
-      transactions.filter((transaction) => transaction.id !== id)
+      transactionsList.filter((transaction) => transaction.id !== id)
     );
+    setSuccessMessage("Transaction successfully deleted!");
   }
 
   return (

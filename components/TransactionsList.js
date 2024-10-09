@@ -2,6 +2,7 @@ import { isToday, isYesterday } from "date-fns";
 import TransactionItem from "./TransactionItem";
 import styled from "styled-components";
 import { format } from "date-fns";
+import { transactions } from "@/lib/transactions";
 
 const groupTransactionByDate = (transactions) => {
   return transactions.reduce((groups, transaction) => {
@@ -32,21 +33,27 @@ export default function TransactionsList({
   const groupedTransactions = groupTransactionByDate(transactions);
   return (
     <StyledListContainer>
-      {Object.keys(groupedTransactions).map((date) => (
-        <li key={date}>
-          <StyledDate>{date}</StyledDate>
-          <ul>
-            {groupedTransactions[date].map((transaction) => (
-              <StyledList key={transaction.id}>
-                <TransactionItem
-                  handleDeleteTransaction={handleDeleteTransaction}
-                  transaction={transaction}
-                />
-              </StyledList>
-            ))}
-          </ul>
-        </li>
-      ))}
+      {transactions.length > 0 ? (
+        Object.keys(groupedTransactions).map((date) => {
+          return (
+            <li key={date}>
+              <StyledDate>{date}</StyledDate>
+              <ul>
+                {groupedTransactions[date].map((transaction) => (
+                  <StyledList key={transaction.id}>
+                    <TransactionItem
+                      handleDeleteTransaction={handleDeleteTransaction}
+                      transaction={transaction}
+                    />
+                  </StyledList>
+                ))}
+              </ul>
+            </li>
+          );
+        })
+      ) : (
+        <p>No transactions available. Please add a new transaction.</p>
+      )}
     </StyledListContainer>
   );
 }

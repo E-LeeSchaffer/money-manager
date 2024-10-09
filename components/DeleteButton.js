@@ -18,11 +18,17 @@ export default function DeleteButton({ onDeleteTransaction, id }) {
     <>
       {isDeleting ? (
         <>
-          <button onClick={handleCancel}>Cancel</button>
-          <button onClick={handleConfirmDelete}>Really Delete</button>
+          <button type="button" onClick={handleCancel}>
+            Cancel
+          </button>
+          <button type="button" onClick={handleConfirmDelete}>
+            Really Delete
+          </button>
         </>
       ) : (
-        <button onClick={handleDelete}>Delete</button>
+        <button type="button" onClick={handleDelete}>
+          Delete
+        </button>
       )}
     </>
   );

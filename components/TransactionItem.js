@@ -18,10 +18,13 @@ export default function TransactionItem({
   return (
     <>
       <StyledCard>
-        <OptionsButton
-          id={transaction.id}
-          handleDeleteTransaction={handleDeleteTransaction}
-        />
+        <StyledOptionsButton>
+          <OptionsButton
+            id={transaction.id}
+            handleDeleteTransaction={handleDeleteTransaction}
+          />
+        </StyledOptionsButton>
+
         <StyledName>{transaction.name}</StyledName>
         <StyledCategory>{transaction.category}</StyledCategory>
         <StyledAmount type={transaction.type}>{formatNumber}</StyledAmount>
@@ -39,11 +42,17 @@ const StyledCard = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   align-items: center;
+
   row-gap: 8px;
   grid-template-areas:
-    "name name"
+    "name options"
     "category amount";
   background-color: white;
+`;
+
+const StyledOptionsButton = styled.div`
+  grid-area: options;
+  justify-self: end;
 `;
 
 const StyledName = styled.p`
