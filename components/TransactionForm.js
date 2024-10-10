@@ -3,9 +3,13 @@ import { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 import styled from "styled-components";
 
-export default function TransactionForm({ onAdd }) {
+export default function TransactionForm({
+  onAdd,
+  formHeader,
+  isEditing,
+  buttonText,
+}) {
   const today = new Date().toISOString().split("T")[0];
-
   const [selectedType, setSelectedType] = useState("");
   const [amount, setAmount] = useState("");
   const [typeError, setTypeError] = useState(false);
@@ -39,7 +43,7 @@ export default function TransactionForm({ onAdd }) {
     <>
       <StyledForm onSubmit={handleSubmit}>
         <StyledFieldset>
-          <StyledLegend>Add a new transaction</StyledLegend>
+          <StyledLegend>{formHeader}</StyledLegend>
           <FormRow>
             <StyledNameLabel htmlFor="name">Name</StyledNameLabel>
             <StyledNameInput
@@ -129,8 +133,8 @@ export default function TransactionForm({ onAdd }) {
             />
           </FormRow>
         </StyledFieldset>
-
-        <StyledButton type="submit">Add</StyledButton>
+        <StyledButton type="submit">{buttonText}</StyledButton>
+        {isEditing && <StyledButton>Cancel</StyledButton>}
       </StyledForm>
     </>
   );

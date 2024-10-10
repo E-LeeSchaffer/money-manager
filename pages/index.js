@@ -13,6 +13,7 @@ export default function HomePage() {
     { defaultValue: transactions }
   );
   const [successMessage, setSuccessMessage] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (successMessage !== "") {
@@ -39,18 +40,51 @@ export default function HomePage() {
     setSuccessMessage("Transaction successfully deleted!");
   }
 
+  function handleEditTransaction(updatedTransaction) {
+    setTransactionsList(
+      transactionsList.map((transaction) =>
+        transaction.id === updatedTransaction.id
+          ? updatedTransaction
+          : transaction
+      )
+    );
+  }
+
+  function handleOpenEditMode() {
+    setIsEditing(true);
+  }
+
+  function handleConfirmEdit() {
+    handleEditTransaction(transactionsList.id);
+  }
+
   return (
     <>
       <Header />
       <main>
         <StyledTitle>Transactions</StyledTitle>
-        <TransactionForm onAdd={handleAddTransaction} />
+        {!isEditing ? (
+          <TransactionForm
+            formHeader="Add a new transaction"
+            buttonText="Add"
+            onAdd={handleAddTransaction}
+          />
+        ) : (
+          <TransactionForm
+            formHeader="Edit Transaction"
+            buttonText="Update"
+            isEditing={isEditing}
+          />
+        )}
+
         {successMessage && (
           <StyleSuccessMessage>{successMessage}</StyleSuccessMessage>
         )}
         <TransactionsList
           handleDeleteTransaction={handleDeleteTransaction}
+          handleEditTransaction={handleEditTransaction}
           transactions={transactionsList}
+          handleOpenEditMode={handleOpenEditMode}
         />
       </main>
     </>
