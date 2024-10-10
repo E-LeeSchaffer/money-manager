@@ -119,7 +119,7 @@ const StyledConfirmActionContainer = styled.div`
 const StyledCancelButton = styled.button`
   border: none;
   border-radius: 4px;
-  background-color: red;
+  background-color: var(--friendly-red-color);
   color: white;
   height: fit-content;
 `;
