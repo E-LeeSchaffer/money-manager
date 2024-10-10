@@ -1,6 +1,11 @@
 import styled from "styled-components";
+import OptionsMenu from "./OptionsMenu";
+import { useState } from "react";
 
-export default function TransactionItem({ transaction }) {
+export default function TransactionItem({
+  transaction,
+  onHandleDeleteTransaction,
+}) {
   const formatNumber = new Intl.NumberFormat("de-DE", {
     style: "currency",
     currency: "EUR",
@@ -9,50 +14,108 @@ export default function TransactionItem({ transaction }) {
       ? -Math.abs(transaction.amount)
       : transaction.amount
   );
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  function handleDelete() {
+    setIsDeleting(true);
+  }
+
+  function handleConfirmDelete() {
+    onHandleDeleteTransaction(transaction.id);
+  }
+
+  function handleCancel() {
+    setIsDeleting(false);
+  }
+
+  if (isDeleting) {
+    return (
+      <StyledConfirmActionContainer>
+        <StyledCancelButton type="button" onClick={handleCancel}>
+          Cancel
+        </StyledCancelButton>
+        <StyledConfirmButton type="button" onClick={handleConfirmDelete}>
+          Really Delete
+        </StyledConfirmButton>
+      </StyledConfirmActionContainer>
+    );
+  }
 
   return (
-    <>
-      <StyledCard>
-        <StyledName>{transaction.name}</StyledName>
-        <StyledCategory>{transaction.category}</StyledCategory>
-        <StyledAmount type={transaction.type}>{formatNumber}</StyledAmount>
-      </StyledCard>
-    </>
+    <StyledCard>
+      <StyledOptionsContainer>
+        <OptionsMenu onHandleDelete={handleDelete} />
+      </StyledOptionsContainer>
+      <StyledName>{transaction.name}</StyledName>
+      <StyledCategory>{transaction.category}</StyledCategory>
+      <StyledAmount type={transaction.type}>{formatNumber}</StyledAmount>
+    </StyledCard>
   );
 }
 
 const StyledCard = styled.div`
   border: 0.1px solid var(--dark-grey-color);
   border-radius: 16px;
-  padding: 4px 16px;
+  padding: 8px 16px;
   display: grid;
   width: 20rem;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  align-items: center;
-  row-gap: 8px;
+  min-height: 4rem;
   grid-template-areas:
-    "name name"
+    "name options"
     "category amount";
   background-color: white;
 `;
 
-const StyledName = styled.p`
-  font-weight: 500;
+const StyledOptionsContainer = styled.div`
+  grid-area: options;
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+`;
+
+const StyledName = styled.div`
   grid-area: name;
 `;
 
-const StyledCategory = styled.p`
-  font-size: 0.75rem;
+const StyledCategory = styled.div`
   grid-area: category;
+  font-size: x-small;
+  display: flex;
 `;
 
-const StyledAmount = styled.p`
+const StyledAmount = styled.div`
   color: ${(props) =>
     props.type === "expense"
       ? "var(--friendly-red-color)"
       : "var(--friendly-green-color)"};
-
   grid-area: amount;
-  text-align: end;
+  display: flex;
+  justify-content: end;
+`;
+
+const StyledConfirmActionContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  border: 0.1px solid var(--dark-grey-color);
+  border-radius: 16px;
+  padding: 8px 16px;
+  width: 20rem;
+  min-height: 4rem;
+  background-color: white;
+`;
+
+const StyledCancelButton = styled.button`
+  border: none;
+  border-radius: 4px;
+  background-color: var(--friendly-red-color);
+  color: white;
+  height: fit-content;
+`;
+
+const StyledConfirmButton = styled.button`
+  border: none;
+  background-color: transparent;
+  height: fit-content;
 `;

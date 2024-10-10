@@ -1,3 +1,4 @@
+import createGlobalStyle from "styled-components";
 import { isToday, isYesterday } from "date-fns";
 import TransactionItem from "./TransactionItem";
 import styled from "styled-components";
@@ -25,22 +26,36 @@ const groupTransactionByDate = (transactions) => {
   }, {});
 };
 
-export default function TransactionsList({ transactions }) {
+export default function TransactionsList({
+  transactions,
+  handleDeleteTransaction,
+}) {
   const groupedTransactions = groupTransactionByDate(transactions);
   return (
     <StyledListContainer>
-      {Object.keys(groupedTransactions).map((date) => (
-        <li key={date}>
-          <StyledDate>{date}</StyledDate>
-          <ul>
-            {groupedTransactions[date].map((transaction) => (
-              <StyledList key={transaction.id}>
-                <TransactionItem transaction={transaction} />
-              </StyledList>
-            ))}
-          </ul>
-        </li>
-      ))}
+      {transactions.length > 0 ? (
+        Object.keys(groupedTransactions).map((date) => {
+          return (
+            <li key={date}>
+              <StyledDate>{date}</StyledDate>
+              <ul>
+                {groupedTransactions[date].map((transaction) => (
+                  <StyledList key={transaction.id}>
+                    <TransactionItem
+                      onHandleDeleteTransaction={handleDeleteTransaction}
+                      transaction={transaction}
+                    />
+                  </StyledList>
+                ))}
+              </ul>
+            </li>
+          );
+        })
+      ) : (
+        <StyledEmptyListMessage>
+          No transactions available. Please add a new transaction.
+        </StyledEmptyListMessage>
+      )}
     </StyledListContainer>
   );
 }
@@ -58,4 +73,11 @@ const StyledDate = styled.h3`
 
 const StyledList = styled.li`
   margin-bottom: 4px;
+`;
+
+const StyledEmptyListMessage = styled.p`
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: var(--dark-grey-color);
 `;

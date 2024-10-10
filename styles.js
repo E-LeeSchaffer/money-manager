@@ -8,50 +8,36 @@ export default createGlobalStyle`
   }
 
   :root {
-  --light-bg-color: #F7F9FB;
-  --dark-grey-color: #d4d4d4;
-  --accent-color: #4686cd;
-  --text-color-dark: #141414;
-  --friendly-red-color: #F44336;
-  --friendly-green-color: #4CAF50;
+    --light-bg-color: #F7F9FB;
+    --dark-grey-color: #d4d4d4;
+    --accent-color: #4686cd;
+    --text-color-dark: #141414;
+    --friendly-red-color: #F44336;
+    --friendly-green-color: #4CAF50;
   }
 
   body {
     margin: 0;
-   font-family: sofia-pro, sans-serif;
-         background: var(--light-bg-color);
-
+    font-family: sofia-pro, sans-serif;
+    background: var(--light-bg-color);
   }
 
   main {
-  padding-inline: 16px;
-
+    padding-inline: 16px;
   }
 
   ul {
-   padding: 0;
-      margin: 5px;
-
+    padding: 0;
+    margin: 0;
   }
 
   li {
     list-style: none;
-   
   }
 
 
- h2 {
-  text-align: center;
-  font-size: 1.7rem;
-  font-weight: 700;
-  padding-top: 24px;
- }
 
- p {
-  margin: 0;
- }
-
- label {
- font-size: 0.8rem;
- }
+  label {
+    font-size: 0.8rem;
+  }
 `;

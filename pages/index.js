@@ -32,20 +32,37 @@ export default function HomePage() {
     setSuccessMessage("Transaction successfully added!");
   }
 
+  function handleDeleteTransaction(id) {
+    setTransactionsList(
+      transactionsList.filter((transaction) => transaction.id !== id)
+    );
+    setSuccessMessage("Transaction successfully deleted!");
+  }
+
   return (
     <>
       <Header />
       <main>
-        <h2>Transactions</h2>
+        <StyledTitle>Transactions</StyledTitle>
         <TransactionForm onAdd={handleAddTransaction} />
         {successMessage && (
           <StyleSuccessMessage>{successMessage}</StyleSuccessMessage>
         )}
-        <TransactionsList transactions={transactionsList} />
+        <TransactionsList
+          handleDeleteTransaction={handleDeleteTransaction}
+          transactions={transactionsList}
+        />
       </main>
     </>
   );
 }
+
+const StyledTitle = styled.h2`
+  text-align: center;
+  font-size: 1.7rem;
+  font-weight: 700;
+  padding-top: 24px;
+`;
 
 const StyleSuccessMessage = styled.p`
   position: fixed;

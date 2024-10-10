@@ -55,7 +55,7 @@ export default function TransactionForm({ onAdd }) {
             <StyledCurrencyInput
               id="amount"
               name="amount"
-              maxLength="12"
+              maxLength="9"
               allowNegativeValue={false}
               intlConfig={{ locale: "de-DE", currency: "EUR" }}
               value={amount}
@@ -264,6 +264,7 @@ const StyledDateLabel = styled.label`
 
 const StyledDateInput = styled.input`
   grid-area: dateInput;
+  font-family: sofia-pro;
   padding: 4px 12px;
   border: 1px solid var(--dark-grey-color);
   border-radius: 24px;

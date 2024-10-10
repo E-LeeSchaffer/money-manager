@@ -36,7 +36,6 @@ const StyledHeader = styled.h1`
   height: 44px;
   margin: 0;
   padding-inline: 16px;
-
   background-color: ${(props) =>
     props.isScrolled ? "rgba(245, 245, 245, 0.8)" : "rgba(255, 255, 255, 0.5)"};
   transition: background-color 0.3s ease-in-out;
