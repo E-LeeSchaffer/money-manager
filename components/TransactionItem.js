@@ -15,11 +15,6 @@ export default function TransactionItem({
       : transaction.amount
   );
   const [isDeleting, setIsDeleting] = useState(false);
-  const [isOptionSelect, setIsOptionSelect] = useState(false);
-
-  function toggleOptions() {
-    setIsOptionSelect(!isOptionSelect);
-  }
 
   function handleDelete() {
     setIsDeleting(true);
@@ -31,7 +26,6 @@ export default function TransactionItem({
 
   function handleCancel() {
     setIsDeleting(false);
-    setIsOptionSelect(false);
   }
 
   if (isDeleting) {
@@ -50,11 +44,7 @@ export default function TransactionItem({
   return (
     <StyledCard>
       <StyledOptionsContainer>
-        <OptionsMenu
-          onHandleDelete={handleDelete}
-          onToggleOptions={toggleOptions}
-          isOptionSelect={isOptionSelect}
-        />
+        <OptionsMenu onHandleDelete={handleDelete} />
       </StyledOptionsContainer>
       <StyledName>{transaction.name}</StyledName>
       <StyledCategory>{transaction.category}</StyledCategory>

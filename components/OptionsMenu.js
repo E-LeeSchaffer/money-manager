@@ -1,14 +1,16 @@
 import styled from "styled-components";
 import Image from "next/image";
+import { useState } from "react";
 
-export default function OptionsMenu({
-  onHandleDelete,
-  onToggleOptions,
-  isOptionSelect,
-}) {
+export default function OptionsMenu({ onHandleDelete }) {
+  const [isOptionSelect, setIsOptionSelect] = useState(false);
+
+  function toggleOptions() {
+    setIsOptionSelect(!isOptionSelect);
+  }
   return (
     <>
-      <StyledToggleButton type="button" onClick={onToggleOptions}>
+      <StyledToggleButton type="button" onClick={toggleOptions}>
         <Image
           src="/images/dots.svg"
           alt="options button"
@@ -18,7 +20,12 @@ export default function OptionsMenu({
       </StyledToggleButton>
       {isOptionSelect ? (
         <StyledOptionsModal>
-          <StyledDeleteButton onClick={onHandleDelete}>
+          <StyledDeleteButton
+            onClick={() => {
+              onHandleDelete();
+              setIsOptionSelect(false);
+            }}
+          >
             Delete
           </StyledDeleteButton>
         </StyledOptionsModal>
