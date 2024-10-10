@@ -29,6 +29,8 @@ const groupTransactionByDate = (transactions) => {
 export default function TransactionsList({
   transactions,
   handleDeleteTransaction,
+  handleEditTransaction,
+  handleOpenEditMode,
 }) {
   const groupedTransactions = groupTransactionByDate(transactions);
   return (
@@ -43,7 +45,9 @@ export default function TransactionsList({
                   <StyledList key={transaction.id}>
                     <TransactionItem
                       onHandleDeleteTransaction={handleDeleteTransaction}
+                      onHandleEditTransaction={handleEditTransaction}
                       transaction={transaction}
+                      handleOpenEditMode={handleOpenEditMode}
                     />
                   </StyledList>
                 ))}
