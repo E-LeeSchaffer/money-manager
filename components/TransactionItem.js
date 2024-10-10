@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import OptionsButton from "./OptionsButton";
+import OptionsMenu from "./OptionsMenu";
 import { useState } from "react";
 
 export default function TransactionItem({
@@ -34,32 +34,32 @@ export default function TransactionItem({
     setIsOptionSelect(false);
   }
 
+  if (isDeleting) {
+    return (
+      <StyledConfirmActionContainer>
+        <StyledCancelButton type="button" onClick={handleCancel}>
+          Cancel
+        </StyledCancelButton>
+        <StyledConfirmButton type="button" onClick={handleConfirmDelete}>
+          Really Delete
+        </StyledConfirmButton>
+      </StyledConfirmActionContainer>
+    );
+  }
+
   return (
-    <>
-      {!isDeleting ? (
-        <StyledCard>
-          <StyledOptionsContainer>
-            <OptionsButton
-              onHandleDelete={handleDelete}
-              onToggleOptions={toggleOptions}
-              isOptionSelect={isOptionSelect}
-            />
-          </StyledOptionsContainer>
-          <StyledName>{transaction.name}</StyledName>
-          <StyledCategory>{transaction.category}</StyledCategory>
-          <StyledAmount type={transaction.type}>{formatNumber}</StyledAmount>
-        </StyledCard>
-      ) : (
-        <StyledConfirmActionContainer>
-          <StyledCancelButton type="button" onClick={handleCancel}>
-            Cancel
-          </StyledCancelButton>
-          <StyledConfirmButton type="button" onClick={handleConfirmDelete}>
-            Really Delete
-          </StyledConfirmButton>
-        </StyledConfirmActionContainer>
-      )}
-    </>
+    <StyledCard>
+      <StyledOptionsContainer>
+        <OptionsMenu
+          onHandleDelete={handleDelete}
+          onToggleOptions={toggleOptions}
+          isOptionSelect={isOptionSelect}
+        />
+      </StyledOptionsContainer>
+      <StyledName>{transaction.name}</StyledName>
+      <StyledCategory>{transaction.category}</StyledCategory>
+      <StyledAmount type={transaction.type}>{formatNumber}</StyledAmount>
+    </StyledCard>
   );
 }
 
