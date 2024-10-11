@@ -1,12 +1,21 @@
 import styled from "styled-components";
 import TransactionForm from "./TransactionForm";
+import { transactions } from "@/lib/transactions";
 
 export default function EditTransactionModal({
   isModalOpen,
   isEditing,
   onCloseModal,
+  transaction,
+  onHandleEditTransaction,
 }) {
   if (!isModalOpen) return null;
+
+  function handleFormSubmit(updatedTransaction) {
+    onHandleEditTransaction({ ...transaction, ...updatedTransaction });
+    onCloseModal();
+  }
+
   return (
     <StyledModal>
       <StyledFormContainer>
@@ -15,6 +24,8 @@ export default function EditTransactionModal({
           formHeader="Edit Transaction"
           buttonText="Update"
           isEditing={isEditing}
+          updatedData={transaction}
+          onAdd={handleFormSubmit}
         />
       </StyledFormContainer>
     </StyledModal>

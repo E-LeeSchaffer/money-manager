@@ -1,11 +1,18 @@
 import { categories } from "@/lib/categories";
+import { transactions } from "@/lib/transactions";
 import { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 import styled from "styled-components";
 
-export default function TransactionForm({ onAdd, formHeader, buttonText }) {
+export default function TransactionForm({
+  onAdd,
+  formHeader,
+  buttonText,
+  updatedData = {},
+  isEditing,
+}) {
   const today = new Date().toISOString().split("T")[0];
-  const [selectedType, setSelectedType] = useState("");
+  const [selectedType, setSelectedType] = useState(updatedData.type || "");
   const [amount, setAmount] = useState("");
   const [typeError, setTypeError] = useState(false);
 
@@ -31,7 +38,6 @@ export default function TransactionForm({ onAdd, formHeader, buttonText }) {
     event.target.reset();
     setAmount("");
     setSelectedType("");
-    setSelectedType(false);
   }
 
   return (
@@ -46,6 +52,7 @@ export default function TransactionForm({ onAdd, formHeader, buttonText }) {
               id="name"
               name="name"
               maxLength={40}
+              defaultValue={updatedData.name || ""}
               required
             />
           </FormRow>
@@ -57,7 +64,7 @@ export default function TransactionForm({ onAdd, formHeader, buttonText }) {
               maxLength="9"
               allowNegativeValue={false}
               intlConfig={{ locale: "de-DE", currency: "EUR" }}
-              value={amount}
+              defaultValue={updatedData.amount || ""}
               onValueChange={(value) => {
                 setAmount(value);
               }}
@@ -70,7 +77,7 @@ export default function TransactionForm({ onAdd, formHeader, buttonText }) {
             </StyledCategoryLabel>
             <StyledCategorySelect
               id="category"
-              defaultValue=""
+              defaultValue={updatedData.category || ""}
               name="category"
               required
             >
@@ -99,7 +106,6 @@ export default function TransactionForm({ onAdd, formHeader, buttonText }) {
                 }}
               />
               <StyledRadioLabel htmlFor="income">Income</StyledRadioLabel>
-
               <StyledRadioInput
                 id="expense"
                 name="type"
@@ -123,7 +129,7 @@ export default function TransactionForm({ onAdd, formHeader, buttonText }) {
               type="date"
               id="date"
               name="date"
-              defaultValue={today}
+              defaultValue={updatedData.date || today}
               required
             />
           </FormRow>

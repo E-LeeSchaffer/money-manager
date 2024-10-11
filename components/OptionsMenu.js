@@ -2,7 +2,12 @@ import styled from "styled-components";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function OptionsMenu({ onHandleDelete, onOpenModal }) {
+export default function OptionsMenu({
+  onHandleDelete,
+  onOpenModal,
+  onHandleOpenEditMode,
+  transaction,
+}) {
   const [isOptionSelect, setIsOptionSelect] = useState(false);
 
   function toggleOptions() {
@@ -26,6 +31,7 @@ export default function OptionsMenu({ onHandleDelete, onOpenModal }) {
             onClick={() => {
               onOpenModal();
               setIsOptionSelect(false);
+              onHandleOpenEditMode(transaction);
             }}
           >
             Edit

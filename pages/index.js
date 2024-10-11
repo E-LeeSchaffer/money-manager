@@ -16,6 +16,7 @@ export default function HomePage() {
   const [successMessage, setSuccessMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [updatedTransaction, setUpdatedTransaction] = useState("");
 
   useEffect(() => {
     if (successMessage !== "") {
@@ -52,12 +53,10 @@ export default function HomePage() {
     );
   }
 
-  function handleOpenEditMode() {
+  function handleOpenEditMode(transaction) {
     setIsEditing(true);
-  }
-
-  function handleConfirmEdit() {
-    handleEditTransaction(transactionsList.id);
+    setUpdatedTransaction(transaction);
+    setIsModalOpen(true);
   }
 
   function openModal() {
@@ -68,8 +67,6 @@ export default function HomePage() {
     setIsModalOpen(false);
   }
 
-  function handleUpdateData(updatedTransaction) {}
-
   return (
     <>
       <Header />
@@ -79,6 +76,8 @@ export default function HomePage() {
           isModalOpen={isModalOpen}
           onCloseModal={closeModal}
           isEditing={isEditing}
+          transaction={updatedTransaction}
+          onHandleEditTransaction={handleEditTransaction}
         ></EditTransactionModal>
         <TransactionForm
           formHeader="Add a new transaction"
@@ -95,7 +94,6 @@ export default function HomePage() {
           handleOpenEditMode={handleOpenEditMode}
           openModal={openModal}
           onCloseModal={closeModal}
-          handleUpdateData={handleUpdateData}
         />
       </main>
     </>
