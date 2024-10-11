@@ -3,12 +3,7 @@ import { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 import styled from "styled-components";
 
-export default function TransactionForm({
-  onAdd,
-  formHeader,
-  isEditing,
-  buttonText,
-}) {
+export default function TransactionForm({ onAdd, formHeader, buttonText }) {
   const today = new Date().toISOString().split("T")[0];
   const [selectedType, setSelectedType] = useState("");
   const [amount, setAmount] = useState("");
@@ -134,7 +129,6 @@ export default function TransactionForm({
           </FormRow>
         </StyledFieldset>
         <StyledButton type="submit">{buttonText}</StyledButton>
-        {isEditing && <StyledButton>Cancel</StyledButton>}
       </StyledForm>
     </>
   );

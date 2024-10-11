@@ -31,6 +31,7 @@ export default function TransactionsList({
   handleDeleteTransaction,
   handleEditTransaction,
   handleOpenEditMode,
+  openModal,
 }) {
   const groupedTransactions = groupTransactionByDate(transactions);
   return (
@@ -48,6 +49,7 @@ export default function TransactionsList({
                       onHandleEditTransaction={handleEditTransaction}
                       transaction={transaction}
                       handleOpenEditMode={handleOpenEditMode}
+                      openModal={openModal}
                     />
                   </StyledList>
                 ))}

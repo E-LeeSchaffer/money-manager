@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import EditTransactionModal from "@/components/Modal";
 import TransactionForm from "@/components/TransactionForm";
 import TransactionsList from "@/components/TransactionsList";
 import { transactions } from "@/lib/transactions";
@@ -14,6 +15,7 @@ export default function HomePage() {
   );
   const [successMessage, setSuccessMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (successMessage !== "") {
@@ -58,25 +60,31 @@ export default function HomePage() {
     handleEditTransaction(transactionsList.id);
   }
 
+  function openModal() {
+    setIsModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsModalOpen(false);
+  }
+
+  function handleUpdateData(updatedTransaction) {}
+
   return (
     <>
       <Header />
       <main>
         <StyledTitle>Transactions</StyledTitle>
-        {!isEditing ? (
-          <TransactionForm
-            formHeader="Add a new transaction"
-            buttonText="Add"
-            onAdd={handleAddTransaction}
-          />
-        ) : (
-          <TransactionForm
-            formHeader="Edit Transaction"
-            buttonText="Update"
-            isEditing={isEditing}
-          />
-        )}
-
+        <EditTransactionModal
+          isModalOpen={isModalOpen}
+          onCloseModal={closeModal}
+          isEditing={isEditing}
+        ></EditTransactionModal>
+        <TransactionForm
+          formHeader="Add a new transaction"
+          buttonText="Add"
+          onAdd={handleAddTransaction}
+        />
         {successMessage && (
           <StyleSuccessMessage>{successMessage}</StyleSuccessMessage>
         )}
@@ -85,6 +93,9 @@ export default function HomePage() {
           handleEditTransaction={handleEditTransaction}
           transactions={transactionsList}
           handleOpenEditMode={handleOpenEditMode}
+          openModal={openModal}
+          onCloseModal={closeModal}
+          handleUpdateData={handleUpdateData}
         />
       </main>
     </>

@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import OptionsMenu from "./OptionsMenu";
 import { useState } from "react";
-import TransactionForm from "./TransactionForm";
 
 export default function TransactionItem({
   transaction,
   onHandleDeleteTransaction,
   handleOpenEditMode,
+  openModal,
 }) {
   const formatNumber = new Intl.NumberFormat("de-DE", {
     style: "currency",
@@ -49,6 +49,8 @@ export default function TransactionItem({
         <OptionsMenu
           onHandleDelete={handleDelete}
           onHandleOpenEditMode={handleOpenEditMode}
+          onOpenModal={openModal}
+          transaction={transaction}
         />
       </StyledOptionsContainer>
       <StyledName>{transaction.name}</StyledName>
