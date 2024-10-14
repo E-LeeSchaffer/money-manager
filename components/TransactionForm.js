@@ -13,8 +13,9 @@ export default function TransactionForm({
 }) {
   const today = new Date().toISOString().split("T")[0];
   const [selectedType, setSelectedType] = useState(updatedData.type || "");
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(updatedData.amount?.toString() || "");
   const [typeError, setTypeError] = useState(false);
+  const [amountError, setAmountError] = useState(false);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -22,11 +23,12 @@ export default function TransactionForm({
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
-    if (data.amount) {
-      data.amount = parseFloat(
-        data.amount.replace(/\./g, "").replace(",", ".")
-      );
-    }
+    data.amount = parseFloat(amount.replace(/\./g, "").replace(",", "."));
+
+    if (data.amount <= 0) {
+      setAmountError(true);
+      return;
+    } else setAmountError(false);
 
     if (!selectedType) {
       setTypeError(true);
@@ -64,12 +66,17 @@ export default function TransactionForm({
               maxLength="9"
               allowNegativeValue={false}
               intlConfig={{ locale: "de-DE", currency: "EUR" }}
-              defaultValue={updatedData.amount || ""}
+              value={amount}
               onValueChange={(value) => {
-                setAmount(value);
+                setAmount(value ?? "");
               }}
               required
             />
+            {amountError && (
+              <ErrorMessage>
+                Please enter an amount greater than zero.
+              </ErrorMessage>
+            )}
           </FormRow>
           <FormRow>
             <StyledCategoryLabel htmlFor="category">
@@ -157,6 +164,7 @@ const StyledFieldset = styled.fieldset`
     "nameLabel nameInput"
     "amountLabel amountInput"
     "categoryLabel categoryInput"
+    ". amountErrorMessage"
     "typeLabel typeToggleButton"
     ". typeErrorMessage"
     "dateLabel dateInput";
@@ -256,7 +264,7 @@ const StyledRadioLabel = styled.label`
 `;
 
 const ErrorMessage = styled.p`
-  grid-area: typeErrorMessage;
+  grid-area: {amountError ? amountErrorMessage : typeErrorMessage } ;
   color: red;
   font-size: 0.6rem;
   margin-bottom: 4px;

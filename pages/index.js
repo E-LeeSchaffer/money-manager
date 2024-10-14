@@ -1,8 +1,7 @@
 import Header from "@/components/Header";
-import EditTransactionModal from "@/components/Modal";
+import EditTransactionModal from "@/components/EditTransactionModal";
 import TransactionForm from "@/components/TransactionForm";
 import TransactionsList from "@/components/TransactionsList";
-import { transactions } from "@/lib/transactions";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { ulid } from "ulid";
@@ -11,7 +10,7 @@ import useLocalStorageState from "use-local-storage-state";
 export default function HomePage() {
   const [transactionsList, setTransactionsList] = useLocalStorageState(
     "transactions",
-    { defaultValue: transactions }
+    { defaultValue: [] }
   );
   const [successMessage, setSuccessMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
