@@ -8,14 +8,6 @@ export default function TransactionItem({
   handleOpenEditMode,
   openModal,
 }) {
-  const formatNumber = new Intl.NumberFormat("de-DE", {
-    style: "currency",
-    currency: "EUR",
-  }).format(
-    transaction.type === "expense"
-      ? -Math.abs(transaction.amount)
-      : transaction.amount
-  );
   const [isDeleting, setIsDeleting] = useState(false);
 
   function handleDelete() {
