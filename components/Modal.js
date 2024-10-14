@@ -8,6 +8,7 @@ export default function EditTransactionModal({
   onCloseModal,
   transaction,
   onHandleEditTransaction,
+  formatNumber,
 }) {
   if (!isModalOpen) return null;
 
@@ -15,6 +16,14 @@ export default function EditTransactionModal({
     onHandleEditTransaction({ ...transaction, ...updatedTransaction });
     onCloseModal();
   }
+
+  const formattedTransaction = {
+    ...transaction,
+    amount:
+      transaction.type === "expense"
+        ? Math.abs(transaction.amount)
+        : transaction.amount,
+  };
 
   return (
     <StyledModal>
@@ -24,7 +33,7 @@ export default function EditTransactionModal({
           formHeader="Edit Transaction"
           buttonText="Update"
           isEditing={isEditing}
-          updatedData={transaction}
+          updatedData={formattedTransaction}
           onAdd={handleFormSubmit}
         />
       </StyledFormContainer>

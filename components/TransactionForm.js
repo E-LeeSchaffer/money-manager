@@ -13,20 +13,22 @@ export default function TransactionForm({
 }) {
   const today = new Date().toISOString().split("T")[0];
   const [selectedType, setSelectedType] = useState(updatedData.type || "");
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(updatedData.amount?.toString() || "");
   const [typeError, setTypeError] = useState(false);
+  const [amountError, setAmountError] = useState(false);
 
   function handleSubmit(event) {
     event.preventDefault();
-
     const formData = new FormData(event.target);
+
     const data = Object.fromEntries(formData);
 
-    if (data.amount) {
-      data.amount = parseFloat(
-        data.amount.replace(/\./g, "").replace(",", ".")
-      );
-    }
+    data.amount = parseFloat(amount.replace(/\./g, "").replace(",", "."));
+
+    if (data.amount <= 0) {
+      setAmountError(true);
+      return;
+    } else setAmountError(false);
 
     if (!selectedType) {
       setTypeError(true);
@@ -64,12 +66,17 @@ export default function TransactionForm({
               maxLength="9"
               allowNegativeValue={false}
               intlConfig={{ locale: "de-DE", currency: "EUR" }}
-              defaultValue={updatedData.amount || ""}
+              value={amount}
               onValueChange={(value) => {
-                setAmount(value);
+                setAmount(value ?? "");
               }}
               required
             />
+            {amountError && (
+              <ErrorMessageAmount>
+                Please enter an amount greater than zero.
+              </ErrorMessageAmount>
+            )}
           </FormRow>
           <FormRow>
             <StyledCategoryLabel htmlFor="category">
@@ -120,7 +127,9 @@ export default function TransactionForm({
               <StyledRadioLabel htmlFor="expense">Expense</StyledRadioLabel>
             </StyledToggleButton>
             {typeError && (
-              <ErrorMessage>Please select a transaction type.</ErrorMessage>
+              <ErrorMessageType>
+                Please select a transaction type.
+              </ErrorMessageType>
             )}
           </FormRow>
           <FormRow>
@@ -152,10 +161,10 @@ const StyledFieldset = styled.fieldset`
   border-color: var(--dark-grey-color);
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(6, auto);
   grid-template-areas:
     "nameLabel nameInput"
     "amountLabel amountInput"
+    ". amountErrorMessage"
     "categoryLabel categoryInput"
     "typeLabel typeToggleButton"
     ". typeErrorMessage"
@@ -163,7 +172,6 @@ const StyledFieldset = styled.fieldset`
   padding: 12px 16px;
   gap: 4px;
 `;
-
 const FormRow = styled.div`
   display: contents;
 `;
@@ -255,46 +263,8 @@ const StyledRadioLabel = styled.label`
   grid-area: radioLabel;
 `;
 
-const ErrorMessage = styled.p`
-  grid-area: typeErrorMessage;
-  color: red;
-  font-size: 0.6rem;
-  margin-bottom: 4px;
-`;
-
-const StyledDateLabel = styled.label`
-  grid-area: dateLabel;
-`;
-
-const StyledDateInput = styled.input`
-  grid-area: dateInput;
-  font-family: sofia-pro;
-  padding: 4px 12px;
-  border: 1px solid var(--dark-grey-color);
-  border-radius: 24px;
-  background-color: white;
-  color: var(--text-color-dark);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease-in-out;
-
-  &:hover {
-    background-color: var(--light-bg-color);
-  }
-
-  &:focus {
-    border-color: var(--accent-color);
-    outline: none;
-    box-shadow: 0 0 4px rgba(70, 134, 205, 0.8);
-  }
-`;
-
-const StyledLegend = styled.legend`
-  padding: 6px;
-  text-align: center;
-  font-weight: 500;
-`;
-
 const StyledToggleButton = styled.div`
+  grid-area: typeToggleButton;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -335,6 +305,48 @@ const StyledToggleButton = styled.div`
     background-color: var(--accent-color);
     color: white;
   }
+`;
+const ErrorMessageAmount = styled.p`
+  grid-area: amountErrorMessage;
+  color: red;
+  font-size: 0.6rem;
+`;
+const ErrorMessageType = styled.p`
+  grid-area: typeErrorMessage;
+  color: red;
+  font-size: 0.6rem;
+`;
+
+const StyledDateLabel = styled.label`
+  grid-area: dateLabel;
+`;
+
+const StyledDateInput = styled.input`
+  grid-area: dateInput;
+  font-family: sofia-pro;
+  padding: 4px 12px;
+  border: 1px solid var(--dark-grey-color);
+  border-radius: 24px;
+  background-color: white;
+  color: var(--text-color-dark);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: var(--light-bg-color);
+  }
+
+  &:focus {
+    border-color: var(--accent-color);
+    outline: none;
+    box-shadow: 0 0 4px rgba(70, 134, 205, 0.8);
+  }
+`;
+
+const StyledLegend = styled.legend`
+  padding: 6px;
+  text-align: center;
+  font-weight: 500;
 `;
 
 const StyledButton = styled.button`

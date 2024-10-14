@@ -28,6 +28,20 @@ export default function HomePage() {
     }
   }, [successMessage]);
 
+  function formatNumber(transaction) {
+    const formatter = new Intl.NumberFormat("de-DE", {
+      style: "currency",
+      currency: "EUR",
+    });
+
+    const amount =
+      transaction.type === "expense"
+        ? -Math.abs(transaction.amount)
+        : transaction.amount;
+
+    return formatter.format(amount);
+  }
+
   function handleAddTransaction(data) {
     setTransactionsList([
       { ...data, id: ulid(), currency: "EUR" },
@@ -51,6 +65,7 @@ export default function HomePage() {
           : transaction
       )
     );
+    setSuccessMessage("Transaction successfully updated!");
   }
 
   function handleOpenEditMode(transaction) {
@@ -78,6 +93,7 @@ export default function HomePage() {
           isEditing={isEditing}
           transaction={updatedTransaction}
           onHandleEditTransaction={handleEditTransaction}
+          formatNumber={formatNumber}
         ></EditTransactionModal>
         <TransactionForm
           formHeader="Add a new transaction"
