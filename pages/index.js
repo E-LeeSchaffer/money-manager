@@ -110,6 +110,7 @@ export default function HomePage() {
           handleOpenEditMode={handleOpenEditMode}
           openModal={openModal}
           onCloseModal={closeModal}
+          formatNumber={formatNumber}
         />
       </main>
     </>

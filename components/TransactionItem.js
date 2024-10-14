@@ -7,8 +7,11 @@ export default function TransactionItem({
   onHandleDeleteTransaction,
   handleOpenEditMode,
   openModal,
+  formatNumber,
 }) {
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const formattedAmount = formatNumber(transaction);
 
   function handleDelete() {
     setIsDeleting(true);
@@ -47,7 +50,7 @@ export default function TransactionItem({
       </StyledOptionsContainer>
       <StyledName>{transaction.name}</StyledName>
       <StyledCategory>{transaction.category}</StyledCategory>
-      <StyledAmount type={transaction.type}>{formatNumber}</StyledAmount>
+      <StyledAmount type={transaction.type}>{formattedAmount}</StyledAmount>
     </StyledCard>
   );
 }

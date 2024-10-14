@@ -35,6 +35,7 @@ export default function EditTransactionModal({
           isEditing={isEditing}
           updatedData={formattedTransaction}
           onAdd={handleFormSubmit}
+          formatNumber={formatNumber}
         />
       </StyledFormContainer>
     </StyledModal>
