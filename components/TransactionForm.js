@@ -1,6 +1,5 @@
 import { categories } from "@/lib/categories";
-import { transactions } from "@/lib/transactions";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 import styled from "styled-components";
 
@@ -9,10 +8,10 @@ export default function TransactionForm({
   formHeader,
   buttonText,
   updatedData = {},
-  isEditing,
 }) {
+  const amountInput = useRef(null);
+
   const today = new Date().toISOString().split("T")[0];
-  const [selectedType, setSelectedType] = useState(updatedData.type || "");
   const [amount, setAmount] = useState(updatedData.amount?.toString() || "");
   const [typeError, setTypeError] = useState(false);
   const [amountError, setAmountError] = useState(false);
@@ -23,23 +22,23 @@ export default function TransactionForm({
 
     const data = Object.fromEntries(formData);
 
-    data.amount = parseFloat(amount.replace(/\./g, "").replace(",", "."));
+    data.amount = parseFloat(data.amount.replace(/\./g, "").replace(",", "."));
 
     if (data.amount <= 0) {
       setAmountError(true);
       return;
-    } else setAmountError(false);
+    } else {
+      setAmountError(false);
+    }
 
-    if (!selectedType) {
+    if (!data.type) {
       setTypeError(true);
       return;
     }
 
     onAdd(data);
-
     event.target.reset();
     setAmount("");
-    setSelectedType("");
   }
 
   return (
@@ -65,11 +64,10 @@ export default function TransactionForm({
               name="amount"
               maxLength="9"
               allowNegativeValue={false}
+              decimalsLimit={2}
               intlConfig={{ locale: "de-DE", currency: "EUR" }}
               value={amount}
-              onValueChange={(value) => {
-                setAmount(value ?? "");
-              }}
+              onValueChange={(value) => setAmount(value)}
               required
             />
             {amountError && (
@@ -106,9 +104,8 @@ export default function TransactionForm({
                 name="type"
                 type="radio"
                 value="income"
-                checked={selectedType === "income"}
+                defaultChecked={updatedData.type === "income"}
                 onChange={() => {
-                  setSelectedType("income");
                   setTypeError(false);
                 }}
               />
@@ -118,9 +115,8 @@ export default function TransactionForm({
                 name="type"
                 type="radio"
                 value="expense"
-                checked={selectedType === "expense"}
+                defaultChecked={updatedData.type === "expense"}
                 onChange={() => {
-                  setSelectedType("expense");
                   setTypeError(false);
                 }}
               />

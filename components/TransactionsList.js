@@ -51,7 +51,6 @@ export default function TransactionsList({
                       transaction={transaction}
                       handleOpenEditMode={handleOpenEditMode}
                       openModal={openModal}
-                      formatNumber={formatNumber}
                     />
                   </StyledList>
                 ))}

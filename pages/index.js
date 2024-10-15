@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import EditTransactionModal from "@/components/Modal";
+import Modal from "@/components/Modal";
 import TransactionForm from "@/components/TransactionForm";
 import TransactionsList from "@/components/TransactionsList";
 import { transactions } from "@/lib/transactions";
@@ -16,7 +16,7 @@ export default function HomePage() {
   const [successMessage, setSuccessMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [updatedTransaction, setUpdatedTransaction] = useState("");
+  const [editTransaction, setEditTransaction] = useState("");
 
   useEffect(() => {
     if (successMessage !== "") {
@@ -27,20 +27,6 @@ export default function HomePage() {
       return () => clearTimeout(timer);
     }
   }, [successMessage]);
-
-  function formatNumber(transaction) {
-    const formatter = new Intl.NumberFormat("de-DE", {
-      style: "currency",
-      currency: "EUR",
-    });
-
-    const amount =
-      transaction.type === "expense"
-        ? -Math.abs(transaction.amount)
-        : transaction.amount;
-
-    return formatter.format(amount);
-  }
 
   function handleAddTransaction(data) {
     setTransactionsList([
@@ -70,7 +56,7 @@ export default function HomePage() {
 
   function handleOpenEditMode(transaction) {
     setIsEditing(true);
-    setUpdatedTransaction(transaction);
+    setEditTransaction(transaction);
     setIsModalOpen(true);
   }
 
@@ -82,19 +68,25 @@ export default function HomePage() {
     setIsModalOpen(false);
   }
 
+  function handleFormSubmit(updatedTransaction) {
+    handleEditTransaction({ ...editTransaction, ...updatedTransaction });
+    closeModal();
+  }
+
   return (
     <>
       <Header />
       <main>
         <StyledTitle>Transactions</StyledTitle>
-        <EditTransactionModal
-          isModalOpen={isModalOpen}
-          onCloseModal={closeModal}
-          isEditing={isEditing}
-          transaction={updatedTransaction}
-          onHandleEditTransaction={handleEditTransaction}
-          formatNumber={formatNumber}
-        ></EditTransactionModal>
+        <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
+          <TransactionForm
+            formHeader="Edit Transaction"
+            buttonText="Update"
+            isEditing={isEditing}
+            updatedData={editTransaction}
+            onAdd={handleFormSubmit}
+          />
+        </Modal>
         <TransactionForm
           formHeader="Add a new transaction"
           buttonText="Add"
@@ -110,7 +102,6 @@ export default function HomePage() {
           handleOpenEditMode={handleOpenEditMode}
           openModal={openModal}
           onCloseModal={closeModal}
-          formatNumber={formatNumber}
         />
       </main>
     </>

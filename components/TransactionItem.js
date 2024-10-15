@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import OptionsMenu from "./OptionsMenu";
 import { useState } from "react";
+import { formatNumber } from "@/lib/utils";
 
 export default function TransactionItem({
   transaction,
   onHandleDeleteTransaction,
   handleOpenEditMode,
   openModal,
-  formatNumber,
 }) {
   const [isDeleting, setIsDeleting] = useState(false);
 

@@ -1,43 +1,15 @@
 import styled from "styled-components";
-import TransactionForm from "./TransactionForm";
-import { transactions } from "@/lib/transactions";
 
-export default function EditTransactionModal({
-  isModalOpen,
-  isEditing,
-  onCloseModal,
-  transaction,
-  onHandleEditTransaction,
-  formatNumber,
-}) {
+export default function Modal({ isModalOpen, onCloseModal, children }) {
   if (!isModalOpen) return null;
-
-  function handleFormSubmit(updatedTransaction) {
-    onHandleEditTransaction({ ...transaction, ...updatedTransaction });
-    onCloseModal();
-  }
-
-  const formattedTransaction = {
-    ...transaction,
-    amount:
-      transaction.type === "expense"
-        ? Math.abs(transaction.amount)
-        : transaction.amount,
-  };
 
   return (
     <StyledModal>
-      <StyledFormContainer>
+      <Backdrop onClick={onCloseModal} />
+      <Content>
         <button onClick={onCloseModal}>X</button>
-        <TransactionForm
-          formHeader="Edit Transaction"
-          buttonText="Update"
-          isEditing={isEditing}
-          updatedData={formattedTransaction}
-          onAdd={handleFormSubmit}
-          formatNumber={formatNumber}
-        />
-      </StyledFormContainer>
+        {children}
+      </Content>
     </StyledModal>
   );
 }
@@ -48,18 +20,26 @@ const StyledModal = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 100;
 `;
 
-const StyledFormContainer = styled.div`
+const Content = styled.div`
   background: white;
   padding: 20px;
   border-radius: 16px;
   max-width: 500px;
   width: 100%;
   position: relative;
+  margin-inline: 16px;
+`;
+
+const Backdrop = styled.button`
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  border: none;
 `;
