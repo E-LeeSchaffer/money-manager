@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Modal from "@/components/Modal";
 import TransactionForm from "@/components/TransactionForm";
 import TransactionsList from "@/components/TransactionsList";
 import { transactions } from "@/lib/transactions";
@@ -13,6 +14,9 @@ export default function HomePage() {
     { defaultValue: transactions }
   );
   const [successMessage, setSuccessMessage] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editTransaction, setEditTransaction] = useState("");
 
   useEffect(() => {
     if (successMessage !== "") {
@@ -39,18 +43,60 @@ export default function HomePage() {
     setSuccessMessage("Transaction successfully deleted!");
   }
 
+  function handleEditTransaction(updatedTransaction) {
+    setTransactionsList(
+      transactionsList.map((transaction) =>
+        transaction.id === updatedTransaction.id
+          ? updatedTransaction
+          : transaction
+      )
+    );
+    setSuccessMessage("Transaction successfully updated!");
+  }
+
+  function handleOpenEditMode(transaction) {
+    setIsEditing(true);
+    setEditTransaction(transaction);
+    setIsModalOpen(true);
+  }
+
+  function openModal() {
+    setIsModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsModalOpen(false);
+  }
+
+  function handleFormSubmit(updatedTransaction) {
+    handleEditTransaction({ ...editTransaction, ...updatedTransaction });
+    closeModal();
+  }
+
   return (
     <>
       <Header />
       <main>
         <StyledTitle>Transactions</StyledTitle>
-        <TransactionForm onAdd={handleAddTransaction} />
+        <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
+          <TransactionForm
+            isEditing={isEditing}
+            initialData={editTransaction}
+            onSubmit={handleFormSubmit}
+            variant="edit"
+          />
+        </Modal>
+        <TransactionForm variant="add" onSubmit={handleAddTransaction} />
         {successMessage && (
           <StyleSuccessMessage>{successMessage}</StyleSuccessMessage>
         )}
         <TransactionsList
           handleDeleteTransaction={handleDeleteTransaction}
+          handleEditTransaction={handleEditTransaction}
           transactions={transactionsList}
+          handleOpenEditMode={handleOpenEditMode}
+          openModal={openModal}
+          onCloseModal={closeModal}
         />
       </main>
     </>

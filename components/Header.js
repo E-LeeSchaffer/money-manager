@@ -20,7 +20,7 @@ export default function Header() {
     };
   }, []);
 
-  return <StyledHeader $isScrolled={isScrolled}>Money Manager</StyledHeader>;
+  return <StyledHeader $isScrolled={isScrolled}>Money Bin</StyledHeader>;
 }
 
 const StyledHeader = styled.h1`

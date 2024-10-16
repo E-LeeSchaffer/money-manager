@@ -2,12 +2,18 @@ import styled from "styled-components";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function OptionsMenu({ onHandleDelete }) {
+export default function OptionsMenu({
+  onHandleDelete,
+  onOpenModal,
+  onHandleOpenEditMode,
+  transaction,
+}) {
   const [isOptionSelect, setIsOptionSelect] = useState(false);
 
   function toggleOptions() {
     setIsOptionSelect(!isOptionSelect);
   }
+
   return (
     <>
       <StyledToggleButton type="button" onClick={toggleOptions}>
@@ -20,14 +26,25 @@ export default function OptionsMenu({ onHandleDelete }) {
       </StyledToggleButton>
       {isOptionSelect ? (
         <StyledOptionsModal>
-          <StyledDeleteButton
+          <StyledOptionsSelectButton
+            type="button"
+            onClick={() => {
+              onOpenModal();
+              setIsOptionSelect(false);
+              onHandleOpenEditMode(transaction);
+            }}
+          >
+            Edit
+          </StyledOptionsSelectButton>
+          <StyledOptionsSelectButton
+            type="button"
             onClick={() => {
               onHandleDelete();
               setIsOptionSelect(false);
             }}
           >
             Delete
-          </StyledDeleteButton>
+          </StyledOptionsSelectButton>
         </StyledOptionsModal>
       ) : null}
     </>
@@ -56,7 +73,7 @@ const StyledOptionsModal = styled.div`
   padding: 2px;
 `;
 
-const StyledDeleteButton = styled.button`
+const StyledOptionsSelectButton = styled.button`
   border: none;
   background-color: transparent;
   text-align: end;

@@ -1,20 +1,17 @@
 import styled from "styled-components";
 import OptionsMenu from "./OptionsMenu";
 import { useState } from "react";
+import { formatNumber } from "@/lib/utils";
 
 export default function TransactionItem({
   transaction,
   onHandleDeleteTransaction,
+  handleOpenEditMode,
+  openModal,
 }) {
-  const formatNumber = new Intl.NumberFormat("de-DE", {
-    style: "currency",
-    currency: "EUR",
-  }).format(
-    transaction.type === "expense"
-      ? -Math.abs(transaction.amount)
-      : transaction.amount
-  );
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const formattedAmount = formatNumber(transaction);
 
   function handleDelete() {
     setIsDeleting(true);
@@ -44,11 +41,16 @@ export default function TransactionItem({
   return (
     <StyledCard>
       <StyledOptionsContainer>
-        <OptionsMenu onHandleDelete={handleDelete} />
+        <OptionsMenu
+          onHandleDelete={handleDelete}
+          onHandleOpenEditMode={handleOpenEditMode}
+          onOpenModal={openModal}
+          transaction={transaction}
+        />
       </StyledOptionsContainer>
       <StyledName>{transaction.name}</StyledName>
       <StyledCategory>{transaction.category}</StyledCategory>
-      <StyledAmount type={transaction.type}>{formatNumber}</StyledAmount>
+      <StyledAmount type={transaction.type}>{formattedAmount}</StyledAmount>
     </StyledCard>
   );
 }
