@@ -80,18 +80,13 @@ export default function HomePage() {
         <StyledTitle>Transactions</StyledTitle>
         <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
           <TransactionForm
-            formHeader="Edit Transaction"
-            buttonText="Update"
             isEditing={isEditing}
-            updatedData={editTransaction}
-            onAdd={handleFormSubmit}
+            initialData={editTransaction}
+            onSubmit={handleFormSubmit}
+            variant="edit"
           />
         </Modal>
-        <TransactionForm
-          formHeader="Add a new transaction"
-          buttonText="Add"
-          onAdd={handleAddTransaction}
-        />
+        <TransactionForm variant="add" onSubmit={handleAddTransaction} />
         {successMessage && (
           <StyleSuccessMessage>{successMessage}</StyleSuccessMessage>
         )}

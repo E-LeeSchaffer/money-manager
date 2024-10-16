@@ -1,20 +1,20 @@
 import { categories } from "@/lib/categories";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 import styled from "styled-components";
 
 export default function TransactionForm({
-  onAdd,
-  formHeader,
-  buttonText,
-  updatedData = {},
+  onSubmit,
+  initialData = {},
+  variant,
 }) {
-  const amountInput = useRef(null);
-
   const today = new Date().toISOString().split("T")[0];
-  const [amount, setAmount] = useState(updatedData.amount?.toString() || "");
+  const [amount, setAmount] = useState(initialData.amount?.toString() || "");
   const [typeError, setTypeError] = useState(false);
   const [amountError, setAmountError] = useState(false);
+  const formHeader =
+    variant === "edit" ? "Edit Transaction" : "Add Transaction";
+  const buttonText = variant === "edit" ? "Update" : "Add";
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -36,7 +36,7 @@ export default function TransactionForm({
       return;
     }
 
-    onAdd(data);
+    onSubmit(data);
     event.target.reset();
     setAmount("");
   }
@@ -53,7 +53,7 @@ export default function TransactionForm({
               id="name"
               name="name"
               maxLength={40}
-              defaultValue={updatedData.name || ""}
+              defaultValue={initialData.name || ""}
               required
             />
           </FormRow>
@@ -82,7 +82,7 @@ export default function TransactionForm({
             </StyledCategoryLabel>
             <StyledCategorySelect
               id="category"
-              defaultValue={updatedData.category || ""}
+              defaultValue={initialData.category || ""}
               name="category"
               required
             >
@@ -104,7 +104,7 @@ export default function TransactionForm({
                 name="type"
                 type="radio"
                 value="income"
-                defaultChecked={updatedData.type === "income"}
+                defaultChecked={initialData.type === "income"}
                 onChange={() => {
                   setTypeError(false);
                 }}
@@ -115,7 +115,7 @@ export default function TransactionForm({
                 name="type"
                 type="radio"
                 value="expense"
-                defaultChecked={updatedData.type === "expense"}
+                defaultChecked={initialData.type === "expense"}
                 onChange={() => {
                   setTypeError(false);
                 }}
@@ -134,7 +134,7 @@ export default function TransactionForm({
               type="date"
               id="date"
               name="date"
-              defaultValue={updatedData.date || today}
+              defaultValue={initialData.date || today}
               required
             />
           </FormRow>
