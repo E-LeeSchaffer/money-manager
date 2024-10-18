@@ -1,3 +1,4 @@
+import Filter from "@/components/Filter";
 import Header from "@/components/Header";
 import Modal from "@/components/Modal";
 import TransactionForm from "@/components/TransactionForm";
@@ -17,6 +18,11 @@ export default function HomePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editTransaction, setEditTransaction] = useState("");
+  const [isFilterSelectOpen, setIsFilterSelectOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useLocalStorageState(
+    "selectedCategory",
+    { defaultValue: "" }
+  );
 
   useEffect(() => {
     if (successMessage !== "") {
@@ -73,6 +79,19 @@ export default function HomePage() {
     closeModal();
   }
 
+  function toggleFilter() {
+    setIsFilterSelectOpen(!isFilterSelectOpen);
+  }
+
+  function filterTransactions(category) {
+    setIsFilterSelectOpen(false);
+    setSelectedCategory(category);
+  }
+
+  function deselectCategory() {
+    setSelectedCategory("");
+  }
+
   return (
     <>
       <Header />
@@ -90,6 +109,28 @@ export default function HomePage() {
         {successMessage && (
           <StyleSuccessMessage>{successMessage}</StyleSuccessMessage>
         )}
+
+        <StyledFilterControls>
+          {selectedCategory !== "" ? (
+            <StyledSelectedCategoryContainer>
+              <StyledSelectedCategoryDisplay>
+                <StyledSelectedCategoryName>
+                  {selectedCategory}
+                </StyledSelectedCategoryName>
+                <StyledDeselectButton type="button" onClick={deselectCategory}>
+                  x
+                </StyledDeselectButton>
+              </StyledSelectedCategoryDisplay>
+            </StyledSelectedCategoryContainer>
+          ) : null}
+          <StyledFilter
+            onFilterTransactions={filterTransactions}
+            isFilterSelectOpen={isFilterSelectOpen}
+            onToggleFilter={toggleFilter}
+            selectedCategory={selectedCategory}
+          />
+        </StyledFilterControls>
+
         <TransactionsList
           handleDeleteTransaction={handleDeleteTransaction}
           handleEditTransaction={handleEditTransaction}
@@ -125,4 +166,44 @@ const StyleSuccessMessage = styled.p`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   background-color: var(--friendly-green-color);
+`;
+
+const StyledFilterControls = styled.div`
+  border-top: 1px solid var(--dark-grey-color);
+  margin-block: 10px;
+  padding: 4px 10px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: "selectedCategoryContainer filter";
+`;
+
+const StyledSelectedCategoryContainer = styled.div`
+  grid-area: selectedCategoryContainer;
+`;
+
+const StyledSelectedCategoryDisplay = styled.div`
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  padding: 4px;
+  gap: 8px;
+  border: 1px solid var(--dark-grey-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+`;
+
+const StyledSelectedCategoryName = styled.div`
+  font-size: 0.8rem;
+`;
+
+const StyledDeselectButton = styled.button`
+  border: none;
+  background-color: transparent;
+  text-align: center;
+  font-size: 0.8rem;
+`;
+
+const StyledFilter = styled(Filter)`
+  grid-area: filter;
 `;
