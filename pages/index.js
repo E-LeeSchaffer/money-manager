@@ -1,3 +1,4 @@
+import AccountBalance from "@/components/AccountBalance";
 import Header from "@/components/Header";
 import Modal from "@/components/Modal";
 import TransactionForm from "@/components/TransactionForm";
@@ -90,6 +91,7 @@ export default function HomePage() {
         {successMessage && (
           <StyleSuccessMessage>{successMessage}</StyleSuccessMessage>
         )}
+        <AccountBalance transactions={transactionsList} />
         <TransactionsList
           handleDeleteTransaction={handleDeleteTransaction}
           handleEditTransaction={handleEditTransaction}
