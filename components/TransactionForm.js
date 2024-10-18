@@ -2,12 +2,14 @@ import { categories } from "@/lib/categories";
 import { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 import styled from "styled-components";
+import Image from "next/image";
 
 export default function TransactionForm({
   onSubmit,
   initialData = {},
   variant,
 }) {
+  const [showForm, setShowForm] = useState(false);
   const today = new Date().toISOString().split("T")[0];
   const [amount, setAmount] = useState(initialData.amount?.toString() || "");
   const [typeError, setTypeError] = useState(false);
@@ -39,111 +41,154 @@ export default function TransactionForm({
     onSubmit(data);
     event.target.reset();
     setAmount("");
+    setShowForm(false);
   }
 
   return (
     <>
-      <StyledForm onSubmit={handleSubmit}>
-        <StyledFieldset>
-          <StyledLegend>{formHeader}</StyledLegend>
-          <FormRow>
-            <StyledNameLabel htmlFor="name">Name</StyledNameLabel>
-            <StyledNameInput
-              type="text"
-              id="name"
-              name="name"
-              maxLength={40}
-              defaultValue={initialData.name || ""}
-              required
-            />
-          </FormRow>
-          <FormRow>
-            <StyledAmountLabel htmlFor="amount">Amount</StyledAmountLabel>
-            <StyledCurrencyInput
-              id="amount"
-              name="amount"
-              maxLength="9"
-              allowNegativeValue={false}
-              decimalsLimit={2}
-              intlConfig={{ locale: "de-DE", currency: "EUR" }}
-              value={amount}
-              onValueChange={(value) => setAmount(value)}
-              required
-            />
-            {amountError && (
-              <ErrorMessageAmount>
-                Please enter an amount greater than zero.
-              </ErrorMessageAmount>
-            )}
-          </FormRow>
-          <FormRow>
-            <StyledCategoryLabel htmlFor="category">
-              Category
-            </StyledCategoryLabel>
-            <StyledCategorySelect
-              id="category"
-              defaultValue={initialData.category || ""}
-              name="category"
-              required
-            >
-              <option value="" disabled>
-                Please select a category
-              </option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.name}>
-                  {category.name}
+      <StyledButtonContainer>
+        <StyledCollapsableFormButton onClick={() => setShowForm(!showForm)}>
+          {showForm ? "Hide Form" : "Add new transaction"}
+          <StyledArrowIcon
+            src={showForm ? "/images/arrow-up.svg" : "/images/arrow-down.svg"}
+            width={20}
+            height={20}
+            alt={
+              showForm ? "arrow up to close form" : "arrow down to open form"
+            }
+          />
+        </StyledCollapsableFormButton>
+      </StyledButtonContainer>
+      {showForm && (
+        <StyledForm onSubmit={handleSubmit}>
+          <StyledFieldset>
+            <StyledLegend>{formHeader}</StyledLegend>
+            <FormRow>
+              <StyledNameLabel htmlFor="name">Name</StyledNameLabel>
+              <StyledNameInput
+                type="text"
+                id="name"
+                name="name"
+                maxLength={40}
+                defaultValue={initialData.name || ""}
+                required
+              />
+            </FormRow>
+            <FormRow>
+              <StyledAmountLabel htmlFor="amount">Amount</StyledAmountLabel>
+              <StyledCurrencyInput
+                id="amount"
+                name="amount"
+                maxLength="9"
+                allowNegativeValue={false}
+                decimalsLimit={2}
+                intlConfig={{ locale: "de-DE", currency: "EUR" }}
+                value={amount}
+                onValueChange={(value) => setAmount(value)}
+                required
+              />
+              {amountError && (
+                <ErrorMessageAmount>
+                  Please enter an amount greater than zero.
+                </ErrorMessageAmount>
+              )}
+            </FormRow>
+            <FormRow>
+              <StyledCategoryLabel htmlFor="category">
+                Category
+              </StyledCategoryLabel>
+              <StyledCategorySelect
+                id="category"
+                defaultValue={initialData.category || ""}
+                name="category"
+                required
+              >
+                <option value="" disabled>
+                  Please select a category
                 </option>
-              ))}
-            </StyledCategorySelect>
-          </FormRow>
-          <FormRow>
-            <StyledTypeLabel htmlFor="type">Type</StyledTypeLabel>
-            <StyledToggleButton id="type">
-              <StyledRadioInput
-                id="income"
-                name="type"
-                type="radio"
-                value="income"
-                defaultChecked={initialData.type === "income"}
-                onChange={() => {
-                  setTypeError(false);
-                }}
+                {categories.map((category) => (
+                  <option key={category.id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </StyledCategorySelect>
+            </FormRow>
+            <FormRow>
+              <StyledTypeLabel htmlFor="type">Type</StyledTypeLabel>
+              <StyledToggleButton id="type">
+                <StyledRadioInput
+                  id="income"
+                  name="type"
+                  type="radio"
+                  value="income"
+                  defaultChecked={initialData.type === "income"}
+                  onChange={() => {
+                    setTypeError(false);
+                  }}
+                />
+                <StyledRadioLabel htmlFor="income">Income</StyledRadioLabel>
+                <StyledRadioInput
+                  id="expense"
+                  name="type"
+                  type="radio"
+                  value="expense"
+                  defaultChecked={initialData.type === "expense"}
+                  onChange={() => {
+                    setTypeError(false);
+                  }}
+                />
+                <StyledRadioLabel htmlFor="expense">Expense</StyledRadioLabel>
+              </StyledToggleButton>
+              {typeError && (
+                <ErrorMessageType>
+                  Please select a transaction type.
+                </ErrorMessageType>
+              )}
+            </FormRow>
+            <FormRow>
+              <StyledDateLabel htmlFor="date">Date</StyledDateLabel>
+              <StyledDateInput
+                type="date"
+                id="date"
+                name="date"
+                defaultValue={initialData.date || today}
+                required
               />
-              <StyledRadioLabel htmlFor="income">Income</StyledRadioLabel>
-              <StyledRadioInput
-                id="expense"
-                name="type"
-                type="radio"
-                value="expense"
-                defaultChecked={initialData.type === "expense"}
-                onChange={() => {
-                  setTypeError(false);
-                }}
-              />
-              <StyledRadioLabel htmlFor="expense">Expense</StyledRadioLabel>
-            </StyledToggleButton>
-            {typeError && (
-              <ErrorMessageType>
-                Please select a transaction type.
-              </ErrorMessageType>
-            )}
-          </FormRow>
-          <FormRow>
-            <StyledDateLabel htmlFor="date">Date</StyledDateLabel>
-            <StyledDateInput
-              type="date"
-              id="date"
-              name="date"
-              defaultValue={initialData.date || today}
-              required
-            />
-          </FormRow>
-        </StyledFieldset>
-        <StyledButton type="submit">{buttonText}</StyledButton>
-      </StyledForm>
+            </FormRow>
+          </StyledFieldset>
+          <StyledButton type="submit">{buttonText}</StyledButton>
+        </StyledForm>
+      )}
     </>
   );
 }
+
+const StyledButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledCollapsableFormButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  border-radius: 8px;
+  background-color: white;
+  padding: 4px 12px;
+  width: 12rem;
+  border: 1px solid var(--dark-grey-color);
+  color: var(--text-color-dark);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+const StyledArrowIcon = styled(Image)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 12px;
+`;
 
 const StyledForm = styled.form`
   display: flex;
