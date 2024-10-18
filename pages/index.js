@@ -1,3 +1,4 @@
+import AccountBalance from "@/components/AccountBalance";
 import Header from "@/components/Header";
 import Modal from "@/components/Modal";
 import TransactionForm from "@/components/TransactionForm";
@@ -13,6 +14,7 @@ export default function HomePage() {
     "transactions",
     { defaultValue: transactions }
   );
+  const [showForm, setShowForm] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,12 +30,17 @@ export default function HomePage() {
     }
   }, [successMessage]);
 
+  function toggleForm() {
+    setShowForm(!showForm);
+  }
+
   function handleAddTransaction(data) {
     setTransactionsList([
       { ...data, id: ulid(), currency: "EUR" },
       ...transactionsList,
     ]);
     setSuccessMessage("Transaction successfully added!");
+    setShowForm(false);
   }
 
   function handleDeleteTransaction(id) {
@@ -84,12 +91,19 @@ export default function HomePage() {
             initialData={editTransaction}
             onSubmit={handleFormSubmit}
             variant="edit"
+            showForm={!showForm}
           />
         </Modal>
-        <TransactionForm variant="add" onSubmit={handleAddTransaction} />
+        <TransactionForm
+          variant="add"
+          onSubmit={handleAddTransaction}
+          showForm={showForm}
+          toggleForm={toggleForm}
+        />
         {successMessage && (
           <StyleSuccessMessage>{successMessage}</StyleSuccessMessage>
         )}
+        {!showForm && <AccountBalance transactions={transactionsList} />}
         <TransactionsList
           handleDeleteTransaction={handleDeleteTransaction}
           handleEditTransaction={handleEditTransaction}
