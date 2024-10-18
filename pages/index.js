@@ -91,6 +91,7 @@ export default function HomePage() {
             initialData={editTransaction}
             onSubmit={handleFormSubmit}
             variant="edit"
+            showForm={!showForm}
           />
         </Modal>
         <TransactionForm

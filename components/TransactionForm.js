@@ -10,6 +10,7 @@ export default function TransactionForm({
   variant,
   showForm,
   toggleForm,
+  isEditing,
 }) {
   const today = new Date().toISOString().split("T")[0];
   const [amount, setAmount] = useState(initialData.amount?.toString() || "");
@@ -43,22 +44,23 @@ export default function TransactionForm({
     event.target.reset();
     setAmount("");
   }
-
   return (
     <>
-      <StyledButtonContainer>
-        <StyledCollapsableFormButton onClick={toggleForm}>
-          {showForm ? "Hide Form" : "Add new transaction"}
-          <StyledArrowIcon
-            src={showForm ? "/images/arrow-up.svg" : "/images/arrow-down.svg"}
-            width={20}
-            height={20}
-            alt={
-              showForm ? "arrow up to close form" : "arrow down to open form"
-            }
-          />
-        </StyledCollapsableFormButton>
-      </StyledButtonContainer>
+      {!isEditing && (
+        <StyledButtonContainer>
+          <StyledCollapsableFormButton onClick={toggleForm}>
+            {showForm ? "Hide Form" : "Add new transaction"}
+            <StyledArrowIcon
+              src={showForm ? "/images/arrow-up.svg" : "/images/arrow-down.svg"}
+              width={20}
+              height={20}
+              alt={
+                showForm ? "arrow up to close form" : "arrow down to open form"
+              }
+            />
+          </StyledCollapsableFormButton>
+        </StyledButtonContainer>
+      )}
       {showForm && (
         <StyledForm onSubmit={handleSubmit}>
           <StyledFieldset>
