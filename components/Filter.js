@@ -48,6 +48,8 @@ export default function Filter({
 
 const StyledFilterContainer = styled.div`
   position: relative;
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const StyledCategorySelect = styled.div`
