@@ -24,6 +24,10 @@ export default function HomePage() {
     "selectedCategory",
     { defaultValue: "" }
   );
+  const [filteredTransactions, setFilteredTransactions] = useLocalStorageState(
+    "filteredCategories",
+    { defaultValue: "" }
+  );
 
   useEffect(() => {
     if (successMessage !== "") {
@@ -34,6 +38,17 @@ export default function HomePage() {
       return () => clearTimeout(timer);
     }
   }, [successMessage]);
+
+  useEffect(() => {
+    if (selectedCategory !== "") {
+      const filteredTransactions = transactionsList.filter(
+        (transaction) => transaction.category === selectedCategory
+      );
+      setFilteredTransactions(filteredTransactions);
+    } else {
+      setFilteredTransactions(transactionsList);
+    }
+  }, [selectedCategory, transactionsList, setFilteredTransactions]);
 
   function handleAddTransaction(data) {
     setTransactionsList([
@@ -98,6 +113,7 @@ export default function HomePage() {
       <Header />
       <main>
         <StyledTitle>Transactions</StyledTitle>
+
         <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
           <TransactionForm
             isEditing={isEditing}
@@ -106,7 +122,9 @@ export default function HomePage() {
             variant="edit"
           />
         </Modal>
+
         <TransactionForm variant="add" onSubmit={handleAddTransaction} />
+
         {successMessage && (
           <StyleSuccessMessage>{successMessage}</StyleSuccessMessage>
         )}
@@ -140,7 +158,9 @@ export default function HomePage() {
         <TransactionsList
           handleDeleteTransaction={handleDeleteTransaction}
           handleEditTransaction={handleEditTransaction}
-          transactions={transactionsList}
+          transactions={
+            selectedCategory ? filteredTransactions : transactionsList
+          }
           handleOpenEditMode={handleOpenEditMode}
           openModal={openModal}
           onCloseModal={closeModal}
