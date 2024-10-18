@@ -35,7 +35,6 @@ export default function TransactionsList({
   handleOpenEditMode,
   openModal,
 }) {
-  console.log(transactions);
   const groupedTransactions = groupTransactionByDate(transactions);
   const emptyListMessage =
     transactions.length === 0 && selectedCategory !== ""
