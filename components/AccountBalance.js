@@ -43,12 +43,13 @@ const StyledPageContainer = styled.div`
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
+  padding-top: 12px;
   align-items: center;
   border: 0.1px solid var(--dark-grey-color);
   border-radius: 16px;
-  width: 12rem;
-  height: 4rem;
+  width: 16rem;
+  height: 6rem;
   background-color: #e9ff70;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   gap: 4px;
@@ -60,7 +61,7 @@ const StyledTitle = styled.h3`
 `;
 
 const StyledCurrentBalance = styled.div`
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: ${(props) =>
     props.type === "expense"
       ? "var(--friendly-red-color)"

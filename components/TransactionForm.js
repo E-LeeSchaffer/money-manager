@@ -8,8 +8,9 @@ export default function TransactionForm({
   onSubmit,
   initialData = {},
   variant,
+  showForm,
+  toggleForm,
 }) {
-  const [showForm, setShowForm] = useState(false);
   const today = new Date().toISOString().split("T")[0];
   const [amount, setAmount] = useState(initialData.amount?.toString() || "");
   const [typeError, setTypeError] = useState(false);
@@ -41,13 +42,12 @@ export default function TransactionForm({
     onSubmit(data);
     event.target.reset();
     setAmount("");
-    setShowForm(false);
   }
 
   return (
     <>
       <StyledButtonContainer>
-        <StyledCollapsableFormButton onClick={() => setShowForm(!showForm)}>
+        <StyledCollapsableFormButton onClick={toggleForm}>
           {showForm ? "Hide Form" : "Add new transaction"}
           <StyledArrowIcon
             src={showForm ? "/images/arrow-up.svg" : "/images/arrow-down.svg"}
@@ -167,6 +167,7 @@ const StyledButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 12px;
 `;
 
 const StyledCollapsableFormButton = styled.button`
