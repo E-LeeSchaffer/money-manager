@@ -3,7 +3,6 @@ import { isToday, isYesterday } from "date-fns";
 import TransactionItem from "./TransactionItem";
 import styled from "styled-components";
 import { format } from "date-fns";
-import { transactions } from "@/lib/transactions";
 
 const groupTransactionByDate = (transactions) => {
   return transactions.reduce((groups, transaction) => {
@@ -38,7 +37,7 @@ export default function TransactionsList({
   const groupedTransactions = groupTransactionByDate(transactions);
   const emptyListMessage =
     transactions.length === 0 && selectedCategory !== ""
-      ? "No matched found."
+      ? "No matches found"
       : "No transactions available. Please add a new transaction.";
 
   return (

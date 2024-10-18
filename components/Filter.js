@@ -17,14 +17,18 @@ export default function Filter({
           }}
         >
           <StyledImage
-            src={"/images/funnel.svg"}
+            src={
+              selectedCategory !== ""
+                ? "/images/funnel-fill.svg"
+                : "/images/funnel.svg"
+            }
             alt="filter button"
             width={15}
             height={15}
           />
         </StyledFilterButton>
         {isFilterSelectOpen && (
-          <StyledCategorySelect id="category" name="category">
+          <StyledCategoryContainer id="category" name="category">
             {categories.map((category) => (
               <StyledCategoryButton
                 key={category.id}
@@ -38,7 +42,7 @@ export default function Filter({
                 {category.name}
               </StyledCategoryButton>
             ))}
-          </StyledCategorySelect>
+          </StyledCategoryContainer>
         )}
       </StyledFilterContainer>
     </>
@@ -62,7 +66,7 @@ const StyledImage = styled(Image)`
   display: flex;
 `;
 
-const StyledCategorySelect = styled.div`
+const StyledCategoryContainer = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -73,14 +77,17 @@ const StyledCategorySelect = styled.div`
   background-color: white;
   border: 0.1px solid var(--dark-grey-color);
   border-radius: 4px;
-  gap: 2px;
-  padding: 2px;
+  padding: 4px;
 `;
 
 const StyledCategoryButton = styled.button`
   background-color: ${({ $props }) =>
     $props ? "var(--accent-color)" : "transparent"};
+  color: ${({ $props }) => ($props ? "white" : "var(ext-color-dark)")};
   padding: 0;
   border: none;
   text-align: end;
+  border-radius: 2px;
+  padding: 1px 2px;
+  font-size: 0.7rem;
 `;
