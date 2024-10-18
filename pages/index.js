@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { ulid } from "ulid";
 import useLocalStorageState from "use-local-storage-state";
+import Image from "next/image";
 
 export default function HomePage() {
   const [transactionsList, setTransactionsList] = useLocalStorageState(
@@ -118,7 +119,12 @@ export default function HomePage() {
                   {selectedCategory}
                 </StyledSelectedCategoryName>
                 <StyledDeselectButton type="button" onClick={deselectCategory}>
-                  x
+                  <StyledImage
+                    src={"/images/x-square-fill.svg"}
+                    alt="filter button"
+                    width={10}
+                    height={10}
+                  />
                 </StyledDeselectButton>
               </StyledSelectedCategoryDisplay>
             </StyledSelectedCategoryContainer>
@@ -170,8 +176,8 @@ const StyleSuccessMessage = styled.p`
 
 const StyledFilterControls = styled.div`
   border-top: 1px solid var(--dark-grey-color);
-  margin-block: 10px;
-  padding: 4px 10px;
+  margin: 12px 0 12px 0;
+  padding: 12px 10px;
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-areas: "selectedCategoryContainer filter";
@@ -184,24 +190,29 @@ const StyledSelectedCategoryContainer = styled.div`
 const StyledSelectedCategoryDisplay = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: fit-content;
-  padding: 4px;
+  height: 24px;
+  padding: 0 8px;
   gap: 8px;
   border: 1px solid var(--dark-grey-color);
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
 `;
 
 const StyledSelectedCategoryName = styled.div`
   font-size: 0.8rem;
+  line-height: 1;
 `;
 
 const StyledDeselectButton = styled.button`
   border: none;
   background-color: transparent;
-  text-align: center;
-  font-size: 0.8rem;
+  padding: 0;
+`;
+
+const StyledImage = styled(Image)`
+  display: flex;
 `;
 
 const StyledFilter = styled(Filter)`

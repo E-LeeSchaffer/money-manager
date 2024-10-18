@@ -75,11 +75,11 @@ const StyledListContainer = styled.ul`
 
 const StyledDate = styled.h3`
   font-size: 0.8rem;
-  margin: 16px 0 8px 0;
+  margin: 0 0 8px 0;
 `;
 
 const StyledList = styled.li`
-  margin-bottom: 4px;
+  margin-bottom: 12px;
 `;
 
 const StyledEmptyListMessage = styled.p`

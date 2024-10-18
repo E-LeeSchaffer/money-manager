@@ -17,7 +17,7 @@ export default function Filter({
             onToggleFilter();
           }}
         >
-          <Image
+          <StyledImage
             src={"/images/funnel.svg"}
             alt="filter button"
             width={15}
@@ -50,6 +50,17 @@ const StyledFilterContainer = styled.div`
   position: relative;
   display: flex;
   justify-content: flex-end;
+  height: 24px;
+`;
+
+const StyledFilterButton = styled.button`
+  background-color: transparent;
+  padding: 0;
+  border: none;
+`;
+
+const StyledImage = styled(Image)`
+  display: flex;
 `;
 
 const StyledCategorySelect = styled.div`
@@ -65,12 +76,6 @@ const StyledCategorySelect = styled.div`
   border-radius: 4px;
   gap: 2px;
   padding: 2px;
-`;
-
-const StyledFilterButton = styled.button`
-  background-color: transparent;
-  padding: 0;
-  border: none;
 `;
 
 const StyledCategoryButton = styled.button`
