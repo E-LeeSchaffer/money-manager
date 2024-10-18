@@ -147,7 +147,7 @@ export default function HomePage() {
               </StyledSelectedCategoryDisplay>
             </StyledSelectedCategoryContainer>
           ) : null}
-          <StyledFilter
+          <Filter
             onFilterTransactions={filterTransactions}
             isFilterSelectOpen={isFilterSelectOpen}
             onToggleFilter={toggleFilter}
@@ -234,8 +234,4 @@ const StyledDeselectButton = styled.button`
 
 const StyledImage = styled(Image)`
   display: flex;
-`;
-
-const StyledFilter = styled(Filter)`
-  grid-area: filter;
 `;

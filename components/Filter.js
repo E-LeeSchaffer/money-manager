@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { categories } from "@/lib/categories";
 import styled from "styled-components";
-import createGlobalStyle from "styled-components";
 
 export default function Filter({
   onFilterTransactions,
@@ -34,7 +33,7 @@ export default function Filter({
                 onClick={() => {
                   onFilterTransactions(category.name);
                 }}
-                props={selectedCategory === category.name}
+                $props={selectedCategory === category.name}
               >
                 {category.name}
               </StyledCategoryButton>
@@ -79,8 +78,8 @@ const StyledCategorySelect = styled.div`
 `;
 
 const StyledCategoryButton = styled.button`
-  background-color: ${({ props }) =>
-    props ? "var(--accent-color)" : "transparent"};
+  background-color: ${({ $props }) =>
+    $props ? "var(--accent-color)" : "transparent"};
   padding: 0;
   border: none;
   text-align: end;
