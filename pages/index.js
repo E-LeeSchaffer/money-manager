@@ -161,6 +161,7 @@ export default function HomePage() {
           transactions={
             selectedCategory ? filteredTransactions : transactionsList
           }
+          selectedCategory={selectedCategory}
           handleOpenEditMode={handleOpenEditMode}
           openModal={openModal}
           onCloseModal={closeModal}

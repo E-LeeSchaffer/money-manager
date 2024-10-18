@@ -3,6 +3,7 @@ import { isToday, isYesterday } from "date-fns";
 import TransactionItem from "./TransactionItem";
 import styled from "styled-components";
 import { format } from "date-fns";
+import { transactions } from "@/lib/transactions";
 
 const groupTransactionByDate = (transactions) => {
   return transactions.reduce((groups, transaction) => {
@@ -28,13 +29,19 @@ const groupTransactionByDate = (transactions) => {
 
 export default function TransactionsList({
   transactions,
+  selectedCategory,
   handleDeleteTransaction,
   handleEditTransaction,
   handleOpenEditMode,
   openModal,
-  formatNumber,
 }) {
+  console.log(transactions);
   const groupedTransactions = groupTransactionByDate(transactions);
+  const emptyListMessage =
+    transactions.length === 0 && selectedCategory !== ""
+      ? "No matched found."
+      : "No transactions available. Please add a new transaction.";
+
   return (
     <StyledListContainer>
       {transactions.length > 0 ? (
@@ -59,9 +66,7 @@ export default function TransactionsList({
           );
         })
       ) : (
-        <StyledEmptyListMessage>
-          No transactions available. Please add a new transaction.
-        </StyledEmptyListMessage>
+        <StyledEmptyListMessage>{emptyListMessage}</StyledEmptyListMessage>
       )}
     </StyledListContainer>
   );

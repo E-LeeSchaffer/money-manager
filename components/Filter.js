@@ -34,7 +34,7 @@ export default function Filter({
                 onClick={() => {
                   onFilterTransactions(category.name);
                 }}
-                isSelected={selectedCategory === category.name}
+                props={selectedCategory === category.name}
               >
                 {category.name}
               </StyledCategoryButton>
@@ -79,8 +79,8 @@ const StyledCategorySelect = styled.div`
 `;
 
 const StyledCategoryButton = styled.button`
-  background-color: ${({ isSelected }) =>
-    isSelected ? "var(--accent-color)" : "transparent"};
+  background-color: ${({ props }) =>
+    props ? "var(--accent-color)" : "transparent"};
   padding: 0;
   border: none;
   text-align: end;
