@@ -17,19 +17,17 @@ export default function AccountBalance({ transactions }) {
   const currentBalanceType = currentBalance < 0 ? "expense" : "income";
 
   return (
-    <>
-      <StyledPageContainer>
-        <StyledContainer>
-          <StyledTitle>Current Balance</StyledTitle>
-          <StyledCurrentBalance type={currentBalanceType}>
-            {formatNumber({
-              amount: currentBalance,
-              type: currentBalanceType,
-            })}
-          </StyledCurrentBalance>
-        </StyledContainer>
-      </StyledPageContainer>
-    </>
+    <StyledPageContainer>
+      <StyledAccountBalanceContainer>
+        <StyledTitle>Current Balance</StyledTitle>
+        <StyledCurrentBalance type={currentBalanceType}>
+          {formatNumber({
+            amount: currentBalance,
+            type: currentBalanceType,
+          })}
+        </StyledCurrentBalance>
+      </StyledAccountBalanceContainer>
+    </StyledPageContainer>
   );
 }
 
@@ -40,7 +38,7 @@ const StyledPageContainer = styled.div`
   align-items: center;
 `;
 
-const StyledContainer = styled.div`
+const StyledAccountBalanceContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: start;
