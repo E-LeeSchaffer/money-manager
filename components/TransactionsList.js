@@ -32,7 +32,6 @@ export default function TransactionsList({
   handleEditTransaction,
   handleOpenEditMode,
   openModal,
-  formatNumber,
 }) {
   const groupedTransactions = groupTransactionByDate(transactions);
   return (

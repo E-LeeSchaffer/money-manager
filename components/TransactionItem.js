@@ -77,6 +77,8 @@ const StyledOptionsContainer = styled.div`
 
 const StyledName = styled.div`
   grid-area: name;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const StyledCategory = styled.div`
