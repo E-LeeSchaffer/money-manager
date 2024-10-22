@@ -139,13 +139,21 @@ export default function HomePage() {
         </Modal>
 
 
-        <TransactionForm variant="add" onSubmit={handleAddTransaction} />
 
+
+        <TransactionForm
+          variant="add"
+          onSubmit={handleAddTransaction}
+          showForm={showForm}
+          toggleForm={toggleForm}
+        />
         {successMessage && (
           <StyleSuccessMessage>{successMessage}</StyleSuccessMessage>
         )}
+        {!showForm && <AccountBalance transactions={transactionsList} />}
 
-        <StyledFilterControls>
+
+                  <StyledFilterControls>
           {selectedCategory !== "" ? (
             <StyledSelectedCategoryContainer>
               <StyledSelectedCategoryDisplay>
@@ -170,19 +178,7 @@ export default function HomePage() {
             selectedCategory={selectedCategory}
           />
         </StyledFilterControls>
-
-
-        <TransactionForm
-          variant="add"
-          onSubmit={handleAddTransaction}
-          showForm={showForm}
-          toggleForm={toggleForm}
-        />
-        {successMessage && (
-          <StyleSuccessMessage>{successMessage}</StyleSuccessMessage>
-        )}
-        {!showForm && <AccountBalance transactions={transactionsList} />}
-
+          
         <TransactionsList
           handleDeleteTransaction={handleDeleteTransaction}
           handleEditTransaction={handleEditTransaction}
