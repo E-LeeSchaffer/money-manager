@@ -65,6 +65,7 @@ export default function HomePage() {
     setIsEditing(true);
     setEditTransaction(transaction);
     setIsModalOpen(true);
+    setShowForm(false);
   }
 
   function openModal() {
@@ -73,6 +74,7 @@ export default function HomePage() {
 
   function closeModal() {
     setIsModalOpen(false);
+    setIsEditing(false);
   }
 
   function handleFormSubmit(updatedTransaction) {
