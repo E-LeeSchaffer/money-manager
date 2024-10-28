@@ -36,7 +36,7 @@ export default function TransactionsList({
 }) {
   const groupedTransactions = groupTransactionByDate(transactions);
   const emptyListMessage =
-    transactions.length === 0 && selectedCategory !== ""
+    transactions.length === 0 && selectedCategory
       ? "No matches found"
       : "No transactions available. Please add a new transaction.";
 

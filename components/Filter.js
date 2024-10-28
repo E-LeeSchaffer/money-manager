@@ -9,43 +9,37 @@ export default function Filter({
   selectedCategory,
 }) {
   return (
-    <>
-      <StyledFilterContainer>
-        <StyledFilterButton
-          onClick={() => {
-            onToggleFilter();
-          }}
-        >
-          <StyledImage
-            src={
-              selectedCategory !== ""
-                ? "/images/funnel-fill.svg"
-                : "/images/funnel.svg"
-            }
-            alt="filter button"
-            width={15}
-            height={15}
-          />
-        </StyledFilterButton>
-        {isFilterSelectOpen && (
-          <StyledCategoryContainer id="category" name="category">
-            {categories.map((category) => (
-              <StyledCategoryButton
-                key={category.id}
-                type="button"
-                value={category.name}
-                onClick={() => {
-                  onFilterTransactions(category.name);
-                }}
-                $props={selectedCategory === category.name}
-              >
-                {category.name}
-              </StyledCategoryButton>
-            ))}
-          </StyledCategoryContainer>
-        )}
-      </StyledFilterContainer>
-    </>
+    <StyledFilterContainer>
+      <StyledFilterButton onClick={onToggleFilter}>
+        <StyledImage
+          src={
+            selectedCategory !== ""
+              ? "/images/funnel-fill.svg"
+              : "/images/funnel.svg"
+          }
+          alt="filter button"
+          width={15}
+          height={15}
+        />
+      </StyledFilterButton>
+      {isFilterSelectOpen && (
+        <StyledCategoryContainer id="category" name="category">
+          {categories.map((category) => (
+            <StyledCategoryButton
+              key={category.id}
+              type="button"
+              value={category.name}
+              onClick={() => {
+                onFilterTransactions(category.name);
+              }}
+              $isSelected={selectedCategory === category.name}
+            >
+              {category.name}
+            </StyledCategoryButton>
+          ))}
+        </StyledCategoryContainer>
+      )}
+    </StyledFilterContainer>
   );
 }
 
@@ -81,9 +75,10 @@ const StyledCategoryContainer = styled.div`
 `;
 
 const StyledCategoryButton = styled.button`
-  background-color: ${({ $props }) =>
-    $props ? "var(--accent-color)" : "transparent"};
-  color: ${({ $props }) => ($props ? "white" : "var(ext-color-dark)")};
+  background-color: ${({ $isSelected }) =>
+    $isSelected ? "var(--accent-color)" : "transparent"};
+  color: ${({ $isSelected }) =>
+    $isSelected ? "white" : "var(ext-color-dark)"};
   padding: 0;
   border: none;
   text-align: end;
