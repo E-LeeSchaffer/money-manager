@@ -14,6 +14,7 @@ export default function TransactionItem({
   const formattedAmount = formatNumber(transaction);
 
   function handleDelete() {
+    event.stopPropagation();
     setIsDeleting(true);
   }
 
@@ -38,8 +39,17 @@ export default function TransactionItem({
     );
   }
 
+  const handleCardClick = (event) => {
+    const target =
+      event.target.closest(".options-menu") ||
+      event.target.closest(".toggle-button");
+    if (!target) {
+      router.push(`/transactions/${transaction.id}`);
+    }
+  };
+
   return (
-    <StyledCard>
+    <StyledCard onClick={handleCardClick}>
       <StyledOptionsContainer>
         <OptionsMenu
           onHandleDelete={handleDelete}

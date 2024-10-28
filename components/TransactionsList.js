@@ -3,6 +3,7 @@ import { isToday, isYesterday } from "date-fns";
 import TransactionItem from "./TransactionItem";
 import styled from "styled-components";
 import { format } from "date-fns";
+import Link from "next/link";
 
 const groupTransactionByDate = (transactions) => {
   return transactions.reduce((groups, transaction) => {
@@ -45,13 +46,15 @@ export default function TransactionsList({
               <ul>
                 {groupedTransactions[date].map((transaction) => (
                   <StyledList key={transaction.id}>
-                    <TransactionItem
-                      onHandleDeleteTransaction={handleDeleteTransaction}
-                      onHandleEditTransaction={handleEditTransaction}
-                      transaction={transaction}
-                      handleOpenEditMode={handleOpenEditMode}
-                      openModal={openModal}
-                    />
+                    <StyledLink href={`/transactions/${transaction.id}`}>
+                      <TransactionItem
+                        onHandleDeleteTransaction={handleDeleteTransaction}
+                        onHandleEditTransaction={handleEditTransaction}
+                        transaction={transaction}
+                        handleOpenEditMode={handleOpenEditMode}
+                        openModal={openModal}
+                      />
+                    </StyledLink>
                   </StyledList>
                 ))}
               </ul>
@@ -87,4 +90,9 @@ const StyledEmptyListMessage = styled.p`
   justify-content: center;
   text-align: center;
   color: var(--dark-grey-color);
+`;
+
+const StyledLink = styled.a`
+  text-decoration: none;
+  color: inherit;
 `;
