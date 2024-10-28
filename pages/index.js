@@ -9,6 +9,7 @@ import styled from "styled-components";
 import { ulid } from "ulid";
 import useLocalStorageState from "use-local-storage-state";
 import Image from "next/image";
+import AccountBalance from "@/components/AccountBalance";
 
 export default function HomePage() {
   const [transactionsList, setTransactionsList] = useLocalStorageState(
@@ -150,6 +151,8 @@ export default function HomePage() {
             selectedCategory={selectedCategory}
           />
         </StyledFilterControls>
+
+        {!showForm && <AccountBalance transactions={transactionsList} />}
 
         <TransactionsList
           handleDeleteTransaction={handleDeleteTransaction}
