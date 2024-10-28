@@ -46,15 +46,13 @@ export default function TransactionsList({
               <ul>
                 {groupedTransactions[date].map((transaction) => (
                   <StyledList key={transaction.id}>
-                    <StyledLink href={`/transactions/${transaction.id}`}>
-                      <TransactionItem
-                        onHandleDeleteTransaction={handleDeleteTransaction}
-                        onHandleEditTransaction={handleEditTransaction}
-                        transaction={transaction}
-                        handleOpenEditMode={handleOpenEditMode}
-                        openModal={openModal}
-                      />
-                    </StyledLink>
+                    <TransactionItem
+                      onHandleDeleteTransaction={handleDeleteTransaction}
+                      onHandleEditTransaction={handleEditTransaction}
+                      transaction={transaction}
+                      handleOpenEditMode={handleOpenEditMode}
+                      openModal={openModal}
+                    />
                   </StyledList>
                 ))}
               </ul>
@@ -90,9 +88,4 @@ const StyledEmptyListMessage = styled.p`
   justify-content: center;
   text-align: center;
   color: var(--dark-grey-color);
-`;
-
-const StyledLink = styled.a`
-  text-decoration: none;
-  color: inherit;
 `;

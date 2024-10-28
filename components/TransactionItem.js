@@ -2,7 +2,7 @@ import styled from "styled-components";
 import OptionsMenu from "./OptionsMenu";
 import { useState } from "react";
 import { formatNumber } from "@/lib/utils";
-
+import Link from "next/link";
 export default function TransactionItem({
   transaction,
   onHandleDeleteTransaction,
@@ -10,22 +10,16 @@ export default function TransactionItem({
   openModal,
 }) {
   const [isDeleting, setIsDeleting] = useState(false);
-
   const formattedAmount = formatNumber(transaction);
-
   function handleDelete() {
-    event.stopPropagation();
     setIsDeleting(true);
   }
-
   function handleConfirmDelete() {
     onHandleDeleteTransaction(transaction.id);
   }
-
   function handleCancel() {
     setIsDeleting(false);
   }
-
   if (isDeleting) {
     return (
       <StyledConfirmActionContainer>
@@ -38,19 +32,20 @@ export default function TransactionItem({
       </StyledConfirmActionContainer>
     );
   }
-
-  const handleCardClick = (event) => {
-    const target =
-      event.target.closest(".options-menu") ||
-      event.target.closest(".toggle-button");
-    if (!target) {
-      router.push(`/transactions/${transaction.id}`);
-    }
-  };
-
   return (
-    <StyledCard onClick={handleCardClick}>
-      <StyledOptionsContainer>
+    <StyledCardWrapper>
+      <StyledLink href={`/transactions/${transaction.id}`}>
+        <StyledCard>
+          <StyledName>{transaction.name}</StyledName>
+          <StyledCategory>{transaction.category}</StyledCategory>
+          <StyledAmount type={transaction.type}>{formattedAmount}</StyledAmount>
+        </StyledCard>
+      </StyledLink>
+      <StyledOptionsContainer
+        onClick={(event) => {
+          event.stopPropagation();
+        }}
+      >
         <OptionsMenu
           onHandleDelete={handleDelete}
           onHandleOpenEditMode={handleOpenEditMode}
@@ -58,14 +53,20 @@ export default function TransactionItem({
           transaction={transaction}
         />
       </StyledOptionsContainer>
-      <StyledName>{transaction.name}</StyledName>
-      <StyledCategory>{transaction.category}</StyledCategory>
-      <StyledAmount type={transaction.type}>{formattedAmount}</StyledAmount>
-    </StyledCard>
+    </StyledCardWrapper>
   );
 }
 
+const StyledLink = styled(Link)`
+  color: inherit;
+  text-decoration: none;
+`;
+const StyledCardWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;
 const StyledCard = styled.div`
+  position: relative;
   border: 0.1px solid var(--dark-grey-color);
   border-radius: 16px;
   padding: 8px 16px;
@@ -77,24 +78,26 @@ const StyledCard = styled.div`
     "category amount";
   background-color: white;
 `;
-
 const StyledOptionsContainer = styled.div`
-  grid-area: options;
-  display: flex;
-  justify-content: flex-end;
-  position: relative;
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  z-index: 10;
+  background-color: transparent;
+  cursor: pointer;
 `;
-
 const StyledName = styled.div`
   grid-area: name;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
-
 const StyledCategory = styled.div`
   grid-area: category;
   font-size: x-small;
   display: flex;
 `;
-
 const StyledAmount = styled.div`
   color: ${(props) =>
     props.type === "expense"
@@ -104,7 +107,6 @@ const StyledAmount = styled.div`
   display: flex;
   justify-content: end;
 `;
-
 const StyledConfirmActionContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -117,7 +119,6 @@ const StyledConfirmActionContainer = styled.div`
   min-height: 4rem;
   background-color: white;
 `;
-
 const StyledCancelButton = styled.button`
   border: none;
   border-radius: 4px;
@@ -125,7 +126,6 @@ const StyledCancelButton = styled.button`
   color: white;
   height: fit-content;
 `;
-
 const StyledConfirmButton = styled.button`
   border: none;
   background-color: transparent;

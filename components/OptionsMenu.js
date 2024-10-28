@@ -11,17 +11,12 @@ export default function OptionsMenu({
   const [isOptionSelect, setIsOptionSelect] = useState(false);
 
   function toggleOptions(event) {
-    event.stopPropagation();
     setIsOptionSelect(!isOptionSelect);
   }
 
   return (
     <>
-      <StyledToggleButton
-        className="toggle-button"
-        type="button"
-        onClick={toggleOptions}
-      >
+      <StyledToggleButton type="button" onClick={toggleOptions}>
         <Image
           src="/images/dots.svg"
           alt="options button"
@@ -30,14 +25,9 @@ export default function OptionsMenu({
         />
       </StyledToggleButton>
       {isOptionSelect ? (
-        <StyledOptionsModal
-          className="options-menu"
-          onClick={(event) => event.stopPropagation()}
-        >
+        <StyledOptionsModal>
           <StyledOptionsSelectButton
-            type="button"
             onClick={() => {
-              event.stopPropagation();
               onOpenModal();
               setIsOptionSelect(false);
               onHandleOpenEditMode(transaction);
@@ -48,7 +38,6 @@ export default function OptionsMenu({
           <StyledOptionsSelectButton
             type="button"
             onClick={() => {
-              event.stopPropagation();
               onHandleDelete();
               setIsOptionSelect(false);
             }}
