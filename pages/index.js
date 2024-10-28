@@ -15,6 +15,7 @@ export default function HomePage() {
     "transactions",
     { defaultValue: transactions }
   );
+  const [showForm, setShowForm] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,6 +40,10 @@ export default function HomePage() {
       return () => clearTimeout(timer);
     }
   }, [successMessage]);
+
+  function toggleForm() {
+    setShowForm(!showForm);
+  }
 
   function handleAddTransaction(data) {
     setTransactionsList([
@@ -85,19 +90,6 @@ export default function HomePage() {
     closeModal();
   }
 
-  // function toggleFilter() {
-  //   setIsFilterSelectOpen(!isFilterSelectOpen);
-  // }
-
-  // function filterTransactions(category) {
-  //   setIsFilterSelectOpen(false);
-  //   setSelectedCategory(category);
-  // }
-
-  // function deselectCategory() {
-  //   setSelectedCategory("");
-  // }
-
   function handleCategorySelection(category = "") {
     setIsFilterSelectOpen(false);
     setSelectedCategory(category);
@@ -115,10 +107,16 @@ export default function HomePage() {
             initialData={editTransaction}
             onSubmit={handleFormSubmit}
             variant="edit"
+            showForm={!showForm}
           />
         </Modal>
 
-        <TransactionForm variant="add" onSubmit={handleAddTransaction} />
+        <TransactionForm
+          variant="add"
+          onSubmit={handleAddTransaction}
+          showForm={showForm}
+          toggleForm={toggleForm}
+        />
 
         {successMessage && (
           <StyleSuccessMessage>{successMessage}</StyleSuccessMessage>
