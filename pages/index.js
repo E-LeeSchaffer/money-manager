@@ -123,6 +123,7 @@ export default function HomePage() {
           <StyleSuccessMessage>{successMessage}</StyleSuccessMessage>
         )}
 
+        {!showForm && <AccountBalance transactions={transactionsList} />}
         <StyledFilterControls>
           {selectedCategory !== "" ? (
             <StyledSelectedCategoryContainer>
@@ -144,6 +145,7 @@ export default function HomePage() {
               </StyledSelectedCategoryDisplay>
             </StyledSelectedCategoryContainer>
           ) : null}
+
           <Filter
             onFilterTransactions={handleCategorySelection}
             isFilterSelectOpen={isFilterSelectOpen}
@@ -151,8 +153,6 @@ export default function HomePage() {
             selectedCategory={selectedCategory}
           />
         </StyledFilterControls>
-
-        {!showForm && <AccountBalance transactions={transactionsList} />}
 
         <TransactionsList
           handleDeleteTransaction={handleDeleteTransaction}
