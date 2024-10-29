@@ -28,12 +28,18 @@ const groupTransactionByDate = (transactions) => {
 
 export default function TransactionsList({
   transactions,
+  selectedCategory,
   handleDeleteTransaction,
   handleEditTransaction,
   handleOpenEditMode,
   openModal,
 }) {
   const groupedTransactions = groupTransactionByDate(transactions);
+  const emptyListMessage =
+    transactions.length === 0 && selectedCategory
+      ? "No matches found"
+      : "No transactions available. Please add a new transaction.";
+
   return (
     <StyledListContainer>
       {transactions.length > 0 ? (
@@ -58,9 +64,7 @@ export default function TransactionsList({
           );
         })
       ) : (
-        <StyledEmptyListMessage>
-          No transactions available. Please add a new transaction.
-        </StyledEmptyListMessage>
+        <StyledEmptyListMessage>{emptyListMessage}</StyledEmptyListMessage>
       )}
     </StyledListContainer>
   );
@@ -74,11 +78,11 @@ const StyledListContainer = styled.ul`
 
 const StyledDate = styled.h3`
   font-size: 0.8rem;
-  margin: 16px 0 8px 0;
+  margin: 0 0 8px 0;
 `;
 
 const StyledList = styled.li`
-  margin-bottom: 4px;
+  margin-bottom: 12px;
 `;
 
 const StyledEmptyListMessage = styled.p`
