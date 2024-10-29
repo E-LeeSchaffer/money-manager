@@ -3,24 +3,30 @@ import Header from "@/components/Header";
 import Modal from "@/components/Modal";
 import TransactionForm from "@/components/TransactionForm";
 import TransactionsList from "@/components/TransactionsList";
-import { transactions } from "@/lib/transactions";
-import { useEffect, useState } from "react";
+
 import styled from "styled-components";
-import { ulid } from "ulid";
+import { useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
+
 import Image from "next/image";
 import AccountBalance from "@/components/AccountBalance";
 
-export default function HomePage() {
-  const [transactionsList, setTransactionsList] = useLocalStorageState(
-    "transactions",
-    { defaultValue: transactions }
-  );
-  const [showForm, setShowForm] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editTransaction, setEditTransaction] = useState("");
+export default function HomePage({
+  transactionsList,
+  successMessage,
+  handleOpenEditMode,
+  openModal,
+  closeModal,
+  handleFormSubmit,
+  handleAddTransaction,
+  handleDeleteTransaction,
+  handleEditTransaction,
+  isModalOpen,
+  isEditing,
+  editTransaction,
+  toggleForm,
+  showForm,
+}) {
   const [isFilterSelectOpen, setIsFilterSelectOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useLocalStorageState(
     "selectedCategory",
@@ -31,65 +37,6 @@ export default function HomePage() {
         (transaction) => transaction.category === selectedCategory
       )
     : transactionsList;
-
-  useEffect(() => {
-    if (successMessage !== "") {
-      const timer = setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [successMessage]);
-
-  function toggleForm() {
-    setShowForm(!showForm);
-  }
-
-  function handleAddTransaction(data) {
-    setTransactionsList([
-      { ...data, id: ulid(), currency: "EUR" },
-      ...transactionsList,
-    ]);
-    setSuccessMessage("Transaction successfully added!");
-  }
-
-  function handleDeleteTransaction(id) {
-    setTransactionsList(
-      transactionsList.filter((transaction) => transaction.id !== id)
-    );
-    setSuccessMessage("Transaction successfully deleted!");
-  }
-
-  function handleEditTransaction(updatedTransaction) {
-    setTransactionsList(
-      transactionsList.map((transaction) =>
-        transaction.id === updatedTransaction.id
-          ? updatedTransaction
-          : transaction
-      )
-    );
-    setSuccessMessage("Transaction successfully updated!");
-  }
-
-  function handleOpenEditMode(transaction) {
-    setIsEditing(true);
-    setEditTransaction(transaction);
-    setIsModalOpen(true);
-  }
-
-  function openModal() {
-    setIsModalOpen(true);
-  }
-
-  function closeModal() {
-    setIsModalOpen(false);
-  }
-
-  function handleFormSubmit(updatedTransaction) {
-    handleEditTransaction({ ...editTransaction, ...updatedTransaction });
-    closeModal();
-  }
 
   function handleCategorySelection(category = "") {
     setIsFilterSelectOpen(false);

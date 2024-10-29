@@ -2,6 +2,7 @@ import styled from "styled-components";
 import OptionsMenu from "./OptionsMenu";
 import { useState } from "react";
 import { formatNumber } from "@/lib/utils";
+import Link from "next/link";
 
 export default function TransactionItem({
   transaction,
@@ -39,7 +40,14 @@ export default function TransactionItem({
   }
 
   return (
-    <StyledCard>
+    <StyledCardWrapper>
+      <StyledLink href={`/transactions/${transaction.id}`}>
+        <StyledCard>
+          <StyledName>{transaction.name}</StyledName>
+          <StyledCategory>{transaction.category}</StyledCategory>
+          <StyledAmount type={transaction.type}>{formattedAmount}</StyledAmount>
+        </StyledCard>
+      </StyledLink>
       <StyledOptionsContainer>
         <OptionsMenu
           onHandleDelete={handleDelete}
@@ -48,32 +56,62 @@ export default function TransactionItem({
           transaction={transaction}
         />
       </StyledOptionsContainer>
-      <StyledName>{transaction.name}</StyledName>
-      <StyledCategory>{transaction.category}</StyledCategory>
-      <StyledAmount type={transaction.type}>{formattedAmount}</StyledAmount>
-    </StyledCard>
+    </StyledCardWrapper>
   );
 }
 
+const StyledCardWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;
 const StyledCard = styled.div`
   border: 0.1px solid var(--dark-grey-color);
   border-radius: 16px;
   padding: 8px 16px;
   display: grid;
-  width: 20rem;
+  width: 100%;
   min-height: 4rem;
-  grid-template-areas:
-    "name options"
-    "category amount";
+  grid-template-areas: "name options" "category amount";
   background-color: white;
+  cursor: pointer;
+`;
+const StyledOptionsContainer = styled.div`
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  z-index: 10;
+  background-color: transparent;
+  cursor: pointer;
 `;
 
-const StyledOptionsContainer = styled.div`
-  grid-area: options;
-  display: flex;
-  justify-content: flex-end;
-  position: relative;
+const StyledLink = styled(Link)`
+  color: inherit;
+  text-decoration: none;
 `;
+// const StyledCardWrapper = styled.div`
+//   position: relative;
+//   width: 100%;
+// `;
+
+// const StyledCard = styled.div`
+//   border: 0.1px solid var(--dark-grey-color);
+//   border-radius: 16px;
+//   padding: 8px 16px;
+//   display: grid;
+//   width: 20rem;
+//   min-height: 4rem;
+//   grid-template-areas:
+//     "name options"
+//     "category amount";
+//   background-color: white;
+// `;
+
+// const StyledOptionsContainer = styled.div`
+//   grid-area: options;
+//   display: flex;
+//   justify-content: flex-end;
+//   position: relative;
+// `;
 
 const StyledName = styled.div`
   grid-area: name;
