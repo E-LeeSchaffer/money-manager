@@ -55,7 +55,22 @@ export default function TransactionDetailsPage({
   }
 
   if (!transactionDetails) {
-    return <p>Loading...</p>;
+    return (
+      <>
+        <StyledPageNotFoundMessage>
+          Page not found
+          <StyledBackButton onClick={() => router.push("/")}>
+            <StyledImage
+              src="/images/arrow-return-left.svg"
+              alt="edit button"
+              width={15}
+              height={15}
+            />
+            Back to Transactions
+          </StyledBackButton>
+        </StyledPageNotFoundMessage>
+      </>
+    );
   }
 
   return (
@@ -169,6 +184,17 @@ export default function TransactionDetailsPage({
     </main>
   );
 }
+
+const StyledPageNotFoundMessage = styled.p`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+  color: var(--dark-grey-color);
+  height: 100vh;
+  margin: 0;
+`;
 
 const StyledSuccessMessage = styled.p`
   position: fixed;
