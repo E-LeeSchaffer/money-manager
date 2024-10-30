@@ -78,7 +78,7 @@ const StyledCategoryButton = styled.button`
   background-color: ${({ $isSelected }) =>
     $isSelected ? "var(--accent-color)" : "transparent"};
   color: ${({ $isSelected }) =>
-    $isSelected ? "white" : "var(ext-color-dark)"};
+    $isSelected ? "black" : "var(ext-color-dark)"};
   padding: 0;
   border: none;
   text-align: end;

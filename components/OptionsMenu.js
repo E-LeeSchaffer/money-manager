@@ -25,7 +25,7 @@ export default function OptionsMenu({
         />
       </StyledToggleButton>
       {isOptionSelect ? (
-        <StyledOptionsModal>
+        <StyledOptionsMenu>
           <StyledOptionsSelectButton
             type="button"
             onClick={() => {
@@ -45,7 +45,7 @@ export default function OptionsMenu({
           >
             Delete
           </StyledOptionsSelectButton>
-        </StyledOptionsModal>
+        </StyledOptionsMenu>
       ) : null}
     </>
   );
@@ -60,13 +60,14 @@ const StyledToggleButton = styled.button`
   height: fit-content;
 `;
 
-const StyledOptionsModal = styled.div`
+const StyledOptionsMenu = styled.div`
   position: absolute;
   display: flex;
   justify-content: end;
   flex-direction: column;
   background-color: white;
   top: 15px;
+  right: 0;
   border: 0.1px solid var(--dark-grey-color);
   border-radius: 4px;
   gap: 2px;

@@ -7,7 +7,7 @@ export default function Modal({ isModalOpen, onCloseModal, children }) {
     <StyledModal>
       <Backdrop onClick={onCloseModal} />
       <Content>
-        <button onClick={onCloseModal}>X</button>
+        <StyledCancelButton onClick={onCloseModal}>&#x2715;</StyledCancelButton>
         {children}
       </Content>
     </StyledModal>
@@ -42,4 +42,9 @@ const Backdrop = styled.button`
   width: 100%;
   height: 100%;
   border: none;
+`;
+
+const StyledCancelButton = styled.button`
+  border: none;
+  background-color: transparent;
 `;

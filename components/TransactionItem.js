@@ -70,45 +70,21 @@ const StyledCard = styled.div`
   min-height: 4rem;
   grid-template-areas: "name options" "category amount";
   background-color: white;
-  cursor: pointer;
 `;
+
 const StyledOptionsContainer = styled.div`
+  grid-area: options;
   position: absolute;
   top: 8px;
   right: 16px;
   z-index: 10;
   background-color: transparent;
-  cursor: pointer;
 `;
 
 const StyledLink = styled(Link)`
   color: inherit;
   text-decoration: none;
 `;
-// const StyledCardWrapper = styled.div`
-//   position: relative;
-//   width: 100%;
-// `;
-
-// const StyledCard = styled.div`
-//   border: 0.1px solid var(--dark-grey-color);
-//   border-radius: 16px;
-//   padding: 8px 16px;
-//   display: grid;
-//   width: 20rem;
-//   min-height: 4rem;
-//   grid-template-areas:
-//     "name options"
-//     "category amount";
-//   background-color: white;
-// `;
-
-// const StyledOptionsContainer = styled.div`
-//   grid-area: options;
-//   display: flex;
-//   justify-content: flex-end;
-//   position: relative;
-// `;
 
 const StyledName = styled.div`
   grid-area: name;

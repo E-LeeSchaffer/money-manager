@@ -91,7 +91,7 @@ const StyledDate = styled.h3`
 
 const StyledList = styled.li`
   margin-bottom: 12px;
-  width: 20rem;
+  width: 18rem;
 `;
 
 const StyledEmptyListMessage = styled.p`

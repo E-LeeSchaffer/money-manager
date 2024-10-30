@@ -3,7 +3,6 @@ import Header from "@/components/Header";
 import Modal from "@/components/Modal";
 import TransactionForm from "@/components/TransactionForm";
 import TransactionsList from "@/components/TransactionsList";
-
 import styled from "styled-components";
 import { useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
@@ -71,10 +70,11 @@ export default function HomePage({
         />
 
         {successMessage && (
-          <StyleSuccessMessage>{successMessage}</StyleSuccessMessage>
+          <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
         )}
 
         {!showForm && <AccountBalance transactions={transactionsList} />}
+
         <StyledFilterControls>
           {selectedCategory !== "" ? (
             <StyledSelectedCategoryContainer>
@@ -132,7 +132,7 @@ const StyledTitle = styled.h2`
   padding-top: 24px;
 `;
 
-const StyleSuccessMessage = styled.p`
+const StyledSuccessMessage = styled.p`
   position: fixed;
   bottom: 20px;
   left: 50%;
@@ -172,7 +172,7 @@ const StyledSelectedCategoryDisplay = styled.div`
   gap: 8px;
   border: 1px solid var(--dark-grey-color);
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(233, 255, 112, 0.3);
 `;
 
 const StyledSelectedCategoryName = styled.div`

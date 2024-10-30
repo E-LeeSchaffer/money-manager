@@ -222,6 +222,7 @@ const StyledFieldset = styled.fieldset`
   padding: 12px 16px;
   gap: 4px;
 `;
+
 const FormRow = styled.div`
   display: contents;
 `;
@@ -240,14 +241,9 @@ const StyledNameInput = styled.input`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease-in-out;
 
-  &:hover {
-    background-color: var(--light-bg-color);
-  }
-
   &:focus {
     border-color: var(--accent-color);
     outline: none;
-    box-shadow: 0 0 4px rgba(70, 134, 205, 0.8);
   }
 `;
 
@@ -265,14 +261,9 @@ const StyledCurrencyInput = styled(CurrencyInput)`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease-in-out;
 
-  &:hover {
-    background-color: var(--light-bg-color);
-  }
-
   &:focus {
     border-color: var(--accent-color);
     outline: none;
-    box-shadow: 0 0 4px rgba(70, 134, 205, 0.8);
   }
 `;
 
@@ -290,14 +281,9 @@ const StyledCategorySelect = styled.select`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease-in-out;
 
-  &:hover {
-    background-color: var(--light-bg-color);
-  }
-
   &:focus {
     border-color: var(--accent-color);
     outline: none;
-    box-shadow: 0 0 4px rgba(70, 134, 205, 0.8);
   }
 `;
 
@@ -330,7 +316,6 @@ const StyledToggleButton = styled.div`
   }
 
   label {
-    cursor: pointer;
     border-radius: 30px;
     width: 120px;
     text-align: center;
@@ -353,9 +338,9 @@ const StyledToggleButton = styled.div`
 
   input:checked + label {
     background-color: var(--accent-color);
-    color: white;
   }
 `;
+
 const ErrorMessageAmount = styled.p`
   grid-area: amountErrorMessage;
   color: red;
@@ -382,14 +367,9 @@ const StyledDateInput = styled.input`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease-in-out;
 
-  &:hover {
-    background-color: var(--light-bg-color);
-  }
-
   &:focus {
     border-color: var(--accent-color);
     outline: none;
-    box-shadow: 0 0 4px rgba(70, 134, 205, 0.8);
   }
 `;
 
@@ -401,15 +381,10 @@ const StyledLegend = styled.legend`
 
 const StyledButton = styled.button`
   border-radius: 24px;
-  background-color: white;
+  background-color: var(--accent-color);
   padding: 4px 16px;
-  border: 1px solid var(--dark-grey-color);
   color: var(--text-color-dark);
+  border: none;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-top: 12px;
-
-  &:hover {
-    background-color: var(--accent-color);
-    color: white;
-  }
 `;
