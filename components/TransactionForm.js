@@ -1,5 +1,5 @@
 import { categories } from "@/lib/categories";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 import styled from "styled-components";
 import Image from "next/image";
@@ -19,6 +19,12 @@ export default function TransactionForm({
   const formHeader =
     variant === "edit" ? "Edit Transaction" : "Add Transaction";
   const buttonText = variant === "edit" ? "Update" : "Add";
+
+  useEffect(() => {
+    if (initialData.amount) {
+      setAmount(initialData.amount.toString());
+    }
+  }, [initialData.amount]);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -40,7 +46,7 @@ export default function TransactionForm({
       return;
     }
 
-    onSubmit(data);
+    onSubmit({ ...initialData, ...data });
     event.target.reset();
     setAmount("");
   }
@@ -61,7 +67,7 @@ export default function TransactionForm({
           </StyledCollapsableFormButton>
         </StyledButtonContainer>
       )}
-      {showForm && (
+      {(isEditing || showForm) && (
         <StyledForm onSubmit={handleSubmit}>
           <StyledFieldset>
             <StyledLegend>{formHeader}</StyledLegend>

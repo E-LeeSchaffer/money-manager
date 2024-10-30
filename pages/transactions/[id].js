@@ -1,6 +1,7 @@
 import Modal from "@/components/Modal";
 import TransactionForm from "@/components/TransactionForm";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 export default function TransactionDetailPage({
@@ -17,13 +18,32 @@ export default function TransactionDetailPage({
   handleFormSubmit,
   showForm,
   toggleForm,
+  handleOpenDeleteDialogue,
+  handleConfirmDelete,
+  handleCancelDeleteDialogue,
+  isDeleting,
 }) {
   const router = useRouter();
   const { id } = router.query;
 
-  const transactionDetails = transactionsList.find(
-    (transaction) => transaction.id === id
-  );
+  const [transactionDetails, setTransactionDetails] = useState(null);
+
+  //   const transactionDetails = transactionsList.find(
+  //     (transaction) => transaction.id === id
+  //   );
+
+  useEffect(() => {
+    if (id && transactionsList) {
+      const transaction = transactionsList.find(
+        (transaction) => transaction.id === id
+      );
+      setTransactionDetails(transaction);
+    }
+  }, [id, transactionsList]);
+
+  if (!transactionDetails) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>
@@ -33,45 +53,68 @@ export default function TransactionDetailPage({
       <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
         <TransactionForm
           isEditing={isEditing}
-          initialData={editTransaction}
-          onSubmit={handleFormSubmit}
+          initialData={transactionDetails}
+          onSubmit={(updatedTransaction) => {
+            handleEditTransaction(updatedTransaction);
+            closeModal();
+          }}
           variant="edit"
-          toggleForm={toggleForm}
         />
       </Modal>
       <StyledDetail>
         <h2>Transaction Details</h2>
-        <p>
-          <strong>Name:</strong> {transactionDetails.name}
-        </p>
-        <p>
-          <strong>Amount:</strong> {transactionDetails.amount}€
-        </p>
-        <p>
-          <strong>Category:</strong> {transactionDetails.category}
-        </p>
-        <p>
-          <strong>Type:</strong> {transactionDetails.type}
-        </p>
-        <p>
-          <strong>Date:</strong> {transactionDetails.date}
-        </p>
-        <button
-          type="button"
-          onClick={() => {
-            openModal();
-          }}
-        >
-          Edit
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            handleDeleteTransaction();
-          }}
-        >
-          Delete
-        </button>
+        {isDeleting ? (
+          <div>
+            {" "}
+            <div>
+              <button type="button" onClick={handleCancelDeleteDialogue}>
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  handleConfirmDelete(transactionDetails);
+                }}
+              >
+                Really Delete
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <p>
+              <strong>Name:</strong> {transactionDetails.name}
+            </p>
+            <p>
+              <strong>Amount:</strong> {transactionDetails.amount}€
+            </p>
+            <p>
+              <strong>Category:</strong> {transactionDetails.category}
+            </p>
+            <p>
+              <strong>Type:</strong> {transactionDetails.type}
+            </p>
+            <p>
+              <strong>Date:</strong> {transactionDetails.date}
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                handleOpenEditMode(transactionDetails);
+              }}
+            >
+              Edit
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                handleOpenDeleteDialogue();
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        )}
       </StyledDetail>
     </>
   );

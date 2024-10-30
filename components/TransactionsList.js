@@ -29,10 +29,12 @@ const groupTransactionByDate = (transactions) => {
 export default function TransactionsList({
   transactions,
   selectedCategory,
-  handleDeleteTransaction,
+
   handleEditTransaction,
   handleOpenEditMode,
   openModal,
+  handleOpenDeleteDialogue,
+  handleCancelDeleteDialogue,
 }) {
   const groupedTransactions = groupTransactionByDate(transactions);
   const emptyListMessage =
@@ -51,11 +53,12 @@ export default function TransactionsList({
                 {groupedTransactions[date].map((transaction) => (
                   <StyledList key={transaction.id}>
                     <TransactionItem
-                      onHandleDeleteTransaction={handleDeleteTransaction}
+                      handleOpenDeleteDialogue={handleOpenDeleteDialogue}
                       onHandleEditTransaction={handleEditTransaction}
                       transaction={transaction}
                       handleOpenEditMode={handleOpenEditMode}
                       openModal={openModal}
+                      handleCancelDeleteDialogue={handleCancelDeleteDialogue}
                     />
                   </StyledList>
                 ))}

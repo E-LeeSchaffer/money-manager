@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 export default function OptionsMenu({
-  onHandleDelete,
+  handleOpenDeleteDialogue,
   onOpenModal,
   onHandleOpenEditMode,
   transaction,
@@ -39,7 +39,7 @@ export default function OptionsMenu({
           <StyledOptionsSelectButton
             type="button"
             onClick={() => {
-              onHandleDelete();
+              handleOpenDeleteDialogue();
               setIsOptionSelect(false);
             }}
           >

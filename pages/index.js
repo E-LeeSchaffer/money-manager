@@ -19,13 +19,17 @@ export default function HomePage({
   closeModal,
   handleFormSubmit,
   handleAddTransaction,
-  handleDeleteTransaction,
+
   handleEditTransaction,
   isModalOpen,
   isEditing,
   editTransaction,
   toggleForm,
   showForm,
+  handleOpenDeleteDialogue,
+  handleConfirmDelete,
+  handleCancelDeleteDialogue,
+  isDeleting,
 }) {
   const [isFilterSelectOpen, setIsFilterSelectOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useLocalStorageState(
@@ -102,7 +106,6 @@ export default function HomePage({
         </StyledFilterControls>
 
         <TransactionsList
-          handleDeleteTransaction={handleDeleteTransaction}
           handleEditTransaction={handleEditTransaction}
           transactions={
             selectedCategory ? filteredTransactions : transactionsList
@@ -111,6 +114,10 @@ export default function HomePage({
           handleOpenEditMode={handleOpenEditMode}
           openModal={openModal}
           onCloseModal={closeModal}
+          handleOpenDeleteDialogue={handleOpenDeleteDialogue}
+          handleConfirmDelete={handleConfirmDelete}
+          handleCancelDeleteDialogue={handleCancelDeleteDialogue}
+          isDeleting={isDeleting}
         />
       </main>
     </>

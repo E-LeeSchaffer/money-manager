@@ -14,6 +14,7 @@ export default function App({ Component, pageProps }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editTransaction, setEditTransaction] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (successMessage !== "") {
@@ -73,6 +74,19 @@ export default function App({ Component, pageProps }) {
     setShowForm(!showForm);
   }
 
+  function handleOpenDeleteDialogue() {
+    setIsDeleting(true);
+  }
+
+  function handleConfirmDelete(transaction) {
+    handleDeleteTransaction(transaction.id);
+    setIsDeleting(false);
+  }
+
+  function handleCancelDeleteDialogue() {
+    setIsDeleting(false);
+  }
+
   const componentProps = {
     transactionsList,
     successMessage,
@@ -81,13 +95,17 @@ export default function App({ Component, pageProps }) {
     closeModal,
     handleFormSubmit,
     handleAddTransaction,
-    handleDeleteTransaction,
+
     handleEditTransaction,
     isModalOpen,
     isEditing,
     editTransaction,
     toggleForm,
     showForm,
+    handleOpenDeleteDialogue,
+    handleConfirmDelete,
+    handleCancelDeleteDialogue,
+    isDeleting,
     ...pageProps,
   };
 
