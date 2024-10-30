@@ -14,7 +14,6 @@ export default function TransactionItem({
   handleOpenDeleteDialogue,
 }) {
   const formattedAmount = formatNumber(transaction);
-
   const isDeleting = isDeletingId === transaction.id;
 
   if (isDeleting) {
