@@ -9,25 +9,16 @@ export default function TransactionDetailPage({
   handleEditTransaction,
   isModalOpen,
   isEditing,
-  editTransaction,
-  successMessage,
-  openModal,
+
   closeModal,
   handleOpenEditMode,
   handleDeleteTransaction,
-  handleFormSubmit,
-  showForm,
-  toggleForm,
-  handleOpenDeleteDialogue,
-  handleConfirmDelete,
-  handleCancelDeleteDialogue,
-  isDeleting,
 }) {
   const router = useRouter();
   const { id } = router.query;
 
   const [transactionDetails, setTransactionDetails] = useState(null);
-
+  const [isDeleting, setIsDeleting] = useState(false);
   //   const transactionDetails = transactionsList.find(
   //     (transaction) => transaction.id === id
   //   );
@@ -40,6 +31,20 @@ export default function TransactionDetailPage({
       setTransactionDetails(transaction);
     }
   }, [id, transactionsList]);
+
+  function handleConfirmDelete() {
+    handleDeleteTransaction(transactionDetails.id);
+    setIsDeleting(false);
+    router.push("/");
+  }
+
+  function handleCancelDeleteDialogue() {
+    setIsDeleting(false);
+  }
+
+  function handleOpenDeleteDialogue() {
+    setIsDeleting(true);
+  }
 
   if (!transactionDetails) {
     return <p>Loading...</p>;

@@ -19,7 +19,7 @@ export default function HomePage({
   closeModal,
   handleFormSubmit,
   handleAddTransaction,
-
+  handleDeleteTransaction,
   handleEditTransaction,
   isModalOpen,
   isEditing,
@@ -29,7 +29,7 @@ export default function HomePage({
   handleOpenDeleteDialogue,
   handleConfirmDelete,
   handleCancelDeleteDialogue,
-  isDeleting,
+  isDeletingId,
 }) {
   const [isFilterSelectOpen, setIsFilterSelectOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useLocalStorageState(
@@ -117,7 +117,8 @@ export default function HomePage({
           handleOpenDeleteDialogue={handleOpenDeleteDialogue}
           handleConfirmDelete={handleConfirmDelete}
           handleCancelDeleteDialogue={handleCancelDeleteDialogue}
-          isDeleting={isDeleting}
+          handleDeleteTransaction={handleDeleteTransaction}
+          isDeletingId={isDeletingId}
         />
       </main>
     </>

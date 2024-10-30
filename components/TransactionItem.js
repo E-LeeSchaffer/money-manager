@@ -6,20 +6,21 @@ import Link from "next/link";
 
 export default function TransactionItem({
   transaction,
-
+  handleConfirmDelete,
   handleOpenEditMode,
   openModal,
-  handleOpenDeleteDialogue,
-  handleConfirmDelete,
+  isDeletingId,
   handleCancelDeleteDialogue,
-  isDeleting,
+  handleOpenDeleteDialogue,
 }) {
   const formattedAmount = formatNumber(transaction);
+
+  const isDeleting = isDeletingId === transaction.id;
 
   if (isDeleting) {
     return (
       <StyledConfirmActionContainer>
-        <StyledCancelButton type="button" onClick={handleCancel}>
+        <StyledCancelButton type="button" onClick={handleCancelDeleteDialogue}>
           Cancel
         </StyledCancelButton>
         <StyledConfirmButton
@@ -45,7 +46,9 @@ export default function TransactionItem({
       </StyledLink>
       <StyledOptionsContainer>
         <OptionsMenu
-          handleOpenDeleteDialogue={handleOpenDeleteDialogue}
+          handleOpenDeleteDialogue={() =>
+            handleOpenDeleteDialogue(transaction.id)
+          }
           onHandleOpenEditMode={handleOpenEditMode}
           onOpenModal={openModal}
           transaction={transaction}
