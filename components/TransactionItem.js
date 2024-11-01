@@ -116,7 +116,7 @@ const StyledConfirmActionContainer = styled.div`
   border: 0.1px solid var(--dark-grey-color);
   border-radius: 16px;
   padding: 8px 16px;
-  width: 20rem;
+  width: 18rem;
   min-height: 4rem;
   background-color: white;
 `;
