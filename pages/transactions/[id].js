@@ -18,27 +18,15 @@ export default function TransactionDetailsPage({
 }) {
   const router = useRouter();
   const { id } = router.query;
-  const [transactionDetails, setTransactionDetails] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const formattedAmount = transactionDetails
-    ? formatNumber(transactionDetails)
-    : "";
-  const capitalizedType = transactionDetails
-    ? capitalizeFirstLetter(transactionDetails.type)
-    : "";
-  const formatedDate = transactionDetails
-    ? formatDate(transactionDetails.date)
-    : "";
+  const transactionDetails = transactionsList.find(
+    (transaction) => transaction.id === id
+  );
 
-  useEffect(() => {
-    if (id && transactionsList) {
-      const transaction = transactionsList.find(
-        (transaction) => transaction.id === id
-      );
-      setTransactionDetails(transaction);
-    }
-  }, [id, transactionsList]);
+  if (!router.isReady) {
+    return null;
+  }
 
   function handleConfirmDelete() {
     handleDeleteTransaction(transactionDetails.id);
@@ -72,6 +60,16 @@ export default function TransactionDetailsPage({
       </>
     );
   }
+
+  const formattedAmount = transactionDetails
+    ? formatNumber(transactionDetails)
+    : "";
+  const capitalizedType = transactionDetails
+    ? capitalizeFirstLetter(transactionDetails.type)
+    : "";
+  const formatedDate = transactionDetails
+    ? formatDate(transactionDetails.date)
+    : "";
 
   return (
     <main>
