@@ -66,8 +66,8 @@ const StyledOptionsMenu = styled.div`
   justify-content: end;
   flex-direction: column;
   background-color: white;
-  top: 15px;
-  right: 0;
+  top: 30px;
+  right: 14px;
   border: 0.1px solid var(--dark-grey-color);
   border-radius: 4px;
   gap: 2px;

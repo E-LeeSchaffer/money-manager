@@ -75,8 +75,11 @@ const StyledCard = styled.div`
 const StyledOptionsContainer = styled.div`
   grid-area: options;
   position: absolute;
-  top: 8px;
-  right: 16px;
+  padding-top: 12px;
+  padding-bottom: 4px;
+  padding-inline: 12px;
+  top: 0;
+  right: 0;
   z-index: 10;
   background-color: transparent;
 `;

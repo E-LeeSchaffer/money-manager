@@ -1,7 +1,7 @@
 import Modal from "@/components/Modal";
 import TransactionForm from "@/components/TransactionForm";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { capitalizeFirstLetter, formatDate, formatNumber } from "@/lib/utils";
@@ -245,7 +245,7 @@ const StyledConfirmActionContainer = styled.div`
   border-radius: 16px;
   padding: 8px 16px;
   width: 18rem;
-  min-height: 16rem;
+  min-height: 13rem;
   background-color: white;
 `;
 
@@ -268,6 +268,7 @@ const StyledDetailsContainer = styled.div`
   background-color: white;
   border-radius: 16px;
   padding: 8px 16px;
+  min-height: 13rem;
   width: 18rem;
   display: flex;
   flex-direction: column;
