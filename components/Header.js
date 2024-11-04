@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import Link from "next/link";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -20,7 +21,11 @@ export default function Header() {
     };
   }, []);
 
-  return <StyledHeader $isScrolled={isScrolled}>Money Bin</StyledHeader>;
+  return (
+    <StyledHeader $isScrolled={isScrolled}>
+      <StyledLink href={"/"}>Money Bin</StyledLink>
+    </StyledHeader>
+  );
 }
 
 const StyledHeader = styled.h1`
@@ -40,4 +45,9 @@ const StyledHeader = styled.h1`
     props.isScrolled ? "rgba(245, 245, 245, 0.8)" : "rgba(255, 255, 255, 0.5)"};
   transition: background-color 0.3s ease-in-out;
   z-index: 1000;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
 `;

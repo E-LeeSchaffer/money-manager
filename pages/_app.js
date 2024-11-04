@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { transactions } from "@/lib/transactions";
 import { ulid } from "ulid";
 import useLocalStorageState from "use-local-storage-state";
+import Layout from "@/components/Layout";
 
 export default function App({ Component, pageProps }) {
   const [transactionsList, setTransactionsList] = useLocalStorageState(
@@ -113,7 +114,9 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <GlobalStyle />
-      <Component {...componentProps} />
+      <Layout>
+        <Component {...componentProps} />
+      </Layout>
     </>
   );
 }
