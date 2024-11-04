@@ -10,7 +10,7 @@ export default createGlobalStyle`
   :root {
     --light-bg-color: #F7F9FB;
     --dark-grey-color: #d4d4d4;
-    --accent-color: #4686cd;
+    --accent-color: #e9ff70;
     --text-color-dark: #141414;
     --friendly-red-color: #F44336;
     --friendly-green-color: #4CAF50;
@@ -20,6 +20,7 @@ export default createGlobalStyle`
     margin: 0;
     font-family: sofia-pro, sans-serif;
     background: var(--light-bg-color);
+    color: var(--text-color-dark);
   }
 
   main {
@@ -34,8 +35,6 @@ export default createGlobalStyle`
   li {
     list-style: none;
   }
-
-
 
   label {
     font-size: 0.8rem;

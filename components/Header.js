@@ -32,11 +32,12 @@ const StyledHeader = styled.h1`
   justify-content: start;
   align-items: center;
   font-size: 1rem;
-  color: #4686cd;
+  color: var(--text-color-dark);
   height: 44px;
   margin: 0;
   padding-inline: 16px;
   background-color: ${(props) =>
     props.isScrolled ? "rgba(245, 245, 245, 0.8)" : "rgba(255, 255, 255, 0.5)"};
   transition: background-color 0.3s ease-in-out;
+  z-index: 1000;
 `;

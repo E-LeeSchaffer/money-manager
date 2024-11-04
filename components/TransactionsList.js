@@ -33,6 +33,10 @@ export default function TransactionsList({
   handleEditTransaction,
   handleOpenEditMode,
   openModal,
+  handleOpenDeleteDialogue,
+  handleCancelDeleteDialogue,
+  handleConfirmDelete,
+  isDeletingId,
 }) {
   const groupedTransactions = groupTransactionByDate(transactions);
   const emptyListMessage =
@@ -51,11 +55,15 @@ export default function TransactionsList({
                 {groupedTransactions[date].map((transaction) => (
                   <StyledList key={transaction.id}>
                     <TransactionItem
-                      onHandleDeleteTransaction={handleDeleteTransaction}
+                      handleConfirmDelete={handleConfirmDelete}
+                      handleOpenDeleteDialogue={handleOpenDeleteDialogue}
                       onHandleEditTransaction={handleEditTransaction}
                       transaction={transaction}
                       handleOpenEditMode={handleOpenEditMode}
                       openModal={openModal}
+                      handleCancelDeleteDialogue={handleCancelDeleteDialogue}
+                      handleDeleteTransaction={handleDeleteTransaction}
+                      isDeletingId={isDeletingId}
                     />
                   </StyledList>
                 ))}
@@ -83,6 +91,7 @@ const StyledDate = styled.h3`
 
 const StyledList = styled.li`
   margin-bottom: 12px;
+  width: 18rem;
 `;
 
 const StyledEmptyListMessage = styled.p`

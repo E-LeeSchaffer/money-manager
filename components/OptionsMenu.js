@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 export default function OptionsMenu({
-  onHandleDelete,
+  handleOpenDeleteDialogue,
   onOpenModal,
   onHandleOpenEditMode,
   transaction,
@@ -25,7 +25,7 @@ export default function OptionsMenu({
         />
       </StyledToggleButton>
       {isOptionSelect ? (
-        <StyledOptionsModal>
+        <StyledOptionsMenu>
           <StyledOptionsSelectButton
             type="button"
             onClick={() => {
@@ -39,13 +39,13 @@ export default function OptionsMenu({
           <StyledOptionsSelectButton
             type="button"
             onClick={() => {
-              onHandleDelete();
+              handleOpenDeleteDialogue();
               setIsOptionSelect(false);
             }}
           >
             Delete
           </StyledOptionsSelectButton>
-        </StyledOptionsModal>
+        </StyledOptionsMenu>
       ) : null}
     </>
   );
@@ -60,13 +60,14 @@ const StyledToggleButton = styled.button`
   height: fit-content;
 `;
 
-const StyledOptionsModal = styled.div`
+const StyledOptionsMenu = styled.div`
   position: absolute;
   display: flex;
   justify-content: end;
   flex-direction: column;
   background-color: white;
-  top: 15px;
+  top: 30px;
+  right: 14px;
   border: 0.1px solid var(--dark-grey-color);
   border-radius: 4px;
   gap: 2px;
