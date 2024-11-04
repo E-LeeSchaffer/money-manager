@@ -172,7 +172,7 @@ const StyledSelectedCategoryDisplay = styled.div`
   gap: 8px;
   border: 1px solid var(--dark-grey-color);
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(233, 255, 112, 0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const StyledSelectedCategoryName = styled.div`
