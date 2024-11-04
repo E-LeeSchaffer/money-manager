@@ -47,81 +47,78 @@ export default function HomePage({
   }
 
   return (
-    <>
-      <Header />
-      <main>
-        <StyledTitle>Transactions</StyledTitle>
+    <main>
+      <StyledTitle>Transactions</StyledTitle>
 
-        <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
-          <TransactionForm
-            isEditing={isEditing}
-            initialData={editTransaction}
-            onSubmit={handleFormSubmit}
-            variant="edit"
-            showForm={!showForm}
-          />
-        </Modal>
-
+      <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
         <TransactionForm
-          variant="add"
-          onSubmit={handleAddTransaction}
-          showForm={showForm}
-          toggleForm={toggleForm}
+          isEditing={isEditing}
+          initialData={editTransaction}
+          onSubmit={handleFormSubmit}
+          variant="edit"
+          showForm={!showForm}
         />
+      </Modal>
 
-        {successMessage && (
-          <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
-        )}
+      <TransactionForm
+        variant="add"
+        onSubmit={handleAddTransaction}
+        showForm={showForm}
+        toggleForm={toggleForm}
+      />
 
-        {!showForm && <AccountBalance transactions={transactionsList} />}
+      {successMessage && (
+        <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
+      )}
 
-        <StyledFilterControls>
-          {selectedCategory !== "" ? (
-            <StyledSelectedCategoryContainer>
-              <StyledSelectedCategoryDisplay>
-                <StyledSelectedCategoryName>
-                  {selectedCategory}
-                </StyledSelectedCategoryName>
-                <StyledDeselectButton
-                  type="button"
-                  onClick={() => handleCategorySelection("")}
-                >
-                  <StyledImage
-                    src={"/images/x-square-fill.svg"}
-                    alt="filter button"
-                    width={10}
-                    height={10}
-                  />
-                </StyledDeselectButton>
-              </StyledSelectedCategoryDisplay>
-            </StyledSelectedCategoryContainer>
-          ) : null}
+      {!showForm && <AccountBalance transactions={transactionsList} />}
 
-          <Filter
-            onFilterTransactions={handleCategorySelection}
-            isFilterSelectOpen={isFilterSelectOpen}
-            onToggleFilter={() => setIsFilterSelectOpen(!isFilterSelectOpen)}
-            selectedCategory={selectedCategory}
-          />
-        </StyledFilterControls>
+      <StyledFilterControls>
+        {selectedCategory !== "" ? (
+          <StyledSelectedCategoryContainer>
+            <StyledSelectedCategoryDisplay>
+              <StyledSelectedCategoryName>
+                {selectedCategory}
+              </StyledSelectedCategoryName>
+              <StyledDeselectButton
+                type="button"
+                onClick={() => handleCategorySelection("")}
+              >
+                <StyledImage
+                  src={"/images/x-square-fill.svg"}
+                  alt="filter button"
+                  width={10}
+                  height={10}
+                />
+              </StyledDeselectButton>
+            </StyledSelectedCategoryDisplay>
+          </StyledSelectedCategoryContainer>
+        ) : null}
 
-        <TransactionsList
-          handleEditTransaction={handleEditTransaction}
-          transactions={
-            selectedCategory ? filteredTransactions : transactionsList
-          }
+        <Filter
+          onFilterTransactions={handleCategorySelection}
+          isFilterSelectOpen={isFilterSelectOpen}
+          onToggleFilter={() => setIsFilterSelectOpen(!isFilterSelectOpen)}
           selectedCategory={selectedCategory}
-          handleOpenEditMode={handleOpenEditMode}
-          openModal={openModal}
-          onCloseModal={closeModal}
-          handleOpenDeleteDialogue={handleOpenDeleteDialogue}
-          handleConfirmDelete={handleConfirmDelete}
-          handleCancelDeleteDialogue={handleCancelDeleteDialogue}
-          handleDeleteTransaction={handleDeleteTransaction}
-          isDeletingId={isDeletingId}
         />
-      </main>
-    </>
+      </StyledFilterControls>
+
+      <TransactionsList
+        handleEditTransaction={handleEditTransaction}
+        transactions={
+          selectedCategory ? filteredTransactions : transactionsList
+        }
+        selectedCategory={selectedCategory}
+        handleOpenEditMode={handleOpenEditMode}
+        openModal={openModal}
+        onCloseModal={closeModal}
+        handleOpenDeleteDialogue={handleOpenDeleteDialogue}
+        handleConfirmDelete={handleConfirmDelete}
+        handleCancelDeleteDialogue={handleCancelDeleteDialogue}
+        handleDeleteTransaction={handleDeleteTransaction}
+        isDeletingId={isDeletingId}
+      />
+    </main>
   );
 }
 
@@ -129,7 +126,6 @@ const StyledTitle = styled.h2`
   text-align: center;
   font-size: 1.7rem;
   font-weight: 700;
-  padding-top: 24px;
 `;
 
 const StyledSuccessMessage = styled.p`
