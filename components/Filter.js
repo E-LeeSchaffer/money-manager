@@ -44,10 +44,11 @@ export default function Filter({
 }
 
 const StyledFilterContainer = styled.div`
-  position: relative;
   display: flex;
-  justify-content: flex-end;
   height: 24px;
+  max-width: 18rem;
+  position: relative;
+  right: 0;
 `;
 
 const StyledFilterButton = styled.button`

@@ -1,5 +1,4 @@
 import Filter from "@/components/Filter";
-import Header from "@/components/Header";
 import Modal from "@/components/Modal";
 import TransactionForm from "@/components/TransactionForm";
 import TransactionsList from "@/components/TransactionsList";
@@ -9,6 +8,7 @@ import useLocalStorageState from "use-local-storage-state";
 
 import Image from "next/image";
 import AccountBalance from "@/components/AccountBalance";
+import Search from "@/components/Search";
 
 export default function HomePage({
   transactionsList,
@@ -40,10 +40,30 @@ export default function HomePage({
         (transaction) => transaction.category === selectedCategory
       )
     : transactionsList;
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchItem, setSearchItem] = useState("");
+  const [searchedTransaction, setSearchedTransaction] = useState("");
 
   function handleCategorySelection(category = "") {
     setIsFilterSelectOpen(false);
     setSelectedCategory(category);
+  }
+
+  function handleSearch() {
+    setIsSearching(!isSearching);
+    if (isSearching === false) {
+      setSearchItem("");
+      setSearchedTransaction("");
+    }
+  }
+
+  function handleInputChange(event) {
+    const searchTerm = event.target.value;
+    setSearchItem(searchTerm);
+    const searchedTransactions = filteredTransactions.filter((transaction) => {
+      return transaction.name.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+    setSearchedTransaction(searchedTransactions);
   }
 
   return (
@@ -73,40 +93,53 @@ export default function HomePage({
 
       {!showForm && <AccountBalance transactions={transactionsList} />}
 
-      <StyledFilterControls>
+      <StyledSelectionBar>
         {selectedCategory !== "" ? (
-          <StyledSelectedCategoryContainer>
-            <StyledSelectedCategoryDisplay>
-              <StyledSelectedCategoryName>
-                {selectedCategory}
-              </StyledSelectedCategoryName>
-              <StyledDeselectButton
-                type="button"
-                onClick={() => handleCategorySelection("")}
-              >
-                <StyledImage
-                  src={"/images/x-square-fill.svg"}
-                  alt="filter button"
-                  width={10}
-                  height={10}
-                />
-              </StyledDeselectButton>
-            </StyledSelectedCategoryDisplay>
-          </StyledSelectedCategoryContainer>
+          <StyledSelectedCategoryDisplay>
+            <StyledSelectedCategoryName>
+              {selectedCategory}
+            </StyledSelectedCategoryName>
+            <StyledDeselectButton
+              type="button"
+              onClick={() => handleCategorySelection("")}
+            >
+              <StyledImage
+                src={"/images/x-square-fill.svg"}
+                alt="filter button"
+                width={10}
+                height={10}
+              />
+            </StyledDeselectButton>
+          </StyledSelectedCategoryDisplay>
         ) : null}
 
-        <Filter
-          onFilterTransactions={handleCategorySelection}
-          isFilterSelectOpen={isFilterSelectOpen}
-          onToggleFilter={() => setIsFilterSelectOpen(!isFilterSelectOpen)}
-          selectedCategory={selectedCategory}
-        />
-      </StyledFilterControls>
+        {isSearching ? (
+          <StyledInput
+            type="text"
+            name="searchbar"
+            value={searchItem}
+            onChange={handleInputChange}
+            autoFocus
+          />
+        ) : null}
+
+        <StyledControls>
+          <Search handleSearch={handleSearch} />
+          <Filter
+            onFilterTransactions={handleCategorySelection}
+            isFilterSelectOpen={isFilterSelectOpen}
+            onToggleFilter={() => setIsFilterSelectOpen(!isFilterSelectOpen)}
+            selectedCategory={selectedCategory}
+          />
+        </StyledControls>
+      </StyledSelectionBar>
 
       <TransactionsList
         handleEditTransaction={handleEditTransaction}
         transactions={
-          selectedCategory ? filteredTransactions : transactionsList
+          searchedTransaction !== "" && isSearching
+            ? searchedTransaction
+            : filteredTransactions
         }
         selectedCategory={selectedCategory}
         handleOpenEditMode={handleOpenEditMode}
@@ -145,17 +178,12 @@ const StyledSuccessMessage = styled.p`
   background-color: var(--friendly-green-color);
 `;
 
-const StyledFilterControls = styled.div`
+const StyledSelectionBar = styled.div`
   border-top: 1px solid var(--dark-grey-color);
   margin: 12px 0 12px 0;
   padding: 12px 10px;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-areas: "selectedCategoryContainer filter";
-`;
-
-const StyledSelectedCategoryContainer = styled.div`
-  grid-area: selectedCategoryContainer;
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const StyledSelectedCategoryDisplay = styled.div`
@@ -182,6 +210,22 @@ const StyledDeselectButton = styled.button`
   padding: 0;
 `;
 
+const StyledControls = styled.div`
+  display: flex;
+`;
+
 const StyledImage = styled(Image)`
   display: flex;
+`;
+
+const StyledInput = styled.input`
+  display: flex;
+  width: 6rem;
+  border: none;
+  border-bottom: 1px solid var(--dark-grey-color);
+  border-radius: 8px;
+
+  &:focus {
+    outline: none;
+  }
 `;
