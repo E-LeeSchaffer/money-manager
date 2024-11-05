@@ -67,7 +67,7 @@ export default function HomePage({
   }
 
   return (
-    <main>
+    <>
       <StyledTitle>Transactions</StyledTitle>
 
       <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
@@ -143,7 +143,7 @@ export default function HomePage({
         isDeletingId={isDeletingId}
         sortOrder={sortOrder}
       />
-    </main>
+    </>
   );
 }
 

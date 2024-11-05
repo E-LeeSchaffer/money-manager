@@ -2,7 +2,12 @@ import Image from "next/image";
 import styled from "styled-components";
 export default function SortControl({ sortOrder, onToggleSortOrder }) {
   return (
-    <StyledSortButton onClick={onToggleSortOrder}>
+    <StyledSortButton
+      onClick={onToggleSortOrder}
+      aria-label={`Sort transactions in ${
+        sortOrder === "desc" ? "ascending" : "descending"
+      }`}
+    >
       <Image
         src={
           sortOrder === "desc"
