@@ -62,7 +62,7 @@ export default function HomePage({
     return transactions.slice().sort((a, b) => {
       const dateA = new Date(a.date);
       const dateB = new Date(b.date);
-      return sortOrder === "desc" ? dateA - dateB : dateB - dateA;
+      return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
     });
   }
 
@@ -121,12 +121,14 @@ export default function HomePage({
           onToggleFilter={() => setIsFilterSelectOpen(!isFilterSelectOpen)}
           selectedCategory={selectedCategory}
         />
+      </StyledFilterControls>
+      <StyledSortContainer>
+        {" "}
         <SortControl
           sortOrder={sortOrder}
           onToggleSortOrder={handleToggleSortOrder}
         />
-      </StyledFilterControls>
-
+      </StyledSortContainer>
       <TransactionsList
         handleEditTransaction={handleEditTransaction}
         transactions={displayedTransactions}
@@ -175,6 +177,12 @@ const StyledFilterControls = styled.div`
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-areas: "selectedCategoryContainer filter";
+`;
+
+const StyledSortContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 10px;
 `;
 
 const StyledSelectedCategoryContainer = styled.div`

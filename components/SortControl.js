@@ -1,8 +1,8 @@
 import Image from "next/image";
-
+import styled from "styled-components";
 export default function SortControl({ sortOrder, onToggleSortOrder }) {
   return (
-    <button onClick={onToggleSortOrder}>
+    <StyledSortButton onClick={onToggleSortOrder}>
       <Image
         src={
           sortOrder === "desc"
@@ -10,9 +10,15 @@ export default function SortControl({ sortOrder, onToggleSortOrder }) {
             : "/images/sort-numeric-up.svg"
         }
         alt={sortOrder === "desc" ? "Descending Order" : "Ascending Order"}
-        width={15}
-        height={15}
+        width={16}
+        height={16}
       ></Image>
-    </button>
+    </StyledSortButton>
   );
 }
+
+const StyledSortButton = styled.button`
+  background-color: transparent;
+  padding: 0;
+  border: none;
+`;
