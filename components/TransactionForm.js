@@ -160,6 +160,7 @@ export default function TransactionForm({
                 id="date"
                 name="date"
                 defaultValue={initialData.date || today}
+                max={today}
                 required
               />
             </FormRow>
