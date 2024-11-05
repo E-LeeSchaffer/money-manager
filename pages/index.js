@@ -9,6 +9,7 @@ import useLocalStorageState from "use-local-storage-state";
 
 import Image from "next/image";
 import AccountBalance from "@/components/AccountBalance";
+import SortControl from "@/components/SortControl";
 
 export default function HomePage({
   transactionsList,
@@ -35,15 +36,34 @@ export default function HomePage({
     "selectedCategory",
     { defaultValue: "" }
   );
+  const [sortOrder, setSortOrder] = useState("desc");
+
   const filteredTransactions = selectedCategory
     ? transactionsList.filter(
         (transaction) => transaction.category === selectedCategory
       )
     : transactionsList;
 
+  const displayedTransactions = sortTransactions(
+    filteredTransactions,
+    sortOrder
+  );
+
   function handleCategorySelection(category = "") {
     setIsFilterSelectOpen(false);
     setSelectedCategory(category);
+  }
+
+  function handleToggleSortOrder() {
+    setSortOrder(sortOrder === "desc" ? "asc" : "desc");
+  }
+
+  function sortTransactions(transactions, sortOrder) {
+    return transactions.slice().sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return sortOrder === "desc" ? dateA - dateB : dateB - dateA;
+    });
   }
 
   return (
@@ -101,13 +121,15 @@ export default function HomePage({
           onToggleFilter={() => setIsFilterSelectOpen(!isFilterSelectOpen)}
           selectedCategory={selectedCategory}
         />
+        <SortControl
+          sortOrder={sortOrder}
+          onToggleSortOrder={handleToggleSortOrder}
+        />
       </StyledFilterControls>
 
       <TransactionsList
         handleEditTransaction={handleEditTransaction}
-        transactions={
-          selectedCategory ? filteredTransactions : transactionsList
-        }
+        transactions={displayedTransactions}
         selectedCategory={selectedCategory}
         handleOpenEditMode={handleOpenEditMode}
         openModal={openModal}
@@ -117,6 +139,7 @@ export default function HomePage({
         handleCancelDeleteDialogue={handleCancelDeleteDialogue}
         handleDeleteTransaction={handleDeleteTransaction}
         isDeletingId={isDeletingId}
+        sortOrder={sortOrder}
       />
     </main>
   );
