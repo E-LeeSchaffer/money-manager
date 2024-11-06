@@ -2,29 +2,69 @@ import { useEffect, useState } from "react";
 import { formatNumber } from "@/lib/utils";
 import styled from "styled-components";
 
-export default function AccountBalance({ transactions }) {
+export default function AccountBalance({
+  transactions,
+  filteredAccount,
+  filteredAccountType,
+}) {
   const [currentBalance, setCurrentBalance] = useState(0);
 
   useEffect(() => {
-    const sumOfTransaction = transactions.reduce((total, transaction) => {
-      return transaction.type === "income"
-        ? total + transaction.amount
-        : total - transaction.amount;
-    }, 0);
-    setCurrentBalance(sumOfTransaction);
+    const incomeTotal = transactions
+      .filter((transaction) => transaction.type === "income")
+      .reduce((total, transaction) => total + transaction.amount, 0);
+
+    const expenseTotal = transactions
+      .filter((transaction) => transaction.type === "expense")
+      .reduce((total, transaction) => total + transaction.amount, 0);
+
+    setCurrentBalance(incomeTotal - expenseTotal);
   }, [transactions]);
 
   const currentBalanceType = currentBalance < 0 ? "expense" : "income";
 
+  function getTitle() {
+    if (filteredAccountType === "income") return "Total Income";
+    if (filteredAccountType === "expense") return "Total Expense";
+    if (filteredAccountType === "total") return "Total Sum";
+    return "Current Balance";
+  }
+
+  function formatNumberWithoutSign({ amount, type }) {
+    return new Intl.NumberFormat("de-DE", {
+      style: "currency",
+      currency: "EUR",
+      signDisplay: "never",
+    }).format(amount);
+  }
+
+  function formatNumberWithSign({ amount, type }) {
+    return new Intl.NumberFormat("de-DE", {
+      style: "currency",
+      currency: "EUR",
+      signDisplay: "auto",
+    }).format(amount);
+  }
+
+  const displayAmount = filteredAccount ?? currentBalance;
+
+  const formattedAmount =
+    filteredAccountType === "balance" || filteredAccountType === "total"
+      ? formatNumberWithSign({
+          amount: displayAmount,
+          type: currentBalanceType,
+        })
+      : formatNumberWithoutSign({
+          amount: displayAmount,
+          type: currentBalanceType,
+        });
+
   return (
     <StyledPageContainer>
       <StyledAccountBalanceContainer>
-        <StyledTitle>Current Balance</StyledTitle>
+        <StyledTitle>{getTitle()}</StyledTitle>
         <StyledCurrentBalance type={currentBalanceType}>
-          {formatNumber({
-            amount: currentBalance,
-            type: currentBalanceType,
-          })}
+          {formattedAmount}
         </StyledCurrentBalance>
       </StyledAccountBalanceContainer>
     </StyledPageContainer>

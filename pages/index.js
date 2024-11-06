@@ -4,11 +4,12 @@ import Modal from "@/components/Modal";
 import TransactionForm from "@/components/TransactionForm";
 import TransactionsList from "@/components/TransactionsList";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
 
 import Image from "next/image";
 import AccountBalance from "@/components/AccountBalance";
+import IncomeExpense from "@/components/IncomeExpense";
 
 export default function HomePage({
   transactionsList,
@@ -30,6 +31,9 @@ export default function HomePage({
   handleCancelDeleteDialogue,
   isDeletingId,
 }) {
+  const [filteredAccount, setFilteredAccount] = useState(null);
+  const [filteredAccountType, setFilteredAccountType] =
+    useLocalStorageState("balance");
   const [isFilterSelectOpen, setIsFilterSelectOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useLocalStorageState(
     "selectedCategory",
@@ -40,6 +44,44 @@ export default function HomePage({
         (transaction) => transaction.category === selectedCategory
       )
     : transactionsList;
+
+  useEffect(() => {
+    if (filteredAccountType === "income") {
+      setFilteredAccount(
+        filteredTransactions
+          .filter((transaction) => transaction.type === "income")
+          .reduce(
+            (accumulator, transaction) => accumulator + transaction.amount,
+            0
+          )
+      );
+    } else if (filteredAccountType === "expense") {
+      setFilteredAccount(
+        filteredTransactions
+          .filter((transaction) => transaction.type === "expense")
+          .reduce(
+            (accumulator, transaction) => accumulator + transaction.amount,
+            0
+          )
+      );
+    } else if (filteredAccountType === "total") {
+      const incomeSum = filteredTransactions
+        .filter((transaction) => transaction.type === "income")
+        .reduce(
+          (accumulator, transaction) => accumulator + transaction.amount,
+          0
+        );
+      const expenseSum = filteredTransactions
+        .filter((transaction) => transaction.type === "expense")
+        .reduce(
+          (accumulator, transaction) => accumulator + transaction.amount,
+          0
+        );
+      setFilteredAccount(incomeSum - expenseSum);
+    } else {
+      setFilteredAccount(null);
+    }
+  }, [filteredAccountType, filteredTransactions]);
 
   function handleCategorySelection(category = "") {
     setIsFilterSelectOpen(false);
@@ -70,8 +112,19 @@ export default function HomePage({
       {successMessage && (
         <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
       )}
-
-      {!showForm && <AccountBalance transactions={transactionsList} />}
+      <IncomeExpense
+        transactions={filteredTransactions}
+        setFilteredAccount={setFilteredAccount}
+        setFilteredAccountType={setFilteredAccountType}
+        filteredAccountType={filteredAccountType}
+      />
+      {!showForm && (
+        <AccountBalance
+          transactions={transactionsList}
+          filteredAccount={filteredAccount}
+          filteredAccountType={filteredAccountType}
+        />
+      )}
 
       <StyledFilterControls>
         {selectedCategory !== "" ? (
