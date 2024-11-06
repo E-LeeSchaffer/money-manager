@@ -5,10 +5,10 @@ import TransactionsList from "@/components/TransactionsList";
 import styled from "styled-components";
 import { useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
-
 import Image from "next/image";
 import AccountBalance from "@/components/AccountBalance";
 import Search from "@/components/Search";
+import SortControl from "@/components/SortControl";
 
 export default function HomePage({
   transactionsList,
@@ -35,6 +35,7 @@ export default function HomePage({
     "selectedCategory",
     { defaultValue: "" }
   );
+  const [sortOrder, setSortOrder] = useState("desc");
   const filteredTransactions = selectedCategory
     ? transactionsList.filter(
         (transaction) => transaction.category === selectedCategory
@@ -42,7 +43,15 @@ export default function HomePage({
     : transactionsList;
   const [isSearching, setIsSearching] = useState(false);
   const [searchItem, setSearchItem] = useState("");
-  const [searchedTransaction, setSearchedTransaction] = useState("");
+  const transactionsAfterSearch = searchItem
+    ? filteredTransactions.filter((transaction) =>
+        transaction.name.toLowerCase().includes(searchItem.toLowerCase())
+      )
+    : filteredTransactions;
+  const displayedTransactions = sortTransactions(
+    searchItem || selectedCategory ? transactionsAfterSearch : transactionsList,
+    sortOrder
+  );
 
   function handleCategorySelection(category = "") {
     setIsFilterSelectOpen(false);
@@ -51,9 +60,9 @@ export default function HomePage({
 
   function handleSearch() {
     setIsSearching(!isSearching);
-    if (isSearching === false) {
+
+    if (isSearching) {
       setSearchItem("");
-      setSearchedTransaction("");
     }
   }
 
@@ -69,11 +78,22 @@ export default function HomePage({
     const searchedTransactions = filteredTransactions.filter((transaction) => {
       return transaction.name.toLowerCase().includes(searchTerm.toLowerCase());
     });
-    setSearchedTransaction(searchedTransactions);
+  }
+
+  function handleToggleSortOrder() {
+    setSortOrder(sortOrder === "desc" ? "asc" : "desc");
+  }
+
+  function sortTransactions(transactions, sortOrder) {
+    return transactions.slice().sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
+    });
   }
 
   return (
-    <main>
+    <>
       <StyledTitle>Transactions</StyledTitle>
 
       <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
@@ -140,13 +160,16 @@ export default function HomePage({
         </StyledControls>
       </StyledSelectionBar>
 
+      <StyledSortContainer>
+        <SortControl
+          sortOrder={sortOrder}
+          onToggleSortOrder={handleToggleSortOrder}
+        />
+      </StyledSortContainer>
+
       <TransactionsList
         handleEditTransaction={handleEditTransaction}
-        transactions={
-          searchedTransaction !== "" && isSearching
-            ? searchedTransaction
-            : filteredTransactions
-        }
+        transactions={displayedTransactions}
         selectedCategory={selectedCategory}
         handleOpenEditMode={handleOpenEditMode}
         openModal={openModal}
@@ -156,8 +179,9 @@ export default function HomePage({
         handleCancelDeleteDialogue={handleCancelDeleteDialogue}
         handleDeleteTransaction={handleDeleteTransaction}
         isDeletingId={isDeletingId}
+        sortOrder={sortOrder}
       />
-    </main>
+    </>
   );
 }
 
@@ -186,10 +210,16 @@ const StyledSuccessMessage = styled.p`
 
 const StyledSelectionBar = styled.div`
   border-top: 1px solid var(--dark-grey-color);
-  margin: 12px 0 12px 0;
+  margin: 12px 0 0 0;
   padding: 12px 10px;
   display: grid;
   grid-template-areas: "selectedCategory controls";
+`;
+
+const StyledSortContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding: 2px 10px;
 `;
 
 const StyledSelectedCategoryDisplay = styled.div`
