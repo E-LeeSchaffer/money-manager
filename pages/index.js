@@ -9,6 +9,7 @@ import useLocalStorageState from "use-local-storage-state";
 
 import Image from "next/image";
 import AccountBalance from "@/components/AccountBalance";
+import SortControl from "@/components/SortControl";
 
 export default function HomePage({
   transactionsList,
@@ -35,19 +36,38 @@ export default function HomePage({
     "selectedCategory",
     { defaultValue: "" }
   );
+  const [sortOrder, setSortOrder] = useState("desc");
+
   const filteredTransactions = selectedCategory
     ? transactionsList.filter(
         (transaction) => transaction.category === selectedCategory
       )
     : transactionsList;
 
+  const displayedTransactions = sortTransactions(
+    filteredTransactions,
+    sortOrder
+  );
+
   function handleCategorySelection(category = "") {
     setIsFilterSelectOpen(false);
     setSelectedCategory(category);
   }
 
+  function handleToggleSortOrder() {
+    setSortOrder(sortOrder === "desc" ? "asc" : "desc");
+  }
+
+  function sortTransactions(transactions, sortOrder) {
+    return transactions.slice().sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
+    });
+  }
+
   return (
-    <main>
+    <>
       <StyledTitle>Transactions</StyledTitle>
 
       <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
@@ -102,12 +122,16 @@ export default function HomePage({
           selectedCategory={selectedCategory}
         />
       </StyledFilterControls>
-
+      <StyledSortContainer>
+        {" "}
+        <SortControl
+          sortOrder={sortOrder}
+          onToggleSortOrder={handleToggleSortOrder}
+        />
+      </StyledSortContainer>
       <TransactionsList
         handleEditTransaction={handleEditTransaction}
-        transactions={
-          selectedCategory ? filteredTransactions : transactionsList
-        }
+        transactions={displayedTransactions}
         selectedCategory={selectedCategory}
         handleOpenEditMode={handleOpenEditMode}
         openModal={openModal}
@@ -117,8 +141,9 @@ export default function HomePage({
         handleCancelDeleteDialogue={handleCancelDeleteDialogue}
         handleDeleteTransaction={handleDeleteTransaction}
         isDeletingId={isDeletingId}
+        sortOrder={sortOrder}
       />
-    </main>
+    </>
   );
 }
 
@@ -152,6 +177,12 @@ const StyledFilterControls = styled.div`
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-areas: "selectedCategoryContainer filter";
+`;
+
+const StyledSortContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 10px;
 `;
 
 const StyledSelectedCategoryContainer = styled.div`
