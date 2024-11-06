@@ -45,44 +45,6 @@ export default function HomePage({
       )
     : transactionsList;
 
-  useEffect(() => {
-    if (filteredAccountType === "income") {
-      setFilteredAccount(
-        filteredTransactions
-          .filter((transaction) => transaction.type === "income")
-          .reduce(
-            (accumulator, transaction) => accumulator + transaction.amount,
-            0
-          )
-      );
-    } else if (filteredAccountType === "expense") {
-      setFilteredAccount(
-        filteredTransactions
-          .filter((transaction) => transaction.type === "expense")
-          .reduce(
-            (accumulator, transaction) => accumulator + transaction.amount,
-            0
-          )
-      );
-    } else if (filteredAccountType === "total") {
-      const incomeSum = filteredTransactions
-        .filter((transaction) => transaction.type === "income")
-        .reduce(
-          (accumulator, transaction) => accumulator + transaction.amount,
-          0
-        );
-      const expenseSum = filteredTransactions
-        .filter((transaction) => transaction.type === "expense")
-        .reduce(
-          (accumulator, transaction) => accumulator + transaction.amount,
-          0
-        );
-      setFilteredAccount(incomeSum - expenseSum);
-    } else {
-      setFilteredAccount(null);
-    }
-  }, [filteredAccountType, filteredTransactions]);
-
   function handleCategorySelection(category = "") {
     setIsFilterSelectOpen(false);
     setSelectedCategory(category);
@@ -112,20 +74,21 @@ export default function HomePage({
       {successMessage && (
         <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
       )}
-      <IncomeExpense
-        transactions={filteredTransactions}
-        setFilteredAccount={setFilteredAccount}
-        setFilteredAccountType={setFilteredAccountType}
-        filteredAccountType={filteredAccountType}
-      />
-      {!showForm && (
-        <AccountBalance
-          transactions={transactionsList}
-          filteredAccount={filteredAccount}
+      <StyledBalanceContainer>
+        <IncomeExpense
+          transactions={filteredTransactions}
+          setFilteredAccount={setFilteredAccount}
+          setFilteredAccountType={setFilteredAccountType}
           filteredAccountType={filteredAccountType}
         />
-      )}
-
+        {!showForm && (
+          <AccountBalance
+            transactions={transactionsList}
+            filteredAccount={filteredAccount}
+            filteredAccountType={filteredAccountType}
+          />
+        )}
+      </StyledBalanceContainer>
       <StyledFilterControls>
         {selectedCategory !== "" ? (
           <StyledSelectedCategoryContainer>
@@ -237,4 +200,12 @@ const StyledDeselectButton = styled.button`
 
 const StyledImage = styled(Image)`
   display: flex;
+`;
+
+const StyledBalanceContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
 `;

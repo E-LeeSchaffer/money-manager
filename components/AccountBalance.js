@@ -73,6 +73,7 @@ export default function AccountBalance({
 
 const StyledPageContainer = styled.div`
   display: flex;
+
   justify-content: center;
   padding-block: 12px;
   align-items: center;
