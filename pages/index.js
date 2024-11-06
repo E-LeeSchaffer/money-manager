@@ -74,21 +74,21 @@ export default function HomePage({
       {successMessage && (
         <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
       )}
-      <StyledBalanceContainer>
-        <IncomeExpense
-          transactions={filteredTransactions}
-          setFilteredAccount={setFilteredAccount}
-          setFilteredAccountType={setFilteredAccountType}
-          filteredAccountType={filteredAccountType}
-        />
-        {!showForm && (
+      {!showForm && (
+        <StyledBalanceContainer>
+          <IncomeExpense
+            transactions={filteredTransactions}
+            setFilteredAccount={setFilteredAccount}
+            setFilteredAccountType={setFilteredAccountType}
+            filteredAccountType={filteredAccountType}
+          />
           <AccountBalance
             transactions={transactionsList}
             filteredAccount={filteredAccount}
             filteredAccountType={filteredAccountType}
           />
-        )}
-      </StyledBalanceContainer>
+        </StyledBalanceContainer>
+      )}
       <StyledFilterControls>
         {selectedCategory !== "" ? (
           <StyledSelectedCategoryContainer>
