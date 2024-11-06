@@ -113,17 +113,16 @@ export default function HomePage({
           </StyledSelectedCategoryDisplay>
         ) : null}
 
-        {isSearching ? (
-          <StyledInput
-            type="text"
-            name="searchbar"
-            value={searchItem}
-            onChange={handleInputChange}
-            autoFocus
-          />
-        ) : null}
-
         <StyledControls>
+          {isSearching ? (
+            <StyledInput
+              type="text"
+              name="searchbar"
+              value={searchItem}
+              onChange={handleInputChange}
+              autoFocus
+            />
+          ) : null}
           <Search handleSearch={handleSearch} />
           <Filter
             onFilterTransactions={handleCategorySelection}
@@ -182,14 +181,14 @@ const StyledSelectionBar = styled.div`
   border-top: 1px solid var(--dark-grey-color);
   margin: 12px 0 12px 0;
   padding: 12px 10px;
-  display: flex;
-  justify-content: flex-end;
+  display: grid;
+  grid-template-areas: "selectedCategory controls";
 `;
 
 const StyledSelectedCategoryDisplay = styled.div`
+  grid-area: selectedCategory;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   width: fit-content;
   height: 24px;
   padding: 0 8px;
@@ -212,6 +211,8 @@ const StyledDeselectButton = styled.button`
 
 const StyledControls = styled.div`
   display: flex;
+  grid-area: controls;
+  justify-content: flex-end;
 `;
 
 const StyledImage = styled(Image)`
@@ -220,10 +221,10 @@ const StyledImage = styled(Image)`
 
 const StyledInput = styled.input`
   display: flex;
-  width: 6rem;
   border: none;
+  width: 8rem;
   border-bottom: 1px solid var(--dark-grey-color);
-  border-radius: 8px;
+  background-color: inherit;
 
   &:focus {
     outline: none;

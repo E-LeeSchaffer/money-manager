@@ -46,9 +46,9 @@ export default function Filter({
 const StyledFilterContainer = styled.div`
   display: flex;
   height: 24px;
-  max-width: 18rem;
   position: relative;
   right: 0;
+  padding-left: 0.5rem;
 `;
 
 const StyledFilterButton = styled.button`
