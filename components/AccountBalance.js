@@ -63,9 +63,21 @@ export default function AccountBalance({
     <StyledPageContainer>
       <StyledAccountBalanceContainer>
         <StyledTitle>{getTitle()}</StyledTitle>
-        <StyledCurrentBalance type={currentBalanceType}>
+        <StyledCurrentBalance
+          type={currentBalanceType}
+          filteredType={filteredAccountType}
+        >
           {formattedAmount}
         </StyledCurrentBalance>
+        {filteredAccountType !== "balance" && (
+          <StyledCurrentBalanceInfo>
+            Current Balance:{" "}
+            {formatNumberWithSign({
+              amount: currentBalance,
+              type: currentBalanceType,
+            })}
+          </StyledCurrentBalanceInfo>
+        )}
       </StyledAccountBalanceContainer>
     </StyledPageContainer>
   );
@@ -101,8 +113,17 @@ const StyledTitle = styled.h3`
 
 const StyledCurrentBalance = styled.div`
   font-size: 1.3rem;
-  color: ${(props) =>
-    props.type === "expense"
+  color: ${(props) => {
+    if (props.filteredType === "income") return "var(--friendly-green-color)";
+    if (props.filteredType === "expense") return "var(--friendly-red-color)";
+    return props.type === "expense"
       ? "var(--friendly-red-color)"
-      : "var(--friendly-green-color)"};
+      : "var(--friendly-green-color)";
+  }};
+`;
+
+const StyledCurrentBalanceInfo = styled.div`
+  font-size: 0.8rem;
+  color: var(--text-color-dark);
+  margin-top: 4px;
 `;
