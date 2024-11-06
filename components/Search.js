@@ -1,7 +1,7 @@
 import Image from "next/image";
 import styled from "styled-components";
 
-export default function Search({ handleSearch }) {
+export default function Search({ handleSearch, isSearching }) {
   return (
     <StyledSearchContainer>
       <StyledSearchButton
@@ -10,7 +10,7 @@ export default function Search({ handleSearch }) {
         }}
       >
         <StyledImage
-          src={"/images/search.svg"}
+          src={isSearching ? "/images/x-lg.svg" : "/images/search.svg"}
           alt="search button"
           width={15}
           height={15}

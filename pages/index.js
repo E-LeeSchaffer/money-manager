@@ -57,6 +57,12 @@ export default function HomePage({
     }
   }
 
+  function handleKeyDown(event) {
+    if (event.key === "Enter") {
+      event.target.blur();
+    }
+  }
+
   function handleInputChange(event) {
     const searchTerm = event.target.value;
     setSearchItem(searchTerm);
@@ -120,10 +126,11 @@ export default function HomePage({
               name="searchbar"
               value={searchItem}
               onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
               autoFocus
             />
           ) : null}
-          <Search handleSearch={handleSearch} />
+          <Search handleSearch={handleSearch} isSearching={isSearching} />
           <Filter
             onFilterTransactions={handleCategorySelection}
             isFilterSelectOpen={isFilterSelectOpen}
