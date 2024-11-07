@@ -52,19 +52,19 @@ export default function IncomeExpense({
       <StyledButtonContainer>
         <StyledButton
           onClick={() => handleToggleAccountFilter("total")}
-          active={filteredAccountType === "total"}
+          $active={filteredAccountType === "total"}
         >
           Total
         </StyledButton>
         <StyledButton
           onClick={() => handleToggleAccountFilter("income")}
-          active={filteredAccountType === "income"}
+          $active={filteredAccountType === "income"}
         >
           Income
         </StyledButton>
         <StyledButton
           onClick={() => handleToggleAccountFilter("expense")}
-          active={filteredAccountType === "expense"}
+          $active={filteredAccountType === "expense"}
         >
           Expense
         </StyledButton>
@@ -92,11 +92,11 @@ const StyledButton = styled.button`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-size: 0.8rem;
 
-  border: ${({ active }) =>
-    active
+  border: ${({ $active }) =>
+    $active
       ? "2px solid var(--accent-color)"
       : "0.1px solid var(--dark-grey-color)"};
 
-  background-color: ${({ active }) =>
-    active ? "var(--dark-grey-color)" : "var(--light-bg-color)"};
+  background-color: ${({ $active }) =>
+    $active ? "var(--dark-grey-color)" : "var(--light-bg-color)"};
 `;

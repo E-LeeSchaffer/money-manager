@@ -65,7 +65,7 @@ export default function AccountBalance({
         <StyledTitle>{getTitle()}</StyledTitle>
         <StyledCurrentBalance
           type={currentBalanceType}
-          filteredType={filteredAccountType}
+          $filteredType={filteredAccountType}
         >
           {formattedAmount}
         </StyledCurrentBalance>
@@ -114,8 +114,8 @@ const StyledTitle = styled.h3`
 const StyledCurrentBalance = styled.div`
   font-size: 1.3rem;
   color: ${(props) => {
-    if (props.filteredType === "income") return "var(--friendly-green-color)";
-    if (props.filteredType === "expense") return "var(--friendly-red-color)";
+    if (props.$filteredType === "income") return "var(--friendly-green-color)";
+    if (props.$filteredType === "expense") return "var(--friendly-red-color)";
     return props.type === "expense"
       ? "var(--friendly-red-color)"
       : "var(--friendly-green-color)";
