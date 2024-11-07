@@ -26,7 +26,7 @@ export default function AccountBalance({
   function getTitle() {
     if (filteredAccountType === "income") return "Total Income";
     if (filteredAccountType === "expense") return "Total Expense";
-    if (filteredAccountType === "total") return "Total Sum";
+    if (filteredAccountType === "total") return "Total sum";
     return "Current Balance";
   }
 
