@@ -99,6 +99,11 @@ const StyledCategoryInput = styled.input`
   background-color: inherit;
   font-size: 16px;
   padding: 0;
+
+  &:focus {
+    outline: none;
+    border-bottom: 1px solid var(--dark-grey-color);
+  }
 `;
 
 const ErrorMessage = styled.p`

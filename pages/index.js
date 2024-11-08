@@ -210,16 +210,6 @@ const StyledLink = styled(Link)`
   z-index: 2000;
 `;
 
-const StyledTitleContainer = styled.h2`
-  display: flex;
-  justify-content: center;
-  flex-grow: 1;
-  text-align: center;
-  font-size: 1.7rem;
-  font-weight: 700;
-  margin-top: 0;
-`;
-
 const StyledTitle = styled.h2`
   display: flex;
   justify-content: center;
