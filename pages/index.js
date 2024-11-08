@@ -9,6 +9,14 @@ import Image from "next/image";
 import AccountBalance from "@/components/AccountBalance";
 import Search from "@/components/Search";
 import SortControl from "@/components/SortControl";
+import TimelineFilter from "@/components/TimelineFilter";
+
+function calculateDateRange(days) {
+  const currentDate = new Date();
+  const startDate = new Date();
+  startDate.setDate(currentDate.getDate() - days);
+  return startDate;
+}
 
 export default function HomePage({
   transactionsList,
@@ -36,22 +44,37 @@ export default function HomePage({
     { defaultValue: "" }
   );
   const [sortOrder, setSortOrder] = useState("desc");
-  const filteredTransactions = selectedCategory
-    ? transactionsList.filter(
-        (transaction) => transaction.category === selectedCategory
-      )
-    : transactionsList;
+  const [selectedTimeframe, setSelectedTimeframe] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [searchItem, setSearchItem] = useState("");
-  const transactionsAfterSearch = searchItem
-    ? filteredTransactions.filter((transaction) =>
-        transaction.name.toLowerCase().includes(searchItem.toLowerCase())
-      )
-    : filteredTransactions;
+
+  const filteredTransactions = transactionsList.filter((transaction) => {
+    const matchesCategory = selectedCategory
+      ? transaction.category === selectedCategory
+      : true;
+    const matchesSearch = searchItem
+      ? transaction.name.toLowerCase().includes(searchItem.toLowerCase())
+      : true;
+    const matchesTimeframe = selectedTimeframe
+      ? new Date(transaction.date) >= calculateDateRange(selectedTimeframe)
+      : true;
+    return matchesCategory && matchesSearch && matchesTimeframe;
+  });
+
+  // const transactionsAfterSearch = searchItem
+  //   ? filteredTransactions.filter((transaction) =>
+  //       transaction.name.toLowerCase().includes(searchItem.toLowerCase())
+  //     )
+  //   : filteredTransactions;
+
   const displayedTransactions = sortTransactions(
-    searchItem || selectedCategory ? transactionsAfterSearch : transactionsList,
+    filteredTransactions,
     sortOrder
   );
+
+  function handleTimeFrameChange(timeframe) {
+    setSelectedTimeframe(timeframe);
+  }
 
   function handleCategorySelection(category = "") {
     setIsFilterSelectOpen(false);
@@ -159,6 +182,12 @@ export default function HomePage({
           />
         </StyledControls>
       </StyledSelectionBar>
+      <div>
+        <TimelineFilter
+          selectedTimeframe={selectedTimeframe}
+          onTimeframeChange={handleTimeFrameChange}
+        />
+      </div>
 
       <StyledSortContainer>
         <SortControl
@@ -166,21 +195,24 @@ export default function HomePage({
           onToggleSortOrder={handleToggleSortOrder}
         />
       </StyledSortContainer>
-
-      <TransactionsList
-        handleEditTransaction={handleEditTransaction}
-        transactions={displayedTransactions}
-        selectedCategory={selectedCategory}
-        handleOpenEditMode={handleOpenEditMode}
-        openModal={openModal}
-        onCloseModal={closeModal}
-        handleOpenDeleteDialogue={handleOpenDeleteDialogue}
-        handleConfirmDelete={handleConfirmDelete}
-        handleCancelDeleteDialogue={handleCancelDeleteDialogue}
-        handleDeleteTransaction={handleDeleteTransaction}
-        isDeletingId={isDeletingId}
-        sortOrder={sortOrder}
-      />
+      {displayedTransactions.length > 0 ? (
+        <TransactionsList
+          handleEditTransaction={handleEditTransaction}
+          transactions={displayedTransactions}
+          selectedCategory={selectedCategory}
+          handleOpenEditMode={handleOpenEditMode}
+          openModal={openModal}
+          onCloseModal={closeModal}
+          handleOpenDeleteDialogue={handleOpenDeleteDialogue}
+          handleConfirmDelete={handleConfirmDelete}
+          handleCancelDeleteDialogue={handleCancelDeleteDialogue}
+          handleDeleteTransaction={handleDeleteTransaction}
+          isDeletingId={isDeletingId}
+          sortOrder={sortOrder}
+        />
+      ) : (
+        <p>No transactions found within this timeframe.</p>
+      )}
     </>
   );
 }
