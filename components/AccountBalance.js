@@ -46,6 +46,8 @@ export default function AccountBalance({
       ? amountMap[filteredTransactionType]
       : currentBalance;
 
+  const displayAmountType = displayAmount < 0 ? "expense" : "income";
+
   const formattedAmount =
     filteredTransactionType === "balance" || filteredTransactionType === "total"
       ? formatNumberWithSign({
@@ -62,7 +64,7 @@ export default function AccountBalance({
       <StyledAccountBalanceContainer>
         <StyledTitle>{title}</StyledTitle>
         <StyledCurrentBalance
-          type={currentBalanceType}
+          type={displayAmountType}
           $filteredType={filteredTransactionType}
         >
           {formattedAmount}
