@@ -133,6 +133,7 @@ export default function App({ Component, pageProps }) {
     showForm,
     handleAddCategory,
     isDuplicateError,
+
     ...pageProps,
   };
 

@@ -1,12 +1,26 @@
 import styled from "styled-components";
+import Image from "next/image";
+import { useRouter } from "next/router";
 
 export default function SettingsPage({
   handleAddCategory,
   categories,
   isDuplicateError,
+  successMessage,
 }) {
+  const router = useRouter();
+
   return (
     <>
+      <StyledBackButton onClick={() => router.push("/")}>
+        <StyledImage
+          src="/images/arrow-return-left.svg"
+          alt="edit button"
+          width={15}
+          height={15}
+        />
+        Back to Transactions
+      </StyledBackButton>
       <StyledTitle>Settings</StyledTitle>
       <StyledSettingsCard>
         <StyledSubheading>Customize Categories</StyledSubheading>
@@ -30,9 +44,29 @@ export default function SettingsPage({
           )}
         </StyledCategoryContainer>
       </StyledSettingsCard>
+      {successMessage && (
+        <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
+      )}
     </>
   );
 }
+
+const StyledImage = styled(Image)`
+  display: flex;
+`;
+
+const StyledBackButton = styled.button`
+  background-color: var(--accent-color);
+  color: black;
+  position: relative;
+  top: 10px;
+  left: 10px;
+  border: var(--accent-color);
+  padding: 10px 15px;
+  border-radius: 4px;
+  display: flex;
+  gap: 0.5rem;
+`;
 
 const StyledTitle = styled.h2`
   text-align: center;
@@ -71,4 +105,21 @@ const ErrorMessage = styled.p`
   grid-area: typeErrorMessage;
   color: red;
   font-size: 0.6rem;
+`;
+
+const StyledSuccessMessage = styled.p`
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text-color-dark);
+  font-size: 0.8rem;
+  padding: 6px 4px;
+  width: 220px;
+  font-weight: 800;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  background-color: var(--friendly-green-color);
 `;

@@ -9,6 +9,7 @@ import Image from "next/image";
 import AccountBalance from "@/components/AccountBalance";
 import Search from "@/components/Search";
 import SortControl from "@/components/SortControl";
+import Link from "next/link";
 
 export default function HomePage({
   transactionsList,
@@ -95,6 +96,17 @@ export default function HomePage({
 
   return (
     <>
+      {!showForm && (
+        <StyledLink href={"/settings"}>
+          <Image
+            src={"/images/settings.svg"}
+            alt="filter button"
+            width={15}
+            height={15}
+          />
+        </StyledLink>
+      )}
+
       <StyledTitle>Transactions</StyledTitle>
 
       <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
@@ -189,10 +201,33 @@ export default function HomePage({
   );
 }
 
-const StyledTitle = styled.h2`
+const StyledLink = styled(Link)`
+  position: absolute;
+  right: 16px;
+  top: 10px;
+  text-decoration: none;
+  color: inherit;
+  z-index: 2000;
+`;
+
+const StyledTitleContainer = styled.h2`
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
   text-align: center;
   font-size: 1.7rem;
   font-weight: 700;
+  margin-top: 0;
+`;
+
+const StyledTitle = styled.h2`
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+  text-align: center;
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-top: 0;
 `;
 
 const StyledSuccessMessage = styled.p`

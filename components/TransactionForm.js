@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 import styled from "styled-components";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function TransactionForm({
   categories,
@@ -105,21 +106,31 @@ export default function TransactionForm({
               <StyledCategoryLabel htmlFor="category">
                 Category
               </StyledCategoryLabel>
-              <StyledCategorySelect
-                id="category"
-                defaultValue={initialData.category || ""}
-                name="category"
-                required
-              >
-                <option value="" disabled>
-                  Please select a category
-                </option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.name}>
-                    {category.name}
+              <StyledCategoryContainer>
+                <StyledCategorySelect
+                  id="category"
+                  defaultValue={initialData.category || ""}
+                  name="category"
+                  required
+                >
+                  <option value="" disabled>
+                    Please select a category
                   </option>
-                ))}
-              </StyledCategorySelect>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.name}>
+                      {category.name}
+                    </option>
+                  ))}
+                </StyledCategorySelect>
+                <StyledLink href={"/settings"}>
+                  <Image
+                    src={"/images/settings.svg"}
+                    alt="filter button"
+                    width={15}
+                    height={15}
+                  />
+                </StyledLink>
+              </StyledCategoryContainer>
             </FormRow>
             <FormRow>
               <StyledTypeLabel htmlFor="type">Type</StyledTypeLabel>
@@ -171,6 +182,20 @@ export default function TransactionForm({
     </>
   );
 }
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  padding: 0 2px 0 12px;
+  display: flex;
+  align-items: center;
+`;
+
+const StyledCategoryContainer = styled.div`
+  display: flex;
+  grid-area: categoryInput;
+  justify-content: space-between;
+`;
 
 const StyledButtonContainer = styled.div`
   display: flex;
@@ -273,7 +298,6 @@ const StyledCategoryLabel = styled.label`
 `;
 
 const StyledCategorySelect = styled.select`
-  grid-area: categoryInput;
   padding: 4px 12px;
   border: 1px solid var(--dark-grey-color);
   border-radius: 24px;
@@ -281,6 +305,7 @@ const StyledCategorySelect = styled.select`
   color: var(--text-color-dark);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease-in-out;
+  width: 100%;
 
   &:focus {
     border-color: var(--accent-color);

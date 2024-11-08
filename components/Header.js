@@ -46,7 +46,7 @@ const StyledHeader = styled.h1`
       ? "rgba(245, 245, 245, 0.8)"
       : "rgba(255, 255, 255, 0.5)"};
   transition: background-color 0.3s ease-in-out;
-  z-index: 1000;
+  z-index: 100;
 `;
 
 const StyledLink = styled(Link)`

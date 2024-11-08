@@ -5,6 +5,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { capitalizeFirstLetter, formatDate, formatNumber } from "@/lib/utils";
+import Link from "next/link";
+import { categories } from "@/lib/categories";
 
 export default function TransactionDetailsPage({
   transactionsList,
@@ -73,6 +75,14 @@ export default function TransactionDetailsPage({
 
   return (
     <main>
+      <StyledLink href={"/settings"}>
+        <Image
+          src={"/images/settings.svg"}
+          alt="filter button"
+          width={15}
+          height={15}
+        />
+      </StyledLink>
       <StyledBackButton onClick={() => router.push("/")}>
         <StyledImage
           src="/images/arrow-return-left.svg"
@@ -92,6 +102,7 @@ export default function TransactionDetailsPage({
             closeModal();
           }}
           variant="edit"
+          categories={categories}
         />
       </Modal>
 
@@ -183,6 +194,14 @@ export default function TransactionDetailsPage({
   );
 }
 
+const StyledLink = styled(Link)`
+  position: absolute;
+  right: 16px;
+  top: 10px;
+  text-decoration: none;
+  color: inherit;
+  z-index: 2000;
+`;
 const StyledPageNotFoundMessage = styled.p`
   display: flex;
   justify-content: center;
