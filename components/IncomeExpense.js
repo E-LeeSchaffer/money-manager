@@ -2,69 +2,30 @@ import styled from "styled-components";
 import { useEffect, useMemo } from "react";
 
 export default function IncomeExpense({
-  transactions,
-  setFilteredAccount,
-  setFilteredAccountType,
-  filteredAccountType,
+  onFilterChange,
+  filteredTransactionType,
 }) {
-  const income = useMemo(
-    () =>
-      transactions
-        .filter((transaction) => transaction.type === "income")
-        .reduce(
-          (accumulator, transaction) => accumulator + transaction.amount,
-          0
-        ),
-    [transactions]
-  );
-
-  const expense = useMemo(
-    () =>
-      transactions
-        .filter((transaction) => transaction.type === "expense")
-        .reduce(
-          (accumulator, transaction) => accumulator + transaction.amount,
-          0
-        ),
-    [transactions]
-  );
-
-  const total = income - expense;
-
-  useEffect(() => {
-    if (filteredAccountType === "income") {
-      setFilteredAccount(income);
-    } else if (filteredAccountType === "expense") {
-      setFilteredAccount(expense);
-    } else if (filteredAccountType === "total") {
-      setFilteredAccount(total);
-    } else {
-      setFilteredAccount(null);
-    }
-  }, [filteredAccountType, income, expense, total, setFilteredAccount]);
-
   const handleToggleAccountFilter = (type) => {
-    setFilteredAccountType(type === filteredAccountType ? "balance" : type);
+    onFilterChange(type === filteredTransactionType ? "balance" : type);
   };
-
   return (
     <>
       <StyledButtonContainer>
         <StyledButton
           onClick={() => handleToggleAccountFilter("total")}
-          $active={filteredAccountType === "total"}
+          $active={filteredTransactionType === "total"}
         >
-          Total
+          Profit
         </StyledButton>
         <StyledButton
           onClick={() => handleToggleAccountFilter("income")}
-          $active={filteredAccountType === "income"}
+          $active={filteredTransactionType === "income"}
         >
           Income
         </StyledButton>
         <StyledButton
           onClick={() => handleToggleAccountFilter("expense")}
-          $active={filteredAccountType === "expense"}
+          $active={filteredTransactionType === "expense"}
         >
           Expense
         </StyledButton>

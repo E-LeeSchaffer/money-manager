@@ -3,32 +3,21 @@ import { formatNumber } from "@/lib/utils";
 import styled from "styled-components";
 
 export default function AccountBalance({
-  transactions,
-  filteredAccount,
-  filteredAccountType,
+  income,
+  expense,
+  total,
+  currentBalance,
+  filteredTransactionType,
 }) {
-  const [currentBalance, setCurrentBalance] = useState(0);
-
-  useEffect(() => {
-    const incomeTotal = transactions
-      .filter((transaction) => transaction.type === "income")
-      .reduce((total, transaction) => total + transaction.amount, 0);
-
-    const expenseTotal = transactions
-      .filter((transaction) => transaction.type === "expense")
-      .reduce((total, transaction) => total + transaction.amount, 0);
-
-    setCurrentBalance(incomeTotal - expenseTotal);
-  }, [transactions]);
-
   const currentBalanceType = currentBalance < 0 ? "expense" : "income";
 
-  function getTitle() {
-    if (filteredAccountType === "income") return "Total Income";
-    if (filteredAccountType === "expense") return "Total Expense";
-    if (filteredAccountType === "total") return "Total sum";
-    return "Current Balance";
-  }
+  const titleMap = {
+    income: "Total Income",
+    expense: "Total Expense",
+    total: "Profit",
+  };
+
+  const title = titleMap[filteredTransactionType] || "Current Balance";
 
   function formatNumberWithoutSign({ amount, type }) {
     return new Intl.NumberFormat("de-DE", {
@@ -46,10 +35,19 @@ export default function AccountBalance({
     }).format(amount);
   }
 
-  const displayAmount = filteredAccount ?? currentBalance;
+  const amountMap = {
+    income: income,
+    expense: expense,
+    total: total,
+  };
+
+  const displayAmount =
+    filteredTransactionType in amountMap
+      ? amountMap[filteredTransactionType]
+      : currentBalance;
 
   const formattedAmount =
-    filteredAccountType === "balance" || filteredAccountType === "total"
+    filteredTransactionType === "balance" || filteredTransactionType === "total"
       ? formatNumberWithSign({
           amount: displayAmount,
           type: currentBalanceType,
@@ -62,14 +60,14 @@ export default function AccountBalance({
   return (
     <StyledPageContainer>
       <StyledAccountBalanceContainer>
-        <StyledTitle>{getTitle()}</StyledTitle>
+        <StyledTitle>{title}</StyledTitle>
         <StyledCurrentBalance
           type={currentBalanceType}
-          $filteredType={filteredAccountType}
+          $filteredType={filteredTransactionType}
         >
           {formattedAmount}
         </StyledCurrentBalance>
-        {filteredAccountType !== "balance" && (
+        {filteredTransactionType !== "balance" && (
           <StyledCurrentBalanceInfo>
             Current Balance:{" "}
             {formatNumberWithSign({

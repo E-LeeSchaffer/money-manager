@@ -31,8 +31,7 @@ export default function HomePage({
   handleCancelDeleteDialogue,
   isDeletingId,
 }) {
-  const [filteredAccount, setFilteredAccount] = useState(null);
-  const [filteredAccountType, setFilteredAccountType] =
+  const [filteredTransactionType, setFilteredTransactionType] =
     useLocalStorageState("balance");
   const [isFilterSelectOpen, setIsFilterSelectOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useLocalStorageState(
@@ -96,6 +95,26 @@ export default function HomePage({
     });
   }
 
+  const incomeTotal = transactionsList
+    .filter((transaction) => transaction.type === "income")
+    .reduce((total, transaction) => total + transaction.amount, 0);
+
+  const expenseTotal = transactionsList
+    .filter((transaction) => transaction.type === "expense")
+    .reduce((total, transaction) => total + transaction.amount, 0);
+
+  const currentBalance = incomeTotal - expenseTotal;
+
+  const filteredIncome = filteredTransactions
+    .filter((transaction) => transaction.type === "income")
+    .reduce((accumulator, transaction) => accumulator + transaction.amount, 0);
+
+  const filteredExpense = filteredTransactions
+    .filter((transaction) => transaction.type === "expense")
+    .reduce((accumulator, transaction) => accumulator + transaction.amount, 0);
+
+  const profit = filteredIncome - filteredExpense;
+
   return (
     <>
       <StyledTitle>Transactions</StyledTitle>
@@ -125,14 +144,15 @@ export default function HomePage({
         <StyledBalanceContainer>
           <IncomeExpense
             transactions={filteredTransactions}
-            setFilteredAccount={setFilteredAccount}
-            setFilteredAccountType={setFilteredAccountType}
-            filteredAccountType={filteredAccountType}
+            onFilterChange={setFilteredTransactionType}
+            filteredTransactionType={filteredTransactionType}
           />
           <AccountBalance
-            transactions={transactionsList}
-            filteredAccount={filteredAccount}
-            filteredAccountType={filteredAccountType}
+            income={filteredIncome}
+            expense={filteredExpense}
+            total={profit}
+            currentBalance={currentBalance}
+            filteredTransactionType={filteredTransactionType}
           />
         </StyledBalanceContainer>
       )}
