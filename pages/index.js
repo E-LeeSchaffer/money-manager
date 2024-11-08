@@ -7,6 +7,7 @@ import { useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
 import Image from "next/image";
 import AccountBalance from "@/components/AccountBalance";
+import IncomeExpense from "@/components/IncomeExpense";
 import Search from "@/components/Search";
 import SortControl from "@/components/SortControl";
 
@@ -30,6 +31,8 @@ export default function HomePage({
   handleCancelDeleteDialogue,
   isDeletingId,
 }) {
+  const [filteredTransactionType, setFilteredTransactionType] =
+    useLocalStorageState("balance");
   const [isFilterSelectOpen, setIsFilterSelectOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useLocalStorageState(
     "selectedCategory",
@@ -92,6 +95,26 @@ export default function HomePage({
     });
   }
 
+  const incomeTotal = transactionsList
+    .filter((transaction) => transaction.type === "income")
+    .reduce((total, transaction) => total + transaction.amount, 0);
+
+  const expenseTotal = transactionsList
+    .filter((transaction) => transaction.type === "expense")
+    .reduce((total, transaction) => total + transaction.amount, 0);
+
+  const currentBalance = incomeTotal - expenseTotal;
+
+  const filteredIncome = filteredTransactions
+    .filter((transaction) => transaction.type === "income")
+    .reduce((accumulator, transaction) => accumulator + transaction.amount, 0);
+
+  const filteredExpense = filteredTransactions
+    .filter((transaction) => transaction.type === "expense")
+    .reduce((accumulator, transaction) => accumulator + transaction.amount, 0);
+
+  const profit = filteredIncome - filteredExpense;
+
   return (
     <>
       <StyledTitle>Transactions</StyledTitle>
@@ -117,7 +140,22 @@ export default function HomePage({
         <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
       )}
 
-      {!showForm && <AccountBalance transactions={transactionsList} />}
+      {!showForm && (
+        <StyledBalanceContainer>
+          <IncomeExpense
+            transactions={filteredTransactions}
+            onFilterChange={setFilteredTransactionType}
+            filteredTransactionType={filteredTransactionType}
+          />
+          <AccountBalance
+            income={filteredIncome}
+            expense={filteredExpense}
+            total={profit}
+            currentBalance={currentBalance}
+            filteredTransactionType={filteredTransactionType}
+          />
+        </StyledBalanceContainer>
+      )}
 
       <StyledSelectionBar>
         {selectedCategory !== "" ? (
@@ -254,6 +292,14 @@ const StyledControls = styled.div`
 
 const StyledImage = styled(Image)`
   display: flex;
+`;
+
+const StyledBalanceContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
 `;
 
 const StyledInput = styled.input`
