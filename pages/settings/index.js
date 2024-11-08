@@ -19,7 +19,7 @@ export default function SettingsPage({
           width={15}
           height={15}
         />
-        Back to Transactions
+        Back
       </StyledBackButton>
       <StyledTitle>Settings</StyledTitle>
       <StyledSettingsCard>
@@ -62,7 +62,7 @@ const StyledBackButton = styled.button`
   top: 10px;
   left: 10px;
   border: var(--accent-color);
-  padding: 10px 15px;
+  padding: 4px 8px;
   border-radius: 4px;
   display: flex;
   gap: 0.5rem;
