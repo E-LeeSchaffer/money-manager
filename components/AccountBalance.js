@@ -9,8 +9,6 @@ export default function AccountBalance({
   currentBalance,
   filteredTransactionType,
 }) {
-  const currentBalanceType = currentBalance < 0 ? "expense" : "income";
-
   const titleMap = {
     income: "Total Income",
     expense: "Total Expense",
