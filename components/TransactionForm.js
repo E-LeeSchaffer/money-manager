@@ -1,10 +1,10 @@
-import { categories } from "@/lib/categories";
 import { useEffect, useState } from "react";
 import CurrencyInput from "react-currency-input-field";
 import styled from "styled-components";
 import Image from "next/image";
 
 export default function TransactionForm({
+  categories,
   onSubmit,
   initialData = {},
   variant,

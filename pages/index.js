@@ -29,6 +29,7 @@ export default function HomePage({
   handleConfirmDelete,
   handleCancelDeleteDialogue,
   isDeletingId,
+  categories,
 }) {
   const [isFilterSelectOpen, setIsFilterSelectOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useLocalStorageState(
@@ -103,6 +104,7 @@ export default function HomePage({
           onSubmit={handleFormSubmit}
           variant="edit"
           showForm={!showForm}
+          categories={categories}
         />
       </Modal>
 
@@ -111,6 +113,7 @@ export default function HomePage({
         onSubmit={handleAddTransaction}
         showForm={showForm}
         toggleForm={toggleForm}
+        categories={categories}
       />
 
       {successMessage && (
@@ -156,6 +159,7 @@ export default function HomePage({
             isFilterSelectOpen={isFilterSelectOpen}
             onToggleFilter={() => setIsFilterSelectOpen(!isFilterSelectOpen)}
             selectedCategory={selectedCategory}
+            categories={categories}
           />
         </StyledControls>
       </StyledSelectionBar>

@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { categories } from "@/lib/categories";
 import styled from "styled-components";
 
 export default function Filter({
@@ -7,6 +6,7 @@ export default function Filter({
   isFilterSelectOpen,
   onToggleFilter,
   selectedCategory,
+  categories,
 }) {
   return (
     <StyledFilterContainer>
