@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { categories } from "@/lib/categories";
 import styled from "styled-components";
 import Backdrop from "./Backdrop";
 
@@ -10,6 +9,7 @@ export default function Filter({
   closeSelection,
   activeSelectionId,
   handleSearch,
+  categories,
 }) {
   const filterId = "filter";
   const isFilterOpen = activeSelectionId === filterId;
@@ -25,8 +25,9 @@ export default function Filter({
 
   return (
     <StyledFilterContainer>
-      <StyledFilterButton onClick={toggleFilter}>
+      <StyledFilterButton onClick={toggleFilter} aria-label="Filter">
         <StyledImage
+          aria-hidden="true"
           src={
             selectedCategory !== ""
               ? "/images/funnel-fill.svg"

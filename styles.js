@@ -25,7 +25,7 @@ export default createGlobalStyle`
 
   main {
     padding-inline: 16px;
-    margin-top: 44px;
+    margin-block: 44px;
   }
 
   ul {

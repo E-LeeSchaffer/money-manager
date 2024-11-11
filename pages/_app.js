@@ -4,6 +4,8 @@ import { transactions } from "@/lib/transactions";
 import { ulid } from "ulid";
 import useLocalStorageState from "use-local-storage-state";
 import Layout from "@/components/Layout";
+import { categories as initialCategories } from "@/lib/categories";
+import { capitalizeFirstLetter } from "@/lib/utils";
 
 export default function App({ Component, pageProps }) {
   const [transactionsList, setTransactionsList] = useLocalStorageState(
@@ -17,6 +19,10 @@ export default function App({ Component, pageProps }) {
   const [showForm, setShowForm] = useState(false);
   const [isDeletingId, setIsDeletingId] = useState(false);
   const [activeSelectionId, setActiveSelectionId] = useState(null);
+  const [isDuplicateError, setIsDuplicateError] = useState(false);
+  const [categories, setCategories] = useLocalStorageState("categories", {
+    defaultValue: initialCategories,
+  });
 
   useEffect(() => {
     if (successMessage !== "") {
@@ -97,8 +103,28 @@ export default function App({ Component, pageProps }) {
     setIsDeletingId(false);
   }
 
+  function handleAddCategory(category) {
+    setIsDuplicateError(false);
+
+    const normalizedCategoryName = category.trim().toLowerCase();
+
+    const isDuplicate = categories.some(
+      (category) => category.name.toLowerCase() === normalizedCategoryName
+    );
+
+    if (isDuplicate) {
+      setIsDuplicateError(true);
+      return;
+    }
+
+    const newCategory = { name: capitalizeFirstLetter(category), id: ulid() };
+    setCategories([...categories, newCategory]);
+    setSuccessMessage("Category successfully added!");
+  }
+
   const componentProps = {
     transactionsList,
+    categories,
     successMessage,
     handleOpenEditMode,
     openModal,
@@ -119,6 +145,8 @@ export default function App({ Component, pageProps }) {
     activeSelectionId,
     openSelection,
     closeSelection,
+    handleAddCategory,
+    isDuplicateError,
 
     ...pageProps,
   };

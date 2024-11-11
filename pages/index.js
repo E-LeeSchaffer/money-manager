@@ -10,6 +10,8 @@ import AccountBalance from "@/components/AccountBalance";
 import IncomeExpense from "@/components/IncomeExpense";
 import Search from "@/components/Search";
 import SortControl from "@/components/SortControl";
+import Link from "next/link";
+import TimelineFilter from "@/components/TimelineFilter";
 
 export default function HomePage({
   transactionsList,
@@ -33,6 +35,7 @@ export default function HomePage({
   activeSelectionId,
   openSelection,
   closeSelection,
+  categories,
 }) {
   const [filteredTransactionType, setFilteredTransactionType] =
     useLocalStorageState("balance");
@@ -41,22 +44,42 @@ export default function HomePage({
     { defaultValue: "" }
   );
   const [sortOrder, setSortOrder] = useState("desc");
-  const filteredTransactions = selectedCategory
-    ? transactionsList.filter(
-        (transaction) => transaction.category === selectedCategory
-      )
-    : transactionsList;
+  const [selectedTimeframe, setSelectedTimeframe] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [searchItem, setSearchItem] = useState("");
-  const transactionsAfterSearch = searchItem
-    ? filteredTransactions.filter((transaction) =>
-        transaction.name.toLowerCase().includes(searchItem.toLowerCase())
-      )
-    : filteredTransactions;
+
+  const filteredTransactions = transactionsList.filter((transaction) => {
+    const matchesCategory = selectedCategory
+      ? transaction.category === selectedCategory
+      : true;
+    const matchesSearch = searchItem
+      ? transaction.name.toLowerCase().includes(searchItem.toLowerCase())
+      : true;
+    const matchesTimeframe = selectedTimeframe
+      ? new Date(transaction.date) >= calculateDateRange(selectedTimeframe)
+      : true;
+    return matchesCategory && matchesSearch && matchesTimeframe;
+  });
+
   const displayedTransactions = sortTransactions(
-    searchItem || selectedCategory ? transactionsAfterSearch : transactionsList,
+    filteredTransactions,
     sortOrder
   );
+
+  function calculateDateRange(days) {
+    const currentDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(currentDate.getDate() - days);
+    return startDate;
+  }
+
+  function handleTimeframeClick(value) {
+    if (selectedTimeframe === value) {
+      setSelectedTimeframe(null);
+    } else {
+      setSelectedTimeframe(value);
+    }
+  }
 
   function handleCategorySelection(category = "") {
     setSelectedCategory(category);
@@ -117,6 +140,18 @@ export default function HomePage({
 
   return (
     <>
+      {!showForm && (
+        <StyledLink href={"/settings"} aria-label="Settings">
+          <Image
+            aria-hidden="true"
+            src={"/images/settings.svg"}
+            alt="filter button"
+            width={15}
+            height={15}
+          />
+        </StyledLink>
+      )}
+
       <StyledTitle>Transactions</StyledTitle>
 
       <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
@@ -126,6 +161,7 @@ export default function HomePage({
           onSubmit={handleFormSubmit}
           variant="edit"
           showForm={!showForm}
+          categories={categories}
         />
       </Modal>
 
@@ -134,6 +170,7 @@ export default function HomePage({
         onSubmit={handleAddTransaction}
         showForm={showForm}
         toggleForm={toggleForm}
+        categories={categories}
       />
 
       {successMessage && (
@@ -166,8 +203,10 @@ export default function HomePage({
             <StyledDeselectButton
               type="button"
               onClick={() => handleCategorySelection("")}
+              aria-label="Deselect"
             >
               <StyledImage
+                aria-hidden="true"
                 src={"/images/x-square-fill.svg"}
                 alt="filter button"
                 width={10}
@@ -196,9 +235,17 @@ export default function HomePage({
             closeSelection={closeSelection}
             activeSelectionId={activeSelectionId}
             handleSearch={handleSearch}
+            categories={categories}
           />
         </StyledControls>
       </StyledSelectionBar>
+
+      <StyledTimelineFilterContainer>
+        <TimelineFilter
+          selectedTimeframe={selectedTimeframe}
+          onTimeframeChange={handleTimeframeClick}
+        />
+      </StyledTimelineFilterContainer>
 
       <StyledSortContainer>
         <SortControl
@@ -224,14 +271,57 @@ export default function HomePage({
         openSelection={openSelection}
         closeSelection={closeSelection}
       />
+      {displayedTransactions.length > 0 ? (
+        <TransactionsList
+          handleEditTransaction={handleEditTransaction}
+          transactions={displayedTransactions}
+          selectedCategory={selectedCategory}
+          handleOpenEditMode={handleOpenEditMode}
+          openModal={openModal}
+          onCloseModal={closeModal}
+          handleOpenDeleteDialogue={handleOpenDeleteDialogue}
+          handleConfirmDelete={handleConfirmDelete}
+          handleCancelDeleteDialogue={handleCancelDeleteDialogue}
+          handleDeleteTransaction={handleDeleteTransaction}
+          isDeletingId={isDeletingId}
+          sortOrder={sortOrder}
+          activeSelectionId={activeSelectionId}
+          openSelection={openSelection}
+          closeSelection={closeSelection}
+        />
+      ) : (
+        <StyledNoTransactionsFoundMessage>
+          No transactions found.
+        </StyledNoTransactionsFoundMessage>
+      )}
     </>
   );
 }
 
+const StyledNoTransactionsFoundMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 44px;
+  color: var(--dark-grey-color);
+`;
+
+const StyledLink = styled(Link)`
+  position: absolute;
+  right: 16px;
+  top: 10px;
+  text-decoration: none;
+  color: inherit;
+  z-index: 2000;
+`;
+
 const StyledTitle = styled.h2`
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
   text-align: center;
   font-size: 1.7rem;
   font-weight: 700;
+  margin-top: 0;
 `;
 
 const StyledSuccessMessage = styled.p`
@@ -249,6 +339,11 @@ const StyledSuccessMessage = styled.p`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   background-color: var(--friendly-green-color);
+`;
+
+const StyledTimelineFilterContainer = styled.div`
+  display: flex;
+  padding: 0 12px;
 `;
 
 const StyledSelectionBar = styled.div`

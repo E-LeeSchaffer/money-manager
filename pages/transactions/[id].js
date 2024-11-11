@@ -5,6 +5,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { capitalizeFirstLetter, formatDate, formatNumber } from "@/lib/utils";
+import Link from "next/link";
+import { categories } from "@/lib/categories";
 
 export default function TransactionDetailsPage({
   transactionsList,
@@ -47,15 +49,16 @@ export default function TransactionDetailsPage({
       <>
         <StyledPageNotFoundMessage>
           Page not found
-          <StyledBackButton onClick={() => router.push("/")}>
+          <StyledBackLink href="/">
             <StyledImage
+              aria-hidden="true"
               src="/images/arrow-return-left.svg"
               alt="edit button"
               width={15}
               height={15}
             />
             Back to Transactions
-          </StyledBackButton>
+          </StyledBackLink>
         </StyledPageNotFoundMessage>
       </>
     );
@@ -72,16 +75,26 @@ export default function TransactionDetailsPage({
     : "";
 
   return (
-    <main>
-      <StyledBackButton onClick={() => router.push("/")}>
+    <>
+      <StyledLink href={"/settings"} aria-label="Settings">
+        <Image
+          aria-hidden="true"
+          src={"/images/settings.svg"}
+          alt="filter button"
+          width={15}
+          height={15}
+        />
+      </StyledLink>
+      <StyledBackLink href="/">
         <StyledImage
+          aria-hidden="true"
           src="/images/arrow-return-left.svg"
           alt="edit button"
           width={15}
           height={15}
         />
         Back to Transactions
-      </StyledBackButton>
+      </StyledBackLink>
 
       <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
         <TransactionForm
@@ -92,6 +105,7 @@ export default function TransactionDetailsPage({
             closeModal();
           }}
           variant="edit"
+          categories={categories}
         />
       </Modal>
 
@@ -156,6 +170,7 @@ export default function TransactionDetailsPage({
                 }}
               >
                 <StyledImage
+                  aria-hidden="true"
                   src="/images/pencil.svg"
                   alt="edit button"
                   width={15}
@@ -169,6 +184,7 @@ export default function TransactionDetailsPage({
                 }}
               >
                 <StyledImage
+                  aria-hidden="true"
                   src="/images/trash.svg"
                   alt="delete button"
                   width={15}
@@ -179,10 +195,18 @@ export default function TransactionDetailsPage({
           </StyledDetailsContainer>
         )}
       </StyledTransactionDetails>
-    </main>
+    </>
   );
 }
 
+const StyledLink = styled(Link)`
+  position: absolute;
+  right: 16px;
+  top: 10px;
+  text-decoration: none;
+  color: inherit;
+  z-index: 2000;
+`;
 const StyledPageNotFoundMessage = styled.p`
   display: flex;
   justify-content: center;
@@ -211,14 +235,18 @@ const StyledSuccessMessage = styled.p`
   background-color: var(--friendly-green-color);
 `;
 
-const StyledBackButton = styled.button`
+const StyledBackLink = styled(Link)`
+  display: flex;
+  align-items: center;
   background-color: var(--accent-color);
+  text-decoration: none;
+  width: fit-content;
   color: black;
   position: relative;
   top: 10px;
   left: 10px;
   border: var(--accent-color);
-  padding: 10px 15px;
+  padding: 4px 8px;
   border-radius: 4px;
   display: flex;
   gap: 0.5rem;
