@@ -37,9 +37,9 @@ export default function TransactionsList({
   handleCancelDeleteDialogue,
   handleConfirmDelete,
   isDeletingId,
-  activeMenuId,
-  openOptionsMenu,
-  closeOptionsMenu,
+  activeSelectionId,
+  openSelection,
+  closeSelection,
 }) {
   const groupedTransactions = groupTransactionByDate(transactions);
   const emptyListMessage =
@@ -67,9 +67,9 @@ export default function TransactionsList({
                       handleCancelDeleteDialogue={handleCancelDeleteDialogue}
                       handleDeleteTransaction={handleDeleteTransaction}
                       isDeletingId={isDeletingId}
-                      activeMenuId={activeMenuId}
-                      openOptionsMenu={openOptionsMenu}
-                      closeOptionsMenu={closeOptionsMenu}
+                      activeSelectionId={activeSelectionId}
+                      openSelection={openSelection}
+                      closeSelection={closeSelection}
                     />
                   </StyledList>
                 ))}

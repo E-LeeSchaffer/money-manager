@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-export default function Backdrop({ closeOptionsMenu }) {
-  return <StyledBackdrop onClick={closeOptionsMenu} />;
+export default function Backdrop({ closeSelection }) {
+  return <StyledBackdrop onClick={closeSelection} />;
 }
 
 const StyledBackdrop = styled.div`

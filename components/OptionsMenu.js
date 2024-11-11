@@ -8,18 +8,18 @@ export default function OptionsMenu({
   onOpenModal,
   onHandleOpenEditMode,
   transaction,
-  activeMenuId,
-  openOptionsMenu,
-  closeOptionsMenu,
+  activeSelectionId,
+  openSelection,
+  closeSelection,
 }) {
   const menuId = `menu-${transaction.id}`;
-  const isMenuOpen = activeMenuId === menuId;
+  const isMenuOpen = activeSelectionId === menuId;
 
   function toggleOptions() {
     if (isMenuOpen) {
-      closeOptionsMenu();
+      closeSelection();
     } else {
-      openOptionsMenu(menuId);
+      openSelection(menuId);
     }
   }
 
@@ -35,13 +35,13 @@ export default function OptionsMenu({
       </StyledToggleButton>
       {isMenuOpen ? (
         <>
-          <Backdrop closeOptionsMenu={closeOptionsMenu} />
+          <Backdrop closeSelection={closeSelection} />
           <StyledOptionsMenu>
             <StyledOptionsSelectButton
               type="button"
               onClick={() => {
                 onOpenModal();
-                closeOptionsMenu();
+                closeSelection();
                 onHandleOpenEditMode(transaction);
               }}
             >
@@ -51,7 +51,7 @@ export default function OptionsMenu({
               type="button"
               onClick={() => {
                 handleOpenDeleteDialogue();
-                closeOptionsMenu();
+                closeSelection();
               }}
             >
               Delete

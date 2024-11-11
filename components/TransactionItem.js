@@ -12,9 +12,9 @@ export default function TransactionItem({
   isDeletingId,
   handleCancelDeleteDialogue,
   handleOpenDeleteDialogue,
-  activeMenuId,
-  openOptionsMenu,
-  closeOptionsMenu,
+  activeSelectionId,
+  openSelection,
+  closeSelection,
 }) {
   const formattedAmount = formatNumber(transaction);
   const isDeleting = isDeletingId === transaction.id;
@@ -54,9 +54,9 @@ export default function TransactionItem({
           onHandleOpenEditMode={handleOpenEditMode}
           onOpenModal={openModal}
           transaction={transaction}
-          activeMenuId={activeMenuId}
-          openOptionsMenu={openOptionsMenu}
-          closeOptionsMenu={closeOptionsMenu}
+          activeSelectionId={activeSelectionId}
+          openSelection={openSelection}
+          closeSelection={closeSelection}
         />
       </StyledOptionsContainer>
     </StyledCardWrapper>
