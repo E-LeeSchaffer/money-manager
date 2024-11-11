@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useState } from "react";
 
 const timeframes = [
   { label: "7 Days", value: 7 },
@@ -10,18 +13,54 @@ const timeframes = [
 export default function TimelineFilter({
   selectedTimeframe,
   onTimeframeChange,
+  customDateRange,
+  onCustomDateChange,
 }) {
+  const [isCustomDatePickerOpen, setCustomDatePickerOpen] = useState(false);
+
+  function handleDateChange(dates) {
+    const [start, end] = dates;
+    onCustomDateChange(dates);
+    setCustomDatePickerOpen(false);
+  }
+
+  const customDateLabel =
+    customDateRange.start && customDateRange.end
+      ? `${customDateRange.start.toLocaleDateString()} - ${customDateRange.end.toLocaleDateString()}`
+      : "Custom Range";
   return (
     <StyledTimelineFilterContainer>
       {timeframes.map((timeframe) => (
         <StyledTimelineFilterButton
           key={timeframe.value}
           $active={selectedTimeframe === timeframe.value}
-          onClick={() => onTimeframeChange(timeframe.value)}
+          onClick={() =>
+            onTimeframeChange(
+              selectedTimeframe === timeframe.value ? null : timeframe.value
+            )
+          }
         >
           {timeframe.label}
         </StyledTimelineFilterButton>
       ))}
+      <StyledTimelineFilterButton
+        $active={Boolean(customDateRange.start && customDateRange.end)}
+        onClick={() => setCustomDatePickerOpen(!isCustomDatePickerOpen)}
+      >
+        {customDateLabel}
+      </StyledTimelineFilterButton>
+      {isCustomDatePickerOpen && (
+        <div>
+          <DatePicker
+            selected={customDateRange.start}
+            onChange={(dates) => onCustomDateChange(dates)}
+            startDate={customDateRange.start}
+            endDate={customDateRange.end}
+            selectsRange
+            inline
+          />
+        </div>
+      )}
     </StyledTimelineFilterContainer>
   );
 }

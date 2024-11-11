@@ -45,8 +45,13 @@ export default function HomePage({
   const [selectedTimeframe, setSelectedTimeframe] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [searchItem, setSearchItem] = useState("");
+  const [customDateRange, setCustomDateRange] = useState({
+    start: null,
+    end: null,
+  });
 
   const filteredTransactions = transactionsList.filter((transaction) => {
+    const transactionDate = new Date(transaction.date);
     const matchesCategory = selectedCategory
       ? transaction.category === selectedCategory
       : true;
@@ -54,9 +59,19 @@ export default function HomePage({
       ? transaction.name.toLowerCase().includes(searchItem.toLowerCase())
       : true;
     const matchesTimeframe = selectedTimeframe
-      ? new Date(transaction.date) >= calculateDateRange(selectedTimeframe)
+      ? transactionDate >= calculateDateRange(selectedTimeframe)
       : true;
-    return matchesCategory && matchesSearch && matchesTimeframe;
+    const matchesCustomDateRange =
+      customDateRange.start && customDateRange.end
+        ? transactionDate >= customDateRange.start &&
+          transactionDate <= customDateRange.end
+        : true;
+    return (
+      matchesCategory &&
+      matchesSearch &&
+      matchesTimeframe &&
+      matchesCustomDateRange
+    );
   });
 
   const displayedTransactions = sortTransactions(
@@ -73,10 +88,18 @@ export default function HomePage({
 
   function handleTimeframeClick(value) {
     if (selectedTimeframe === value) {
-      setSelectedTimeframe(null);
+      selectedTimeframe(null);
+      setCustomDateRange({ start: null, end: null });
     } else {
       setSelectedTimeframe(value);
+      setCustomDateRange({ start: null, end: null });
     }
+  }
+
+  function handleCustomDateChange(dates) {
+    const [start, end] = dates;
+    setCustomDateRange({ start, end });
+    setSelectedTimeframe(null);
   }
 
   function handleCategorySelection(category = "") {
@@ -242,6 +265,8 @@ export default function HomePage({
         <TimelineFilter
           selectedTimeframe={selectedTimeframe}
           onTimeframeChange={handleTimeframeClick}
+          customDateRange={customDateRange}
+          onCustomDateChange={handleCustomDateChange}
         />
       </StyledTimelineFilterContainer>
 
