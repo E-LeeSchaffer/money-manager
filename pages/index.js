@@ -71,8 +71,12 @@ export default function HomePage({
     return startDate;
   }
 
-  function handleTimeFrameChange(timeframe) {
-    setSelectedTimeframe(timeframe);
+  function handleTimeframeClick(value) {
+    if (selectedTimeframe === value) {
+      setSelectedTimeframe(null);
+    } else {
+      setSelectedTimeframe(value);
+    }
   }
 
   function handleCategorySelection(category = "") {
@@ -237,7 +241,7 @@ export default function HomePage({
       <StyledTimelineFilterContainer>
         <TimelineFilter
           selectedTimeframe={selectedTimeframe}
-          onTimeframeChange={handleTimeFrameChange}
+          onTimeframeChange={handleTimeframeClick}
         />
       </StyledTimelineFilterContainer>
 

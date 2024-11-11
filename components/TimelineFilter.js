@@ -11,20 +11,13 @@ export default function TimelineFilter({
   selectedTimeframe,
   onTimeframeChange,
 }) {
-  function handleTimeframeClick(value) {
-    if (selectedTimeframe === value) {
-      onTimeframeChange(null);
-    } else {
-      onTimeframeChange(value);
-    }
-  }
   return (
     <StyledTimelineFilterContainer>
       {timeframes.map((timeframe) => (
         <StyledTimelineFilterButton
           key={timeframe.value}
           $active={selectedTimeframe === timeframe.value}
-          onClick={() => handleTimeframeClick(timeframe.value)}
+          onClick={() => onTimeframeChange(timeframe.value)}
         >
           {timeframe.label}
         </StyledTimelineFilterButton>
