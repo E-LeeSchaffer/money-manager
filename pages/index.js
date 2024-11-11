@@ -61,14 +61,12 @@ export default function HomePage({
   function handleCategorySelection(category = "") {
     setSelectedCategory(category);
     closeSelection();
+    if (isSearching) handleSearch();
   }
 
   function handleSearch() {
     setIsSearching(!isSearching);
-
-    if (isSearching) {
-      setSearchItem("");
-    }
+    setSearchItem("");
   }
 
   function handleKeyDown(event) {
@@ -197,6 +195,7 @@ export default function HomePage({
             selectedCategory={selectedCategory}
             closeSelection={closeSelection}
             activeSelectionId={activeSelectionId}
+            handleSearch={handleSearch}
           />
         </StyledControls>
       </StyledSelectionBar>

@@ -9,6 +9,7 @@ export default function Filter({
   openSelection,
   closeSelection,
   activeSelectionId,
+  handleSearch,
 }) {
   const filterId = "filter";
   const isFilterOpen = activeSelectionId === filterId;
@@ -18,6 +19,7 @@ export default function Filter({
       closeSelection();
     } else {
       openSelection(filterId);
+      handleSearch();
     }
   }
 
