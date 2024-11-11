@@ -11,6 +11,7 @@ import IncomeExpense from "@/components/IncomeExpense";
 import Search from "@/components/Search";
 import SortControl from "@/components/SortControl";
 import Link from "next/link";
+import TimelineFilter from "@/components/TimelineFilter";
 
 export default function HomePage({
   transactionsList,
@@ -41,22 +42,42 @@ export default function HomePage({
     { defaultValue: "" }
   );
   const [sortOrder, setSortOrder] = useState("desc");
-  const filteredTransactions = selectedCategory
-    ? transactionsList.filter(
-        (transaction) => transaction.category === selectedCategory
-      )
-    : transactionsList;
+  const [selectedTimeframe, setSelectedTimeframe] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [searchItem, setSearchItem] = useState("");
-  const transactionsAfterSearch = searchItem
-    ? filteredTransactions.filter((transaction) =>
-        transaction.name.toLowerCase().includes(searchItem.toLowerCase())
-      )
-    : filteredTransactions;
+
+  const filteredTransactions = transactionsList.filter((transaction) => {
+    const matchesCategory = selectedCategory
+      ? transaction.category === selectedCategory
+      : true;
+    const matchesSearch = searchItem
+      ? transaction.name.toLowerCase().includes(searchItem.toLowerCase())
+      : true;
+    const matchesTimeframe = selectedTimeframe
+      ? new Date(transaction.date) >= calculateDateRange(selectedTimeframe)
+      : true;
+    return matchesCategory && matchesSearch && matchesTimeframe;
+  });
+
   const displayedTransactions = sortTransactions(
-    searchItem || selectedCategory ? transactionsAfterSearch : transactionsList,
+    filteredTransactions,
     sortOrder
   );
+
+  function calculateDateRange(days) {
+    const currentDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(currentDate.getDate() - days);
+    return startDate;
+  }
+
+  function handleTimeframeClick(value) {
+    if (selectedTimeframe === value) {
+      setSelectedTimeframe(null);
+    } else {
+      setSelectedTimeframe(value);
+    }
+  }
 
   function handleCategorySelection(category = "") {
     setIsFilterSelectOpen(false);
@@ -217,6 +238,13 @@ export default function HomePage({
         </StyledControls>
       </StyledSelectionBar>
 
+      <StyledTimelineFilterContainer>
+        <TimelineFilter
+          selectedTimeframe={selectedTimeframe}
+          onTimeframeChange={handleTimeframeClick}
+        />
+      </StyledTimelineFilterContainer>
+
       <StyledSortContainer>
         <SortControl
           sortOrder={sortOrder}
@@ -224,23 +252,36 @@ export default function HomePage({
         />
       </StyledSortContainer>
 
-      <TransactionsList
-        handleEditTransaction={handleEditTransaction}
-        transactions={displayedTransactions}
-        selectedCategory={selectedCategory}
-        handleOpenEditMode={handleOpenEditMode}
-        openModal={openModal}
-        onCloseModal={closeModal}
-        handleOpenDeleteDialogue={handleOpenDeleteDialogue}
-        handleConfirmDelete={handleConfirmDelete}
-        handleCancelDeleteDialogue={handleCancelDeleteDialogue}
-        handleDeleteTransaction={handleDeleteTransaction}
-        isDeletingId={isDeletingId}
-        sortOrder={sortOrder}
-      />
+      {displayedTransactions.length > 0 ? (
+        <TransactionsList
+          handleEditTransaction={handleEditTransaction}
+          transactions={displayedTransactions}
+          selectedCategory={selectedCategory}
+          handleOpenEditMode={handleOpenEditMode}
+          openModal={openModal}
+          onCloseModal={closeModal}
+          handleOpenDeleteDialogue={handleOpenDeleteDialogue}
+          handleConfirmDelete={handleConfirmDelete}
+          handleCancelDeleteDialogue={handleCancelDeleteDialogue}
+          handleDeleteTransaction={handleDeleteTransaction}
+          isDeletingId={isDeletingId}
+          sortOrder={sortOrder}
+        />
+      ) : (
+        <StyledNoTransactionsFoundMessage>
+          No transactions found.
+        </StyledNoTransactionsFoundMessage>
+      )}
     </>
   );
 }
+
+const StyledNoTransactionsFoundMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 44px;
+  color: var(--dark-grey-color);
+`;
 
 const StyledLink = styled(Link)`
   position: absolute;
@@ -276,6 +317,11 @@ const StyledSuccessMessage = styled.p`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   background-color: var(--friendly-green-color);
+`;
+
+const StyledTimelineFilterContainer = styled.div`
+  display: flex;
+  padding: 0 12px;
 `;
 
 const StyledSelectionBar = styled.div`
