@@ -10,7 +10,7 @@ export default function SettingsPage({
 }) {
   return (
     <>
-      <StyledBackLink href={"/"}>
+      <StyledBackLink href="/">
         <StyledImage
           aria-hidden="true"
           src="/images/arrow-return-left.svg"

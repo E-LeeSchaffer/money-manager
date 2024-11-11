@@ -49,7 +49,7 @@ export default function TransactionDetailsPage({
       <>
         <StyledPageNotFoundMessage>
           Page not found
-          <StyledBackLink href={"/"}>
+          <StyledBackLink href="/">
             <StyledImage
               aria-hidden="true"
               src="/images/arrow-return-left.svg"
@@ -85,7 +85,7 @@ export default function TransactionDetailsPage({
           height={15}
         />
       </StyledLink>
-      <StyledBackLink href={"/"}>
+      <StyledBackLink href="/">
         <StyledImage
           aria-hidden="true"
           src="/images/arrow-return-left.svg"
