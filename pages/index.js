@@ -254,23 +254,6 @@ export default function HomePage({
         />
       </StyledSortContainer>
 
-      <TransactionsList
-        handleEditTransaction={handleEditTransaction}
-        transactions={displayedTransactions}
-        selectedCategory={selectedCategory}
-        handleOpenEditMode={handleOpenEditMode}
-        openModal={openModal}
-        onCloseModal={closeModal}
-        handleOpenDeleteDialogue={handleOpenDeleteDialogue}
-        handleConfirmDelete={handleConfirmDelete}
-        handleCancelDeleteDialogue={handleCancelDeleteDialogue}
-        handleDeleteTransaction={handleDeleteTransaction}
-        isDeletingId={isDeletingId}
-        sortOrder={sortOrder}
-        activeSelectionId={activeSelectionId}
-        openSelection={openSelection}
-        closeSelection={closeSelection}
-      />
       {displayedTransactions.length > 0 ? (
         <TransactionsList
           handleEditTransaction={handleEditTransaction}
