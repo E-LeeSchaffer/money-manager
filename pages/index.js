@@ -268,11 +268,20 @@ export default function HomePage({
           sortOrder={sortOrder}
         />
       ) : (
-        <p>No transactions found.</p>
+        <StyledNoTransactionsFoundMessage>
+          No transactions found.
+        </StyledNoTransactionsFoundMessage>
       )}
     </>
   );
 }
+
+const StyledNoTransactionsFoundMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 44px;
+  color: var(--dark-grey-color);
+`;
 
 const StyledLink = styled(Link)`
   position: absolute;
