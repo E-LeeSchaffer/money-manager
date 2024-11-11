@@ -49,15 +49,16 @@ export default function TransactionDetailsPage({
       <>
         <StyledPageNotFoundMessage>
           Page not found
-          <StyledBackButton onClick={() => router.push("/")}>
+          <StyledBackLink href={"/"}>
             <StyledImage
+              aria-hidden="true"
               src="/images/arrow-return-left.svg"
               alt="edit button"
               width={15}
               height={15}
             />
             Back to Transactions
-          </StyledBackButton>
+          </StyledBackLink>
         </StyledPageNotFoundMessage>
       </>
     );
@@ -74,24 +75,26 @@ export default function TransactionDetailsPage({
     : "";
 
   return (
-    <main>
-      <StyledLink href={"/settings"}>
+    <>
+      <StyledLink href={"/settings"} aria-label="Settings">
         <Image
+          aria-hidden="true"
           src={"/images/settings.svg"}
           alt="filter button"
           width={15}
           height={15}
         />
       </StyledLink>
-      <StyledBackButton onClick={() => router.push("/")}>
+      <StyledBackLink href={"/"}>
         <StyledImage
+          aria-hidden="true"
           src="/images/arrow-return-left.svg"
           alt="edit button"
           width={15}
           height={15}
         />
         Back to Transactions
-      </StyledBackButton>
+      </StyledBackLink>
 
       <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
         <TransactionForm
@@ -167,6 +170,7 @@ export default function TransactionDetailsPage({
                 }}
               >
                 <StyledImage
+                  aria-hidden="true"
                   src="/images/pencil.svg"
                   alt="edit button"
                   width={15}
@@ -180,6 +184,7 @@ export default function TransactionDetailsPage({
                 }}
               >
                 <StyledImage
+                  aria-hidden="true"
                   src="/images/trash.svg"
                   alt="delete button"
                   width={15}
@@ -190,7 +195,7 @@ export default function TransactionDetailsPage({
           </StyledDetailsContainer>
         )}
       </StyledTransactionDetails>
-    </main>
+    </>
   );
 }
 
@@ -230,8 +235,12 @@ const StyledSuccessMessage = styled.p`
   background-color: var(--friendly-green-color);
 `;
 
-const StyledBackButton = styled.button`
+const StyledBackLink = styled(Link)`
+  display: flex;
+  align-items: center;
   background-color: var(--accent-color);
+  text-decoration: none;
+  width: fit-content;
   color: black;
   position: relative;
   top: 10px;

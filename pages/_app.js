@@ -95,6 +95,8 @@ export default function App({ Component, pageProps }) {
   }
 
   function handleAddCategory(category) {
+    setIsDuplicateError(false);
+
     const normalizedCategoryName = category.trim().toLowerCase();
 
     const isDuplicate = categories.some(

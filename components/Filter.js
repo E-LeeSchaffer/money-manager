@@ -10,8 +10,9 @@ export default function Filter({
 }) {
   return (
     <StyledFilterContainer>
-      <StyledFilterButton onClick={onToggleFilter}>
+      <StyledFilterButton onClick={onToggleFilter} aria-label="Filter">
         <StyledImage
+          aria-hidden="true"
           src={
             selectedCategory !== ""
               ? "/images/funnel-fill.svg"

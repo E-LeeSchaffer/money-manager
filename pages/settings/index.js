@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function SettingsPage({
   handleAddCategory,
@@ -8,19 +8,18 @@ export default function SettingsPage({
   isDuplicateError,
   successMessage,
 }) {
-  const router = useRouter();
-
   return (
     <>
-      <StyledBackButton onClick={() => router.push("/")}>
+      <StyledBackLink href={"/"}>
         <StyledImage
+          aria-hidden="true"
           src="/images/arrow-return-left.svg"
           alt="edit button"
           width={15}
           height={15}
         />
         Back
-      </StyledBackButton>
+      </StyledBackLink>
       <StyledTitle>Settings</StyledTitle>
       <StyledSettingsCard>
         <StyledSubheading>Customize Categories</StyledSubheading>
@@ -55,8 +54,12 @@ const StyledImage = styled(Image)`
   display: flex;
 `;
 
-const StyledBackButton = styled.button`
+const StyledBackLink = styled(Link)`
+  display: flex;
+  align-items: center;
   background-color: var(--accent-color);
+  text-decoration: none;
+  width: fit-content;
   color: black;
   position: relative;
   top: 10px;

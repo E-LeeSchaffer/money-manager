@@ -14,6 +14,7 @@ export default function SortControl({ sortOrder, onToggleSortOrder }) {
             ? "/images/sort-numeric-down.svg"
             : "/images/sort-numeric-up.svg"
         }
+        aria-hidden="true"
         alt={sortOrder === "desc" ? "Descending Order" : "Ascending Order"}
         width={16}
         height={16}

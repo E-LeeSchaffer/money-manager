@@ -122,8 +122,9 @@ export default function TransactionForm({
                     </option>
                   ))}
                 </StyledCategorySelect>
-                <StyledLink href={"/settings"}>
+                <StyledLink href={"/settings"} aria-label="Settings">
                   <Image
+                    aria-hidden="true"
                     src={"/images/settings.svg"}
                     alt="filter button"
                     width={15}

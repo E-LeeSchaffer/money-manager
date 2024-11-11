@@ -97,8 +97,9 @@ export default function HomePage({
   return (
     <>
       {!showForm && (
-        <StyledLink href={"/settings"}>
+        <StyledLink href={"/settings"} aria-label="Settings">
           <Image
+            aria-hidden="true"
             src={"/images/settings.svg"}
             alt="filter button"
             width={15}
@@ -143,8 +144,10 @@ export default function HomePage({
             <StyledDeselectButton
               type="button"
               onClick={() => handleCategorySelection("")}
+              aria-label="Deselect"
             >
               <StyledImage
+                aria-hidden="true"
                 src={"/images/x-square-fill.svg"}
                 alt="filter button"
                 width={10}
