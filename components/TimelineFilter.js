@@ -1,16 +1,16 @@
 import styled from "styled-components";
 
+const timeframes = [
+  { label: "7 Days", value: 7 },
+  { label: "30 Days", value: 30 },
+  { label: "Half Year", value: 180 },
+  { label: "Full Year", value: 365 },
+];
+
 export default function TimelineFilter({
   selectedTimeframe,
   onTimeframeChange,
 }) {
-  const timeframes = [
-    { label: "7 Days", value: 7 },
-    { label: "30 Days", value: 30 },
-    { label: "Half Year", value: 180 },
-    { label: "Full Year", value: 365 },
-  ];
-
   function handleTimeframeClick(value) {
     if (selectedTimeframe === value) {
       onTimeframeChange(null);

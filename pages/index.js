@@ -264,7 +264,7 @@ export default function HomePage({
           sortOrder={sortOrder}
         />
       ) : (
-        <p>No transactions found within this timeframe.</p>
+        <p>No transactions found.</p>
       )}
     </>
   );
