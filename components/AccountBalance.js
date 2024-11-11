@@ -2,30 +2,82 @@ import { useEffect, useState } from "react";
 import { formatNumber } from "@/lib/utils";
 import styled from "styled-components";
 
-export default function AccountBalance({ transactions }) {
-  const [currentBalance, setCurrentBalance] = useState(0);
-
-  useEffect(() => {
-    const sumOfTransaction = transactions.reduce((total, transaction) => {
-      return transaction.type === "income"
-        ? total + transaction.amount
-        : total - transaction.amount;
-    }, 0);
-    setCurrentBalance(sumOfTransaction);
-  }, [transactions]);
-
+export default function AccountBalance({
+  income,
+  expense,
+  total,
+  currentBalance,
+  filteredTransactionType,
+}) {
   const currentBalanceType = currentBalance < 0 ? "expense" : "income";
+
+  const titleMap = {
+    income: "Total Income",
+    expense: "Total Expense",
+    total: "Profit",
+  };
+
+  const title = titleMap[filteredTransactionType] || "Current Balance";
+
+  function formatNumberWithoutSign({ amount, type }) {
+    return new Intl.NumberFormat("de-DE", {
+      style: "currency",
+      currency: "EUR",
+      signDisplay: "never",
+    }).format(amount);
+  }
+
+  function formatNumberWithSign({ amount, type }) {
+    return new Intl.NumberFormat("de-DE", {
+      style: "currency",
+      currency: "EUR",
+      signDisplay: "auto",
+    }).format(amount);
+  }
+
+  const amountMap = {
+    income: income,
+    expense: expense,
+    total: total,
+  };
+
+  const displayAmount =
+    filteredTransactionType in amountMap
+      ? amountMap[filteredTransactionType]
+      : currentBalance;
+
+  const displayAmountType = displayAmount < 0 ? "expense" : "income";
+
+  const formattedAmount =
+    filteredTransactionType === "balance" || filteredTransactionType === "total"
+      ? formatNumberWithSign({
+          amount: displayAmount,
+          type: currentBalanceType,
+        })
+      : formatNumberWithoutSign({
+          amount: displayAmount,
+          type: currentBalanceType,
+        });
 
   return (
     <StyledPageContainer>
       <StyledAccountBalanceContainer>
-        <StyledTitle>Current Balance</StyledTitle>
-        <StyledCurrentBalance type={currentBalanceType}>
-          {formatNumber({
-            amount: currentBalance,
-            type: currentBalanceType,
-          })}
+        <StyledTitle>{title}</StyledTitle>
+        <StyledCurrentBalance
+          type={displayAmountType}
+          $filteredType={filteredTransactionType}
+        >
+          {formattedAmount}
         </StyledCurrentBalance>
+        {filteredTransactionType !== "balance" && (
+          <StyledCurrentBalanceInfo>
+            Current Balance:{" "}
+            {formatNumberWithSign({
+              amount: currentBalance,
+              type: currentBalanceType,
+            })}
+          </StyledCurrentBalanceInfo>
+        )}
       </StyledAccountBalanceContainer>
     </StyledPageContainer>
   );
@@ -33,6 +85,7 @@ export default function AccountBalance({ transactions }) {
 
 const StyledPageContainer = styled.div`
   display: flex;
+
   justify-content: center;
   padding-block: 12px;
   align-items: center;
@@ -60,8 +113,17 @@ const StyledTitle = styled.h3`
 
 const StyledCurrentBalance = styled.div`
   font-size: 1.3rem;
-  color: ${(props) =>
-    props.type === "expense"
+  color: ${(props) => {
+    if (props.$filteredType === "income") return "var(--friendly-green-color)";
+    if (props.$filteredType === "expense") return "var(--friendly-red-color)";
+    return props.type === "expense"
       ? "var(--friendly-red-color)"
-      : "var(--friendly-green-color)"};
+      : "var(--friendly-green-color)";
+  }};
+`;
+
+const StyledCurrentBalanceInfo = styled.div`
+  font-size: 0.8rem;
+  color: var(--text-color-dark);
+  margin-top: 4px;
 `;

@@ -7,16 +7,11 @@ import { useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
 import Image from "next/image";
 import AccountBalance from "@/components/AccountBalance";
+import IncomeExpense from "@/components/IncomeExpense";
 import Search from "@/components/Search";
 import SortControl from "@/components/SortControl";
+import Link from "next/link";
 import TimelineFilter from "@/components/TimelineFilter";
-
-function calculateDateRange(days) {
-  const currentDate = new Date();
-  const startDate = new Date();
-  startDate.setDate(currentDate.getDate() - days);
-  return startDate;
-}
 
 export default function HomePage({
   transactionsList,
@@ -37,7 +32,10 @@ export default function HomePage({
   handleConfirmDelete,
   handleCancelDeleteDialogue,
   isDeletingId,
+  categories,
 }) {
+  const [filteredTransactionType, setFilteredTransactionType] =
+    useLocalStorageState("balance");
   const [isFilterSelectOpen, setIsFilterSelectOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useLocalStorageState(
     "selectedCategory",
@@ -61,16 +59,17 @@ export default function HomePage({
     return matchesCategory && matchesSearch && matchesTimeframe;
   });
 
-  // const transactionsAfterSearch = searchItem
-  //   ? filteredTransactions.filter((transaction) =>
-  //       transaction.name.toLowerCase().includes(searchItem.toLowerCase())
-  //     )
-  //   : filteredTransactions;
-
   const displayedTransactions = sortTransactions(
     filteredTransactions,
     sortOrder
   );
+
+  function calculateDateRange(days) {
+    const currentDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(currentDate.getDate() - days);
+    return startDate;
+  }
 
   function handleTimeFrameChange(timeframe) {
     setSelectedTimeframe(timeframe);
@@ -115,8 +114,40 @@ export default function HomePage({
     });
   }
 
+  const incomeTotal = transactionsList
+    .filter((transaction) => transaction.type === "income")
+    .reduce((total, transaction) => total + transaction.amount, 0);
+
+  const expenseTotal = transactionsList
+    .filter((transaction) => transaction.type === "expense")
+    .reduce((total, transaction) => total + transaction.amount, 0);
+
+  const currentBalance = incomeTotal - expenseTotal;
+
+  const filteredIncome = filteredTransactions
+    .filter((transaction) => transaction.type === "income")
+    .reduce((accumulator, transaction) => accumulator + transaction.amount, 0);
+
+  const filteredExpense = filteredTransactions
+    .filter((transaction) => transaction.type === "expense")
+    .reduce((accumulator, transaction) => accumulator + transaction.amount, 0);
+
+  const profit = filteredIncome - filteredExpense;
+
   return (
     <>
+      {!showForm && (
+        <StyledLink href={"/settings"} aria-label="Settings">
+          <Image
+            aria-hidden="true"
+            src={"/images/settings.svg"}
+            alt="filter button"
+            width={15}
+            height={15}
+          />
+        </StyledLink>
+      )}
+
       <StyledTitle>Transactions</StyledTitle>
 
       <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
@@ -126,6 +157,7 @@ export default function HomePage({
           onSubmit={handleFormSubmit}
           variant="edit"
           showForm={!showForm}
+          categories={categories}
         />
       </Modal>
 
@@ -134,13 +166,29 @@ export default function HomePage({
         onSubmit={handleAddTransaction}
         showForm={showForm}
         toggleForm={toggleForm}
+        categories={categories}
       />
 
       {successMessage && (
         <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
       )}
 
-      {!showForm && <AccountBalance transactions={transactionsList} />}
+      {!showForm && (
+        <StyledBalanceContainer>
+          <IncomeExpense
+            transactions={filteredTransactions}
+            onFilterChange={setFilteredTransactionType}
+            filteredTransactionType={filteredTransactionType}
+          />
+          <AccountBalance
+            income={filteredIncome}
+            expense={filteredExpense}
+            total={profit}
+            currentBalance={currentBalance}
+            filteredTransactionType={filteredTransactionType}
+          />
+        </StyledBalanceContainer>
+      )}
 
       <StyledSelectionBar>
         {selectedCategory !== "" ? (
@@ -151,8 +199,10 @@ export default function HomePage({
             <StyledDeselectButton
               type="button"
               onClick={() => handleCategorySelection("")}
+              aria-label="Deselect"
             >
               <StyledImage
+                aria-hidden="true"
                 src={"/images/x-square-fill.svg"}
                 alt="filter button"
                 width={10}
@@ -179,15 +229,17 @@ export default function HomePage({
             isFilterSelectOpen={isFilterSelectOpen}
             onToggleFilter={() => setIsFilterSelectOpen(!isFilterSelectOpen)}
             selectedCategory={selectedCategory}
+            categories={categories}
           />
         </StyledControls>
       </StyledSelectionBar>
-      <div>
+
+      <StyledTimelineFilterContainer>
         <TimelineFilter
           selectedTimeframe={selectedTimeframe}
           onTimeframeChange={handleTimeFrameChange}
         />
-      </div>
+      </StyledTimelineFilterContainer>
 
       <StyledSortContainer>
         <SortControl
@@ -195,6 +247,7 @@ export default function HomePage({
           onToggleSortOrder={handleToggleSortOrder}
         />
       </StyledSortContainer>
+
       {displayedTransactions.length > 0 ? (
         <TransactionsList
           handleEditTransaction={handleEditTransaction}
@@ -217,10 +270,23 @@ export default function HomePage({
   );
 }
 
+const StyledLink = styled(Link)`
+  position: absolute;
+  right: 16px;
+  top: 10px;
+  text-decoration: none;
+  color: inherit;
+  z-index: 2000;
+`;
+
 const StyledTitle = styled.h2`
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
   text-align: center;
   font-size: 1.7rem;
   font-weight: 700;
+  margin-top: 0;
 `;
 
 const StyledSuccessMessage = styled.p`
@@ -238,6 +304,11 @@ const StyledSuccessMessage = styled.p`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   background-color: var(--friendly-green-color);
+`;
+
+const StyledTimelineFilterContainer = styled.div`
+  display: flex;
+  padding: 0 12px;
 `;
 
 const StyledSelectionBar = styled.div`
@@ -286,6 +357,14 @@ const StyledControls = styled.div`
 
 const StyledImage = styled(Image)`
   display: flex;
+`;
+
+const StyledBalanceContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
 `;
 
 const StyledInput = styled.input`

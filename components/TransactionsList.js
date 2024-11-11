@@ -1,4 +1,3 @@
-import createGlobalStyle from "styled-components";
 import { isToday, isYesterday } from "date-fns";
 import TransactionItem from "./TransactionItem";
 import styled from "styled-components";
