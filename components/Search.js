@@ -8,8 +8,10 @@ export default function Search({ handleSearch, isSearching }) {
         onClick={() => {
           handleSearch();
         }}
+        aria-label="Search"
       >
         <StyledImage
+          aria-hidden="true"
           src={isSearching ? "/images/x-lg.svg" : "/images/search.svg"}
           alt="search button"
           width={15}
