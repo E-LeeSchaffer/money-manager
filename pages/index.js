@@ -30,6 +30,9 @@ export default function HomePage({
   handleConfirmDelete,
   handleCancelDeleteDialogue,
   isDeletingId,
+  activeMenuId,
+  openOptionsMenu,
+  closeOptionsMenu,
 }) {
   const [filteredTransactionType, setFilteredTransactionType] =
     useLocalStorageState("balance");
@@ -218,6 +221,9 @@ export default function HomePage({
         handleDeleteTransaction={handleDeleteTransaction}
         isDeletingId={isDeletingId}
         sortOrder={sortOrder}
+        activeMenuId={activeMenuId}
+        openOptionsMenu={openOptionsMenu}
+        closeOptionsMenu={closeOptionsMenu}
       />
     </>
   );

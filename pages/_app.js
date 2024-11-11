@@ -16,6 +16,7 @@ export default function App({ Component, pageProps }) {
   const [editTransaction, setEditTransaction] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [isDeletingId, setIsDeletingId] = useState(false);
+  const [activeMenuId, setActiveMenuId] = useState(null);
 
   useEffect(() => {
     if (successMessage !== "") {
@@ -51,6 +52,14 @@ export default function App({ Component, pageProps }) {
       )
     );
     setSuccessMessage("Transaction successfully updated!");
+  }
+
+  function openOptionsMenu(menuId) {
+    setActiveMenuId(menuId);
+  }
+
+  function closeOptionsMenu() {
+    setActiveMenuId(null);
   }
 
   function handleOpenEditMode(transaction) {
@@ -107,6 +116,9 @@ export default function App({ Component, pageProps }) {
     editTransaction,
     toggleForm,
     showForm,
+    activeMenuId,
+    openOptionsMenu,
+    closeOptionsMenu,
 
     ...pageProps,
   };

@@ -1,17 +1,26 @@
 import styled from "styled-components";
 import Image from "next/image";
 import { useState } from "react";
+import Backdrop from "./Backdrop";
 
 export default function OptionsMenu({
   handleOpenDeleteDialogue,
   onOpenModal,
   onHandleOpenEditMode,
   transaction,
+  activeMenuId,
+  openOptionsMenu,
+  closeOptionsMenu,
 }) {
-  const [isOptionSelect, setIsOptionSelect] = useState(false);
+  const menuId = `menu-${transaction.id}`;
+  const isMenuOpen = activeMenuId === menuId;
 
   function toggleOptions() {
-    setIsOptionSelect(!isOptionSelect);
+    if (isMenuOpen) {
+      closeOptionsMenu();
+    } else {
+      openOptionsMenu(menuId);
+    }
   }
 
   return (
@@ -24,28 +33,31 @@ export default function OptionsMenu({
           height={15}
         />
       </StyledToggleButton>
-      {isOptionSelect ? (
-        <StyledOptionsMenu>
-          <StyledOptionsSelectButton
-            type="button"
-            onClick={() => {
-              onOpenModal();
-              setIsOptionSelect(false);
-              onHandleOpenEditMode(transaction);
-            }}
-          >
-            Edit
-          </StyledOptionsSelectButton>
-          <StyledOptionsSelectButton
-            type="button"
-            onClick={() => {
-              handleOpenDeleteDialogue();
-              setIsOptionSelect(false);
-            }}
-          >
-            Delete
-          </StyledOptionsSelectButton>
-        </StyledOptionsMenu>
+      {isMenuOpen ? (
+        <>
+          <Backdrop closeOptionsMenu={closeOptionsMenu} />
+          <StyledOptionsMenu>
+            <StyledOptionsSelectButton
+              type="button"
+              onClick={() => {
+                onOpenModal();
+                closeOptionsMenu();
+                onHandleOpenEditMode(transaction);
+              }}
+            >
+              Edit
+            </StyledOptionsSelectButton>
+            <StyledOptionsSelectButton
+              type="button"
+              onClick={() => {
+                handleOpenDeleteDialogue();
+                closeOptionsMenu();
+              }}
+            >
+              Delete
+            </StyledOptionsSelectButton>
+          </StyledOptionsMenu>
+        </>
       ) : null}
     </>
   );
@@ -72,6 +84,7 @@ const StyledOptionsMenu = styled.div`
   border-radius: 4px;
   gap: 2px;
   padding: 2px;
+  z-index: 10;
 `;
 
 const StyledOptionsSelectButton = styled.button`
