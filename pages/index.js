@@ -92,6 +92,11 @@ export default function HomePage({
     setSearchItem("");
   }
 
+  function closeSearch() {
+    setIsSearching(false);
+    setSearchItem("");
+  }
+
   function handleKeyDown(event) {
     if (event.key === "Enter") {
       event.target.blur();
@@ -234,7 +239,7 @@ export default function HomePage({
             selectedCategory={selectedCategory}
             closeSelection={closeSelection}
             activeSelectionId={activeSelectionId}
-            handleSearch={handleSearch}
+            closeSearch={closeSearch}
             categories={categories}
           />
         </StyledControls>

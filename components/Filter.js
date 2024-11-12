@@ -8,7 +8,7 @@ export default function Filter({
   openSelection,
   closeSelection,
   activeSelectionId,
-  handleSearch,
+  closeSearch,
   categories,
 }) {
   const filterId = "filter";
@@ -19,7 +19,7 @@ export default function Filter({
       closeSelection();
     } else {
       openSelection(filterId);
-      handleSearch();
+      closeSearch();
     }
   }
 
