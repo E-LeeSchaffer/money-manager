@@ -15,19 +15,22 @@ export default function TimelineFilter({
   onTimeframeChange,
   customDateRange,
   onCustomDateChange,
+  setIsCustomDatePickerOpen,
 }) {
-  const [isCustomDatePickerOpen, setCustomDatePickerOpen] = useState(false);
+  const [isCustomDatePickerOpen, setCustomDatePickerOpenState] =
+    useState(false);
 
-  function handleDateChange(dates) {
-    const [start, end] = dates;
-    onCustomDateChange(dates);
-    setCustomDatePickerOpen(false);
+  function handleClearCustomDateRange() {
+    onCustomDateChange({ start: null, end: null });
+    onTimeframeChange(null);
+    setIsCustomDatePickerOpen(false);
   }
 
   const customDateLabel =
     customDateRange.start && customDateRange.end
       ? `${customDateRange.start.toLocaleDateString()} - ${customDateRange.end.toLocaleDateString()}`
       : "Custom Range";
+
   return (
     <StyledTimelineFilterContainer>
       {timeframes.map((timeframe) => (
@@ -43,23 +46,35 @@ export default function TimelineFilter({
           {timeframe.label}
         </StyledTimelineFilterButton>
       ))}
-      <StyledTimelineFilterButton
-        $active={Boolean(customDateRange.start && customDateRange.end)}
-        onClick={() => setCustomDatePickerOpen(!isCustomDatePickerOpen)}
-      >
-        {customDateLabel}
-      </StyledTimelineFilterButton>
+
+      <StyledCustomDateButtonContainer>
+        <StyledTimelineFilterButton
+          $activeactive={Boolean(customDateRange.start && customDateRange.end)}
+          onClick={() => setCustomDatePickerOpenState(!isCustomDatePickerOpen)}
+        >
+          {customDateLabel}
+        </StyledTimelineFilterButton>
+        {!(customDateRange.start === null && customDateRange.end === null) && (
+          <StyledClearButton
+            onClick={handleClearCustomDateRange}
+            aria-label="Clear custom date range"
+          >
+            &times;
+          </StyledClearButton>
+        )}
+      </StyledCustomDateButtonContainer>
+
       {isCustomDatePickerOpen && (
-        <div>
+        <StyledDatePickerContainer>
           <DatePicker
             selected={customDateRange.start}
-            onChange={(dates) => onCustomDateChange(dates)}
+            onChange={onCustomDateChange}
             startDate={customDateRange.start}
             endDate={customDateRange.end}
             selectsRange
             inline
           />
-        </div>
+        </StyledDatePickerContainer>
       )}
     </StyledTimelineFilterContainer>
   );
@@ -85,4 +100,26 @@ const StyledTimelineFilterButton = styled.button`
       : "0.1px solid var(--dark-grey-color)"};
   background-color: ${({ $active }) =>
     $active ? "var(--dark-grey-color)" : "var(--light-bg-color)"};
+`;
+
+const StyledClearButton = styled.button`
+  position: absolute;
+  right: -8px;
+  top: -8px;
+  border: none;
+  background-color: red;
+  color: var(--dark-grey-color);
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 9999;
+`;
+
+const StyledDatePickerContainer = styled.div`
+  position: absolute;
+  z-index: 1000;
+  margin-top: 10px;
+`;
+
+const StyledCustomDateButtonContainer = styled.div`
+  position: relative;
 `;

@@ -49,6 +49,7 @@ export default function HomePage({
     start: null,
     end: null,
   });
+  const [isCustomDatePickerOpen, setCustomDatePickerOpen] = useState(false);
 
   const filteredTransactions = transactionsList.filter((transaction) => {
     const transactionDate = new Date(transaction.date);
@@ -88,18 +89,23 @@ export default function HomePage({
 
   function handleTimeframeClick(value) {
     if (selectedTimeframe === value) {
-      selectedTimeframe(null);
+      setSelectedTimeframe(null);
       setCustomDateRange({ start: null, end: null });
     } else {
       setSelectedTimeframe(value);
       setCustomDateRange({ start: null, end: null });
     }
   }
-
   function handleCustomDateChange(dates) {
-    const [start, end] = dates;
-    setCustomDateRange({ start, end });
-    setSelectedTimeframe(null);
+    if (Array.isArray(dates)) {
+      const [start, end] = dates;
+      setCustomDateRange({ start: dates[0], end: dates[1] });
+
+      if (start && end) {
+        setSelectedTimeframe(null);
+        setCustomDatePickerOpen(false);
+      }
+    }
   }
 
   function handleCategorySelection(category = "") {
@@ -267,6 +273,7 @@ export default function HomePage({
           onTimeframeChange={handleTimeframeClick}
           customDateRange={customDateRange}
           onCustomDateChange={handleCustomDateChange}
+          setIsCustomDatePickerOpen={setCustomDatePickerOpen}
         />
       </StyledTimelineFilterContainer>
 
