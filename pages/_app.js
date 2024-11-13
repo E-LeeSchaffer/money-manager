@@ -5,6 +5,7 @@ import { ulid } from "ulid";
 import useLocalStorageState from "use-local-storage-state";
 import Layout from "@/components/Layout";
 import { categories as initialCategories } from "@/lib/categories";
+import { getCategoryIcon } from "@/lib/utils";
 import { capitalizeFirstLetter } from "@/lib/utils";
 
 export default function App({ Component, pageProps }) {
@@ -35,8 +36,10 @@ export default function App({ Component, pageProps }) {
   }, [successMessage]);
 
   function handleAddTransaction(data) {
+    const categoryIcon = getCategoryIcon(data.category);
+
     setTransactionsList([
-      { ...data, id: ulid(), currency: "EUR" },
+      { ...data, id: ulid(), currency: "EUR", categoryIcon },
       ...transactionsList,
     ]);
     setSuccessMessage("Transaction successfully added!");
