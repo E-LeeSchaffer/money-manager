@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useEffect, useState } from "react";
+import Image from "next/image";
 
 const timeframes = [
   { label: "7 Days", value: 7 },
@@ -25,9 +25,16 @@ export default function TimelineFilter({
   }
 
   const customDateLabel =
-    customDateRange.start && customDateRange.end
-      ? `${customDateRange.start.toLocaleDateString()} - ${customDateRange.end.toLocaleDateString()}`
-      : "Custom Range";
+    customDateRange.start && customDateRange.end ? (
+      `${customDateRange.start.toLocaleDateString()} - ${customDateRange.end.toLocaleDateString()}`
+    ) : (
+      <Image
+        src="/images/calendar-week.svg"
+        alt="Calendar Icon"
+        width={16}
+        height={16}
+      />
+    );
 
   return (
     <StyledTimelineFilterContainer>
