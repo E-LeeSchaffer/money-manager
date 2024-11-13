@@ -95,11 +95,19 @@ export default function HomePage({
       setSelectedTimeframe(value);
       setCustomDateRange({ start: null, end: null });
     }
+    setCustomDatePickerOpen(false);
   }
+
   function handleCustomDateChange(dates) {
     if (Array.isArray(dates)) {
-      const [start, end] = dates;
-      setCustomDateRange({ start: dates[0], end: dates[1] });
+      let [start, end] = dates;
+
+      if (end) {
+        end = new Date(end);
+        end.setHours(23, 59, 59, 999);
+      }
+
+      setCustomDateRange({ start, end });
 
       if (start && end) {
         setSelectedTimeframe(null);
@@ -274,6 +282,7 @@ export default function HomePage({
           customDateRange={customDateRange}
           onCustomDateChange={handleCustomDateChange}
           setIsCustomDatePickerOpen={setCustomDatePickerOpen}
+          isCustomDatePickerOpen={isCustomDatePickerOpen}
         />
       </StyledTimelineFilterContainer>
 

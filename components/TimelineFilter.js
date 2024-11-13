@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const timeframes = [
   { label: "7 Days", value: 7 },
@@ -15,11 +15,9 @@ export default function TimelineFilter({
   onTimeframeChange,
   customDateRange,
   onCustomDateChange,
+  isCustomDatePickerOpen,
   setIsCustomDatePickerOpen,
 }) {
-  const [isCustomDatePickerOpen, setCustomDatePickerOpenState] =
-    useState(false);
-
   function handleClearCustomDateRange() {
     onCustomDateChange({ start: null, end: null });
     onTimeframeChange(null);
@@ -49,8 +47,8 @@ export default function TimelineFilter({
 
       <StyledCustomDateButtonContainer>
         <StyledTimelineFilterButton
-          $activeactive={Boolean(customDateRange.start && customDateRange.end)}
-          onClick={() => setCustomDatePickerOpenState(!isCustomDatePickerOpen)}
+          $active={Boolean(customDateRange.start && customDateRange.end)}
+          onClick={() => setIsCustomDatePickerOpen(!isCustomDatePickerOpen)}
         >
           {customDateLabel}
         </StyledTimelineFilterButton>
@@ -91,7 +89,8 @@ const StyledTimelineFilterButton = styled.button`
   display: flex;
   width: fit-content;
   align-items: center;
-  height: 1.2rem;
+  height: 1.6rem;
+  padding: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-size: 0.8rem;
   border: ${({ $active }) =>
@@ -104,12 +103,13 @@ const StyledTimelineFilterButton = styled.button`
 
 const StyledClearButton = styled.button`
   position: absolute;
-  right: -8px;
-  top: -8px;
+  border-radius: 50%;
+  right: -4px;
+  top: -6px;
   border: none;
-  background-color: red;
+  background-color: black;
   color: var(--dark-grey-color);
-  font-size: 1.2rem;
+  font-size: 0.8rem;
   cursor: pointer;
   z-index: 9999;
 `;
