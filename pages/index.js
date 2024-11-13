@@ -32,11 +32,13 @@ export default function HomePage({
   handleConfirmDelete,
   handleCancelDeleteDialogue,
   isDeletingId,
+  activeSelectionId,
+  openSelection,
+  closeSelection,
   categories,
 }) {
   const [filteredTransactionType, setFilteredTransactionType] =
     useLocalStorageState("balance");
-  const [isFilterSelectOpen, setIsFilterSelectOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useLocalStorageState(
     "selectedCategory",
     { defaultValue: "" }
@@ -80,16 +82,19 @@ export default function HomePage({
   }
 
   function handleCategorySelection(category = "") {
-    setIsFilterSelectOpen(false);
     setSelectedCategory(category);
+    closeSelection();
+    if (isSearching) handleSearch();
   }
 
   function handleSearch() {
     setIsSearching(!isSearching);
+    setSearchItem("");
+  }
 
-    if (isSearching) {
-      setSearchItem("");
-    }
+  function closeSearch() {
+    setIsSearching(false);
+    setSearchItem("");
   }
 
   function handleKeyDown(event) {
@@ -230,9 +235,11 @@ export default function HomePage({
           <Search handleSearch={handleSearch} isSearching={isSearching} />
           <Filter
             onFilterTransactions={handleCategorySelection}
-            isFilterSelectOpen={isFilterSelectOpen}
-            onToggleFilter={() => setIsFilterSelectOpen(!isFilterSelectOpen)}
+            openSelection={openSelection}
             selectedCategory={selectedCategory}
+            closeSelection={closeSelection}
+            activeSelectionId={activeSelectionId}
+            closeSearch={closeSearch}
             categories={categories}
           />
         </StyledControls>
@@ -266,6 +273,9 @@ export default function HomePage({
           handleDeleteTransaction={handleDeleteTransaction}
           isDeletingId={isDeletingId}
           sortOrder={sortOrder}
+          activeSelectionId={activeSelectionId}
+          openSelection={openSelection}
+          closeSelection={closeSelection}
         />
       ) : (
         <StyledNoTransactionsFoundMessage>

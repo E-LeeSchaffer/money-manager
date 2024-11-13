@@ -1,16 +1,31 @@
 import Image from "next/image";
 import styled from "styled-components";
+import Backdrop from "./Backdrop";
 
 export default function Filter({
   onFilterTransactions,
-  isFilterSelectOpen,
-  onToggleFilter,
   selectedCategory,
+  openSelection,
+  closeSelection,
+  activeSelectionId,
+  closeSearch,
   categories,
 }) {
+  const filterId = "filter";
+  const isFilterOpen = activeSelectionId === filterId;
+
+  function toggleFilter() {
+    if (isFilterOpen) {
+      closeSelection();
+    } else {
+      openSelection(filterId);
+      closeSearch();
+    }
+  }
+
   return (
     <StyledFilterContainer>
-      <StyledFilterButton onClick={onToggleFilter} aria-label="Filter">
+      <StyledFilterButton onClick={toggleFilter} aria-label="Filter">
         <StyledImage
           aria-hidden="true"
           src={
@@ -23,22 +38,26 @@ export default function Filter({
           height={15}
         />
       </StyledFilterButton>
-      {isFilterSelectOpen && (
-        <StyledCategoryContainer id="category" name="category">
-          {categories.map((category) => (
-            <StyledCategoryButton
-              key={category.id}
-              type="button"
-              value={category.name}
-              onClick={() => {
-                onFilterTransactions(category.name);
-              }}
-              $isSelected={selectedCategory === category.name}
-            >
-              {category.name}
-            </StyledCategoryButton>
-          ))}
-        </StyledCategoryContainer>
+      {isFilterOpen && (
+        <>
+          <Backdrop closeSelection={closeSelection} />
+          <StyledCategoryContainer id="category" name="category">
+            {categories.map((category) => (
+              <StyledCategoryButton
+                key={category.id}
+                type="button"
+                value={category.name}
+                onClick={() => {
+                  onFilterTransactions(category.name);
+                  closeSelection();
+                }}
+                $isSelected={selectedCategory === category.name}
+              >
+                {category.name}
+              </StyledCategoryButton>
+            ))}
+          </StyledCategoryContainer>
+        </>
       )}
     </StyledFilterContainer>
   );
