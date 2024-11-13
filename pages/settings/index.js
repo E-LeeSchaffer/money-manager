@@ -1,12 +1,16 @@
 import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function SettingsPage({
   handleAddCategory,
   categories,
   isDuplicateError,
   successMessage,
+  isEditCategory,
+  handleOpenEditModeCategory,
+  handleSaveEditCategory,
 }) {
   return (
     <>
@@ -25,9 +29,42 @@ export default function SettingsPage({
         <StyledSubheading>Customize Categories</StyledSubheading>
         <StyledCategoryContainer id="category" name="category">
           {categories.map((category) => (
-            <div key={category.id}>{category.name}</div>
+            <StyledCategory key={category.id}>
+              <StyledCategoryInput
+                type="text"
+                defaultValue={category.name}
+                disabled={!isEditCategory}
+                autoFocus={isEditCategory}
+                onKeyDown={() => {
+                  handleSaveEditCategory(category);
+                }}
+              />
+              <StyledButtons>
+                <StyledCategoryEditButton>
+                  <StyledImage
+                    aria-hidden="true"
+                    src="/images/pencil.svg"
+                    alt="edit button"
+                    onClick={() => {
+                      handleOpenEditModeCategory(category);
+                    }}
+                    width={15}
+                    height={15}
+                  />
+                </StyledCategoryEditButton>
+                <StyledCategoryDeleteButton>
+                  <StyledImage
+                    aria-hidden="true"
+                    src="/images/trash.svg"
+                    alt="delete button"
+                    width={15}
+                    height={15}
+                  />
+                </StyledCategoryDeleteButton>
+              </StyledButtons>
+            </StyledCategory>
           ))}
-          <StyledCategoryInput
+          <StyledAddCategoryInput
             type="text"
             placeholder="+ Add new category"
             onKeyDown={(event) => {
@@ -37,7 +74,7 @@ export default function SettingsPage({
                 event.target.blur();
               }
             }}
-          ></StyledCategoryInput>
+          ></StyledAddCategoryInput>
           {isDuplicateError && (
             <ErrorMessage>Category already exists!</ErrorMessage>
           )}
@@ -52,6 +89,29 @@ export default function SettingsPage({
 
 const StyledImage = styled(Image)`
   display: flex;
+`;
+
+const StyledCategory = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+`;
+
+const StyledButtons = styled.div`
+  display: flex;
+  gap: 0.5rem;
+`;
+
+const StyledCategoryEditButton = styled.button`
+  border: none;
+  background-color: transparent;
+  padding: 0;
+`;
+
+const StyledCategoryDeleteButton = styled.button`
+  border: none;
+  background-color: transparent;
+  padding: 0;
 `;
 
 const StyledBackLink = styled(Link)`
@@ -96,7 +156,20 @@ const StyledCategoryContainer = styled.div`
 
 const StyledCategoryInput = styled.input`
   display: flex;
-  width: fit-content;
+  flex-grow: 1;
+  font-family: sofia-pro, sans-serif;
+  border: none;
+  background-color: inherit;
+  font-size: 16px;
+  padding: 0;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+const StyledAddCategoryInput = styled.input`
+  display: flex;
   font-family: sofia-pro, sans-serif;
   border: none;
   background-color: inherit;

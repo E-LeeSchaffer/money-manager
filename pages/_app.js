@@ -113,6 +113,24 @@ export default function App({ Component, pageProps }) {
     setSuccessMessage("Category successfully added!");
   }
 
+  const [isEditCategory, setIsEditCategory] = useState(false);
+  const [categoryToEdit, setcategoryToEdit] = useState(null);
+
+  function handleOpenEditModeCategory(selecedCategory) {
+    setIsEditCategory(!isEditCategory);
+    setcategoryToEdit(
+      categories.map((category) => category.id === selecedCategory.id)
+    );
+  }
+
+  function handleSaveEditCategory(editedCategory) {
+    setCategories(
+      categories.map((category) =>
+        category.id === categoryToEdit.id ? editedCategory : category
+      )
+    );
+  }
+
   const componentProps = {
     transactionsList,
     categories,
@@ -135,7 +153,9 @@ export default function App({ Component, pageProps }) {
     showForm,
     handleAddCategory,
     isDuplicateError,
-
+    isEditCategory,
+    handleOpenEditModeCategory,
+    handleSaveEditCategory,
     ...pageProps,
   };
 
