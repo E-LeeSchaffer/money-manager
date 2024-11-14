@@ -11,6 +11,7 @@ export default function SettingsPage({
   isEditCategory,
   handleOpenEditModeCategory,
   handleSaveEditCategory,
+  originalCategoryName,
 }) {
   const inputRefs = useRef({});
 
@@ -48,6 +49,14 @@ export default function SettingsPage({
                 onKeyDown={(event) => {
                   if (event.key === "Enter" && category.id === isEditCategory) {
                     handleSaveEditCategory(category);
+                  }
+                  if (
+                    event.key === "Escape" &&
+                    category.id === isEditCategory
+                  ) {
+                    category.name = originalCategoryName;
+                    event.target.value = originalCategoryName;
+                    event.target.blur();
                   }
                 }}
               />

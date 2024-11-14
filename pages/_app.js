@@ -24,6 +24,7 @@ export default function App({ Component, pageProps }) {
   });
   const [isEditCategory, setIsEditCategory] = useState(null);
   const [categoryToEdit, setcategoryToEdit] = useState(null);
+  const [originalCategoryName, setOriginalCategoryName] = useState("");
 
   useEffect(() => {
     if (successMessage !== "") {
@@ -115,12 +116,26 @@ export default function App({ Component, pageProps }) {
     setSuccessMessage("Category successfully added!");
   }
 
-  function handleOpenEditModeCategory(selecedCategory) {
-    setIsEditCategory(selecedCategory.id);
-    setcategoryToEdit(selecedCategory);
+  function handleOpenEditModeCategory(category) {
+    setOriginalCategoryName(category.name);
+    setIsEditCategory(category.id);
+    setcategoryToEdit(category);
   }
 
   function handleSaveEditCategory(editedCategory) {
+    const normalizedUpdatedName = editedCategory.name.trim().toLowerCase();
+
+    const isDuplicate = categories.some(
+      (category) =>
+        category.id !== editedCategory.id &&
+        category.name.toLowerCase() === normalizedUpdatedName
+    );
+
+    if (isDuplicate) {
+      setIsDuplicateError(true);
+      return;
+    }
+
     setCategories(
       categories.map((category) =>
         category.id === editedCategory.id ? editedCategory : category
@@ -155,6 +170,7 @@ export default function App({ Component, pageProps }) {
     isEditCategory,
     handleOpenEditModeCategory,
     handleSaveEditCategory,
+    originalCategoryName,
     ...pageProps,
   };
 
