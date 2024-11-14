@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
+import Modal from "@/components/Modal";
 
 export default function SettingsPage({
   handleAddCategory,
@@ -12,11 +13,33 @@ export default function SettingsPage({
   handleOpenEditModeCategory,
   handleSaveEditCategory,
   originalCategoryName,
+  handleDeleteCategory,
+  openModal,
+  isModalOpen,
+  closeModal,
+  categoryToDelete,
 }) {
   const inputRefs = useRef({});
 
   return (
     <>
+      <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
+        <StyledContainer>
+          <StyledLegend>Confirm Deletion</StyledLegend>
+          <StyledDeletionWarning>
+            Deleting a category will remove the category from every transaction
+            associated!
+          </StyledDeletionWarning>
+          <StyledCategoryName>Category: {categoryToDelete}</StyledCategoryName>
+          <StyledConfirmActionContainer>
+            <StyledCancelButton type="button">Cancel</StyledCancelButton>
+            <StyledConfirmButton type="button">
+              Really Delete
+            </StyledConfirmButton>
+          </StyledConfirmActionContainer>
+        </StyledContainer>
+      </Modal>
+
       <StyledBackLink href="/">
         <StyledImage
           aria-hidden="true"
@@ -88,6 +111,10 @@ export default function SettingsPage({
                     aria-hidden="true"
                     src="/images/trash.svg"
                     alt="delete button"
+                    onClick={() => {
+                      openModal();
+                      handleDeleteCategory(category);
+                    }}
                     width={15}
                     height={15}
                   />
@@ -117,6 +144,57 @@ export default function SettingsPage({
     </>
   );
 }
+
+const StyledCategoryName = styled.p`
+  font-size: 1.2rem;
+  margin: 0;
+  padding: 0 0 8px 0;
+`;
+
+const StyledDeletionWarning = styled.p`
+  font-size: 0.8rem;
+  margin: 0;
+  padding: 18px 0 8px 0;
+`;
+
+const StyledConfirmActionContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  width: 18rem;
+  min-height: 4rem;
+  background-color: white;
+`;
+
+const StyledCancelButton = styled.button`
+  border: none;
+  border-radius: 4px;
+  background-color: var(--friendly-red-color);
+  color: white;
+  height: fit-content;
+  font-size: 16px;
+`;
+
+const StyledConfirmButton = styled.button`
+  border: none;
+  background-color: transparent;
+  height: fit-content;
+  font-size: 16px;
+`;
+
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 4px 2px 4px;
+`;
+
+const StyledLegend = styled.p`
+  font-size: 1.2rem;
+  margin: 0;
+`;
 
 const StyledImage = styled(Image)`
   display: flex;

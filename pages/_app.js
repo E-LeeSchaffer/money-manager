@@ -25,6 +25,7 @@ export default function App({ Component, pageProps }) {
   const [isEditCategory, setIsEditCategory] = useState(null);
   const [categoryToEdit, setcategoryToEdit] = useState(null);
   const [originalCategoryName, setOriginalCategoryName] = useState("");
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
 
   useEffect(() => {
     if (successMessage !== "") {
@@ -145,6 +146,10 @@ export default function App({ Component, pageProps }) {
     setIsEditCategory(null);
   }
 
+  function handleDeleteCategory(category) {
+    setCategoryToDelete(category.name);
+  }
+
   const componentProps = {
     transactionsList,
     categories,
@@ -171,6 +176,8 @@ export default function App({ Component, pageProps }) {
     handleOpenEditModeCategory,
     handleSaveEditCategory,
     originalCategoryName,
+    handleDeleteCategory,
+    categoryToDelete,
     ...pageProps,
   };
 
