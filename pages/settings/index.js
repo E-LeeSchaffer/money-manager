@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef } from "react";
 
 export default function SettingsPage({
   handleAddCategory,
@@ -12,6 +12,8 @@ export default function SettingsPage({
   handleOpenEditModeCategory,
   handleSaveEditCategory,
 }) {
+  const inputRefs = useRef({});
+
   return (
     <>
       <StyledBackLink href="/">
@@ -31,12 +33,22 @@ export default function SettingsPage({
           {categories.map((category) => (
             <StyledCategory key={category.id}>
               <StyledCategoryInput
+                ref={(element) => {
+                  inputRefs.current[category.id] = element;
+                }}
                 type="text"
                 defaultValue={category.name}
-                disabled={!isEditCategory}
-                autoFocus={isEditCategory}
-                onKeyDown={() => {
-                  handleSaveEditCategory(category);
+                disabled={category.id !== isEditCategory}
+                autoFocus={category.id === isEditCategory}
+                onChange={(event) => {
+                  if (category.id === isEditCategory) {
+                    category.name = event.target.value;
+                  }
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" && category.id === isEditCategory) {
+                    handleSaveEditCategory(category);
+                  }
                 }}
               />
               <StyledButtons>
@@ -47,6 +59,16 @@ export default function SettingsPage({
                     alt="edit button"
                     onClick={() => {
                       handleOpenEditModeCategory(category);
+                      setTimeout(() => {
+                        if (inputRefs.current[category.id]) {
+                          const inputElement = inputRefs.current[category.id];
+                          inputElement.focus();
+                          inputElement.setSelectionRange(
+                            inputElement.value.length,
+                            inputElement.value.length
+                          );
+                        }
+                      }, 0);
                     }}
                     width={15}
                     height={15}

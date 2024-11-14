@@ -22,6 +22,8 @@ export default function App({ Component, pageProps }) {
   const [categories, setCategories] = useLocalStorageState("categories", {
     defaultValue: initialCategories,
   });
+  const [isEditCategory, setIsEditCategory] = useState(null);
+  const [categoryToEdit, setcategoryToEdit] = useState(null);
 
   useEffect(() => {
     if (successMessage !== "") {
@@ -113,22 +115,19 @@ export default function App({ Component, pageProps }) {
     setSuccessMessage("Category successfully added!");
   }
 
-  const [isEditCategory, setIsEditCategory] = useState(false);
-  const [categoryToEdit, setcategoryToEdit] = useState(null);
-
   function handleOpenEditModeCategory(selecedCategory) {
-    setIsEditCategory(!isEditCategory);
-    setcategoryToEdit(
-      categories.map((category) => category.id === selecedCategory.id)
-    );
+    setIsEditCategory(selecedCategory.id);
+    setcategoryToEdit(selecedCategory);
   }
 
   function handleSaveEditCategory(editedCategory) {
     setCategories(
       categories.map((category) =>
-        category.id === categoryToEdit.id ? editedCategory : category
+        category.id === editedCategory.id ? editedCategory : category
       )
     );
+    setSuccessMessage("Category successfully updated!");
+    setIsEditCategory(null);
   }
 
   const componentProps = {
