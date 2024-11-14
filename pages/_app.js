@@ -24,6 +24,7 @@ export default function App({ Component, pageProps }) {
   const [categories, setCategories] = useLocalStorageState("categories", {
     defaultValue: initialCategories,
   });
+  // const [selectedCategoryInForm, setSelectedCategoryInForm] = useState("");
 
   useEffect(() => {
     if (successMessage !== "") {
@@ -89,6 +90,7 @@ export default function App({ Component, pageProps }) {
     handleEditTransaction({ ...editTransaction, ...updatedTransaction });
     closeModal();
   }
+
   function toggleForm() {
     setShowForm(!showForm);
   }

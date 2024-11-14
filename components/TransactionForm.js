@@ -3,6 +3,7 @@ import CurrencyInput from "react-currency-input-field";
 import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
+import { getCategoryIcon } from "@/lib/utils";
 
 export default function TransactionForm({
   categories,
@@ -17,9 +18,15 @@ export default function TransactionForm({
   const [amount, setAmount] = useState(initialData.amount?.toString() || "");
   const [typeError, setTypeError] = useState(false);
   const [amountError, setAmountError] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const formHeader =
     variant === "edit" ? "Edit Transaction" : "Add Transaction";
   const buttonText = variant === "edit" ? "Update" : "Add";
+  const [selectedCategoryInForm, setSelectedCategoryInForm] = useState(
+    initialData.category || ""
+  );
+
+  const categoryIcon = getCategoryIcon(selectedCategoryInForm);
 
   useEffect(() => {
     if (initialData.amount) {
@@ -34,6 +41,7 @@ export default function TransactionForm({
     const data = Object.fromEntries(formData);
 
     data.amount = parseFloat(data.amount.replace(/\./g, "").replace(",", "."));
+    data.category = selectedCategoryInForm;
 
     if (data.amount <= 0) {
       setAmountError(true);
@@ -50,7 +58,19 @@ export default function TransactionForm({
     onSubmit({ ...initialData, ...data });
     event.target.reset();
     setAmount("");
+    setSelectedCategoryInForm("");
   }
+
+  function handleCategorySelect(categoryName) {
+    setSelectedCategoryInForm(categoryName);
+    setIsDropdownOpen(false);
+  }
+
+  if (!showForm && (amount || selectedCategoryInForm)) {
+    setAmount("");
+    setSelectedCategoryInForm("");
+  }
+
   return (
     <>
       {!isEditing && (
@@ -102,26 +122,68 @@ export default function TransactionForm({
                 </ErrorMessageAmount>
               )}
             </FormRow>
+
             <FormRow>
               <StyledCategoryLabel htmlFor="category">
                 Category
               </StyledCategoryLabel>
-              <StyledCategoryContainer>
-                <StyledCategorySelect
-                  id="category"
-                  defaultValue={initialData.category || ""}
-                  name="category"
-                  required
+              <DropdownContainer>
+                <DropdownButton
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
-                  <option value="" disabled>
-                    Please select a category
-                  </option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.name}>
-                      {category.name}
-                    </option>
-                  ))}
-                </StyledCategorySelect>
+                  {selectedCategoryInForm ? (
+                    <>
+                      <Image
+                        src={categoryIcon}
+                        alt={`${selectedCategoryInForm} icon`}
+                        width={24}
+                        height={24}
+                      />
+                      {selectedCategoryInForm}
+                    </>
+                  ) : (
+                    "Please select a category"
+                  )}
+                  <StyledArrowIcon
+                    src={
+                      isDropdownOpen
+                        ? "/images/arrow-up.svg"
+                        : "/images/arrow-down.svg"
+                    }
+                    width={20}
+                    height={20}
+                    alt={
+                      isDropdownOpen
+                        ? "arrow up to close form"
+                        : "arrow down to open form"
+                    }
+                  />
+                </DropdownButton>
+
+                {isDropdownOpen && (
+                  <DropdownList>
+                    {categories.map((category) => (
+                      <DropdownItem
+                        key={category.id}
+                        onClick={() => handleCategorySelect(category.name)}
+                      >
+                        {/* <Image
+                          src={category.icon || "/icons/default-icon.svg"}
+                          alt={category.name}
+                          width={24}
+                          height={24}
+                        /> */}
+                        <Image
+                          src={categoryIcon}
+                          alt={`${selectedCategoryInForm} icon`}
+                          width={24}
+                          height={24}
+                        />
+                        {category.name}
+                      </DropdownItem>
+                    ))}
+                  </DropdownList>
+                )}
                 <StyledLink href={"/settings"} aria-label="Settings">
                   <Image
                     aria-hidden="true"
@@ -131,8 +193,9 @@ export default function TransactionForm({
                     height={15}
                   />
                 </StyledLink>
-              </StyledCategoryContainer>
+              </DropdownContainer>
             </FormRow>
+
             <FormRow>
               <StyledTypeLabel htmlFor="type">Type</StyledTypeLabel>
               <StyledToggleButton id="type">
@@ -183,7 +246,6 @@ export default function TransactionForm({
     </>
   );
 }
-
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: inherit;
@@ -192,10 +254,51 @@ const StyledLink = styled(Link)`
   align-items: center;
 `;
 
-const StyledCategoryContainer = styled.div`
+const DropdownContainer = styled.div`
   display: flex;
   grid-area: categoryInput;
   justify-content: space-between;
+  position: relative;
+  width: 100%;
+`;
+
+const DropdownButton = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 2px 12px;
+  cursor: pointer;
+  border: 1px solid var(--dark-grey-color);
+  border-radius: 24px;
+  background-color: white;
+  color: #141414;
+  font-size: 0.8rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+`;
+
+const DropdownList = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  width: 88%;
+  border: 1px solid var(--dark-grey-color);
+  border-radius: 8px;
+  background-color: white;
+  color: var() (--text-color-dark);
+  padding: 4px 12px;
+  cursor: pointer;
+`;
+
+const DropdownItem = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  cursor: pointer;
 `;
 
 const StyledButtonContainer = styled.div`
