@@ -54,13 +54,15 @@ export default function Filter({
                 }}
                 $isSelected={selectedCategory === category.name}
               >
-                {category.name}
-                <Image
-                  src={getCategoryIcon(category.name)}
-                  alt={`${selectedCategory} icon`}
-                  width={24}
-                  height={24}
-                />
+                <StyledCategoryIcons>
+                  {category.name}
+                  <Image
+                    src={getCategoryIcon(category.name)}
+                    alt={`${selectedCategory} icon`}
+                    width={24}
+                    height={24}
+                  />
+                </StyledCategoryIcons>
               </StyledCategoryButton>
             ))}
           </StyledCategoryContainer>
@@ -101,6 +103,8 @@ const StyledCategoryContainer = styled.div`
   border-radius: 4px;
   padding: 4px;
   width: 120px;
+  max-height: 200px;
+  overflow-y: auto;
 `;
 
 const StyledCategoryButton = styled.button`
@@ -114,4 +118,11 @@ const StyledCategoryButton = styled.button`
   border-radius: 2px;
   padding: 1px 2px;
   font-size: 0.7rem;
+`;
+
+const StyledCategoryIcons = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
 `;

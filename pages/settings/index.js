@@ -30,8 +30,8 @@ export default function SettingsPage({
               <Image
                 src={getCategoryIcon(category.name)}
                 alt={`${category.name} icon`}
-                width={24}
-                height={24}
+                width={40}
+                height={40}
               />
               {category.name}
             </StyledCategoryItem>
@@ -106,8 +106,8 @@ const StyledCategoryContainer = styled.div`
 const StyledCategoryItem = styled.div`
   display: flex;
   align-items: center;
-  padding: 4px 0;
-  gap: 0.8rem;
+  padding: 1px 0;
+  gap: 4px;
 `;
 
 const StyledCategoryInput = styled.input`

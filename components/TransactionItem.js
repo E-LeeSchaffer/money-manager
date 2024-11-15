@@ -120,7 +120,7 @@ const StyledCategory = styled.div`
   grid-area: category;
   font-size: x-small;
   display: flex;
-  gap: 8px;
+  gap: 4px;
   align-items: center;
 `;
 

@@ -64,7 +64,7 @@ export default function TransactionForm({
     setIsDropdownOpen(false);
   }
 
-  if (!showForm && (amount || selectedCategoryInForm)) {
+  if (!showForm && !isEditing && (amount || selectedCategoryInForm)) {
     setAmount("");
     setSelectedCategoryInForm("");
   }
@@ -165,12 +165,6 @@ export default function TransactionForm({
                         key={category.id}
                         onClick={() => handleCategorySelect(category.name)}
                       >
-                        {/* <Image
-                          src={category.icon || "/icons/default-icon.svg"}
-                          alt={category.name}
-                          width={24}
-                          height={24}
-                        /> */}
                         <Image
                           src={getCategoryIcon(category.name)}
                           alt={`${category.name}} icon`}
@@ -273,6 +267,7 @@ const DropdownButton = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease-in-out;
   width: 100%;
+  gap: 4px;
 `;
 
 const DropdownList = styled.div`
@@ -285,18 +280,20 @@ const DropdownList = styled.div`
   flex-direction: column;
   width: 88%;
   border: 1px solid var(--dark-grey-color);
-  border-radius: 8px;
+  border-radius: 4px;
   background-color: white;
   color: var() (--text-color-dark);
-  padding: 4px 12px;
+  padding: 4px;
   cursor: pointer;
+  font-size: 0.8rem;
 `;
 
 const DropdownItem = styled.div`
   display: flex;
   align-items: center;
-  padding: 8px;
+  padding: 4px;
   cursor: pointer;
+  gap: 4px;
 `;
 
 const StyledButtonContainer = styled.div`
@@ -397,22 +394,6 @@ const StyledCurrencyInput = styled(CurrencyInput)`
 
 const StyledCategoryLabel = styled.label`
   grid-area: categoryLabel;
-`;
-
-const StyledCategorySelect = styled.select`
-  padding: 4px 12px;
-  border: 1px solid var(--dark-grey-color);
-  border-radius: 24px;
-  background-color: white;
-  color: var(--text-color-dark);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease-in-out;
-  width: 100%;
-
-  &:focus {
-    border-color: var(--accent-color);
-    outline: none;
-  }
 `;
 
 const StyledTypeLabel = styled.label`
