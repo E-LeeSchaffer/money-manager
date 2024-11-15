@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styled from "styled-components";
 import Backdrop from "./Backdrop";
+import { getCategoryIcon } from "@/lib/utils";
 
 export default function Filter({
   onFilterTransactions,
@@ -54,6 +55,12 @@ export default function Filter({
                 $isSelected={selectedCategory === category.name}
               >
                 {category.name}
+                <Image
+                  src={getCategoryIcon(category.name)}
+                  alt={`${selectedCategory} icon`}
+                  width={24}
+                  height={24}
+                />
               </StyledCategoryButton>
             ))}
           </StyledCategoryContainer>
@@ -93,6 +100,7 @@ const StyledCategoryContainer = styled.div`
   border: 0.1px solid var(--dark-grey-color);
   border-radius: 4px;
   padding: 4px;
+  width: 120px;
 `;
 
 const StyledCategoryButton = styled.button`

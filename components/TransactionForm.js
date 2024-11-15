@@ -26,8 +26,6 @@ export default function TransactionForm({
     initialData.category || ""
   );
 
-  const categoryIcon = getCategoryIcon(selectedCategoryInForm);
-
   useEffect(() => {
     if (initialData.amount) {
       setAmount(initialData.amount.toString());
@@ -134,8 +132,8 @@ export default function TransactionForm({
                   {selectedCategoryInForm ? (
                     <>
                       <Image
-                        src={categoryIcon}
-                        alt={`${selectedCategoryInForm} icon`}
+                        src={getCategoryIcon(selectedCategoryInForm)}
+                        alt={`${selectedCategoryInForm}} icon`}
                         width={24}
                         height={24}
                       />
@@ -174,8 +172,8 @@ export default function TransactionForm({
                           height={24}
                         /> */}
                         <Image
-                          src={categoryIcon}
-                          alt={`${selectedCategoryInForm} icon`}
+                          src={getCategoryIcon(category.name)}
+                          alt={`${category.name}} icon`}
                           width={24}
                           height={24}
                         />
