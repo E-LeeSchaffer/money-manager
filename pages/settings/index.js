@@ -18,6 +18,7 @@ export default function SettingsPage({
   isModalOpen,
   closeModal,
   categoryToDelete,
+  handleConfirmDeleteCategory,
 }) {
   const inputRefs = useRef({});
 
@@ -33,7 +34,12 @@ export default function SettingsPage({
           <StyledCategoryName>Category: {categoryToDelete}</StyledCategoryName>
           <StyledConfirmActionContainer>
             <StyledCancelButton type="button">Cancel</StyledCancelButton>
-            <StyledConfirmButton type="button">
+            <StyledConfirmButton
+              type="button"
+              onClick={() => {
+                handleConfirmDeleteCategory();
+              }}
+            >
               Really Delete
             </StyledConfirmButton>
           </StyledConfirmActionContainer>

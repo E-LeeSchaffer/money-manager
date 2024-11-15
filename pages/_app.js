@@ -150,6 +150,24 @@ export default function App({ Component, pageProps }) {
     setCategoryToDelete(category.name);
   }
 
+  function handleConfirmDeleteCategory() {
+    setTransactionsList((prevTransactions) =>
+      prevTransactions.map((transaction) =>
+        transaction.category === categoryToDelete
+          ? { ...transaction, category: "Uncategorized" }
+          : transaction
+      )
+    );
+
+    setCategories((prevCategories) =>
+      prevCategories.filter((category) => category.name !== categoryToDelete)
+    );
+
+    setSuccessMessage("Category successfully deleted!");
+    setCategoryToDelete(null);
+    closeModal();
+  }
+
   const componentProps = {
     transactionsList,
     categories,
@@ -177,6 +195,7 @@ export default function App({ Component, pageProps }) {
     handleSaveEditCategory,
     originalCategoryName,
     handleDeleteCategory,
+    handleConfirmDeleteCategory,
     categoryToDelete,
     ...pageProps,
   };

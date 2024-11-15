@@ -8,6 +8,10 @@ export default function Filter({
   selectedCategory,
   categories,
 }) {
+  const sortedCategories = [...categories].sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
+
   return (
     <StyledFilterContainer>
       <StyledFilterButton onClick={onToggleFilter} aria-label="Filter">
@@ -25,7 +29,10 @@ export default function Filter({
       </StyledFilterButton>
       {isFilterSelectOpen && (
         <StyledCategoryContainer id="category" name="category">
-          {categories.map((category) => (
+          {[
+            { id: "uncategorized", name: "Uncategorized" },
+            ...sortedCategories,
+          ].map((category) => (
             <StyledCategoryButton
               key={category.id}
               type="button"
