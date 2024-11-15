@@ -18,6 +18,7 @@ export default function App({ Component, pageProps }) {
   const [editTransaction, setEditTransaction] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [isDeletingId, setIsDeletingId] = useState(false);
+  const [activeSelectionId, setActiveSelectionId] = useState(null);
   const [isDuplicateError, setIsDuplicateError] = useState(false);
   const [categories, setCategories] = useLocalStorageState("categories", {
     defaultValue: initialCategories,
@@ -61,6 +62,14 @@ export default function App({ Component, pageProps }) {
       )
     );
     setSuccessMessage("Transaction successfully updated!");
+  }
+
+  function openSelection(selectionId) {
+    setActiveSelectionId(selectionId);
+  }
+
+  function closeSelection() {
+    setActiveSelectionId(null);
   }
 
   function handleOpenEditMode(transaction) {
@@ -188,6 +197,9 @@ export default function App({ Component, pageProps }) {
     editTransaction,
     toggleForm,
     showForm,
+    activeSelectionId,
+    openSelection,
+    closeSelection,
     handleAddCategory,
     isDuplicateError,
     isEditCategory,

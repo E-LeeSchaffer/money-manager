@@ -1,5 +1,6 @@
 import Image from "next/image";
 import styled from "styled-components";
+import Backdrop from "./Backdrop";
 
 export default function Search({ handleSearch, isSearching }) {
   return (
@@ -18,6 +19,7 @@ export default function Search({ handleSearch, isSearching }) {
           height={15}
         />
       </StyledSearchButton>
+      {isSearching && <Backdrop closeSelection={handleSearch} />}
     </StyledSearchContainer>
   );
 }

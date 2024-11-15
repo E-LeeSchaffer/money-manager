@@ -12,6 +12,7 @@ export default function TransactionForm({
   showForm,
   toggleForm,
   isEditing,
+  closeModal,
 }) {
   const today = new Date().toISOString().split("T")[0];
   const [amount, setAmount] = useState(initialData.amount?.toString() || "");
@@ -124,7 +125,13 @@ export default function TransactionForm({
                       </option>
                     ))}
                 </StyledCategorySelect>
-                <StyledLink href={"/settings"} aria-label="Settings">
+                <StyledLink
+                  href={"/settings"}
+                  aria-label="Settings"
+                  onClick={() => {
+                    closeModal();
+                  }}
+                >
                   <Image
                     aria-hidden="true"
                     src={"/images/settings.svg"}
