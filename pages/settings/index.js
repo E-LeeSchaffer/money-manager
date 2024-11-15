@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
+import { getCategoryIcon } from "@/lib/utils";
 
 export default function SettingsPage({
   handleAddCategory,
@@ -25,7 +26,15 @@ export default function SettingsPage({
         <StyledSubheading>Customize Categories</StyledSubheading>
         <StyledCategoryContainer id="category" name="category">
           {categories.map((category) => (
-            <div key={category.id}>{category.name}</div>
+            <StyledCategoryItem key={category.id}>
+              <Image
+                src={getCategoryIcon(category.name)}
+                alt={`${category.name} icon`}
+                width={24}
+                height={24}
+              />
+              {category.name}
+            </StyledCategoryItem>
           ))}
           <StyledCategoryInput
             type="text"
@@ -92,6 +101,13 @@ const StyledCategoryContainer = styled.div`
   flex-direction: column;
   width: 18rem;
   justify-content: center;
+`;
+
+const StyledCategoryItem = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+  gap: 0.8rem;
 `;
 
 const StyledCategoryInput = styled.input`
