@@ -24,7 +24,6 @@ export default function App({ Component, pageProps }) {
   const [categories, setCategories] = useLocalStorageState("categories", {
     defaultValue: initialCategories,
   });
-  // const [selectedCategoryInForm, setSelectedCategoryInForm] = useState("");
 
   useEffect(() => {
     if (successMessage !== "") {
