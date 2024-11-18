@@ -130,15 +130,7 @@ export default function TransactionForm({
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
                   {selectedCategoryInForm ? (
-                    <>
-                      <Image
-                        src={getCategoryIcon(selectedCategoryInForm)}
-                        alt={`${selectedCategoryInForm}} icon`}
-                        width={24}
-                        height={24}
-                      />
-                      {selectedCategoryInForm}
-                    </>
+                    <>{selectedCategoryInForm}</>
                   ) : (
                     "Please select a category"
                   )}
