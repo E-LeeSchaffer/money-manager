@@ -12,6 +12,7 @@ export default function TransactionForm({
   showForm,
   toggleForm,
   isEditing,
+  closeModal,
 }) {
   const today = new Date().toISOString().split("T")[0];
   const [amount, setAmount] = useState(initialData.amount?.toString() || "");
@@ -116,13 +117,21 @@ export default function TransactionForm({
                   <option value="" disabled>
                     Please select a category
                   </option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.name}>
-                      {category.name}
-                    </option>
-                  ))}
+                  {categories
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((category) => (
+                      <option key={category.id} value={category.name}>
+                        {category.name}
+                      </option>
+                    ))}
                 </StyledCategorySelect>
-                <StyledLink href={"/settings"} aria-label="Settings">
+                <StyledLink
+                  href={"/settings"}
+                  aria-label="Settings"
+                  onClick={() => {
+                    closeModal();
+                  }}
+                >
                   <Image
                     aria-hidden="true"
                     src={"/images/settings.svg"}

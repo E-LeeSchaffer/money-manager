@@ -11,6 +11,10 @@ export default function Filter({
   closeSearch,
   categories,
 }) {
+  const sortedCategories = [...categories].sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
+
   const filterId = "filter";
   const isFilterOpen = activeSelectionId === filterId;
 
@@ -38,11 +42,15 @@ export default function Filter({
           height={15}
         />
       </StyledFilterButton>
+
       {isFilterOpen && (
         <>
           <Backdrop closeSelection={closeSelection} />
           <StyledCategoryContainer id="category" name="category">
-            {categories.map((category) => (
+            {[
+              { id: "uncategorized", name: "Uncategorized" },
+              ...sortedCategories,
+            ].map((category) => (
               <StyledCategoryButton
                 key={category.id}
                 type="button"

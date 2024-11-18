@@ -204,6 +204,7 @@ export default function HomePage({
           variant="edit"
           showForm={!showForm}
           categories={categories}
+          closeModal={closeModal}
         />
       </Modal>
 
