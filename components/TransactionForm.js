@@ -13,6 +13,7 @@ export default function TransactionForm({
   showForm,
   toggleForm,
   isEditing,
+  closeModal,
 }) {
   const today = new Date().toISOString().split("T")[0];
   const [amount, setAmount] = useState(initialData.amount?.toString() || "");
@@ -152,20 +153,22 @@ export default function TransactionForm({
 
                 {isDropdownOpen && (
                   <DropdownList>
-                    {categories.map((category) => (
-                      <DropdownItem
-                        key={category.id}
-                        onClick={() => handleCategorySelect(category.name)}
-                      >
-                        <Image
-                          src={getCategoryIcon(category.name)}
-                          alt={`${category.name}} icon`}
-                          width={24}
-                          height={24}
-                        />
-                        {category.name}
-                      </DropdownItem>
-                    ))}
+                    {categories
+                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .map((category) => (
+                        <DropdownItem
+                          key={category.id}
+                          onClick={() => handleCategorySelect(category.name)}
+                        >
+                          <Image
+                            src={getCategoryIcon(category.name)}
+                            alt={`${category.name}} icon`}
+                            width={24}
+                            height={24}
+                          />
+                          {category.name}
+                        </DropdownItem>
+                      ))}
                   </DropdownList>
                 )}
                 <StyledLink href={"/settings"} aria-label="Settings">

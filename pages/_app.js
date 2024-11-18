@@ -24,6 +24,10 @@ export default function App({ Component, pageProps }) {
   const [categories, setCategories] = useLocalStorageState("categories", {
     defaultValue: initialCategories,
   });
+  const [isEditCategory, setIsEditCategory] = useState(null);
+  const [categoryToEdit, setcategoryToEdit] = useState(null);
+  const [originalCategoryName, setOriginalCategoryName] = useState("");
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
 
   useEffect(() => {
     if (successMessage !== "") {
@@ -126,6 +130,62 @@ export default function App({ Component, pageProps }) {
     setSuccessMessage("Category successfully added!");
   }
 
+  function handleOpenEditModeCategory(category) {
+    setOriginalCategoryName(category.name);
+    setIsEditCategory(category.id);
+    setcategoryToEdit(category);
+  }
+
+  function handleSaveEditCategory(editedCategory) {
+    const normalizedUpdatedName = editedCategory.name.trim().toLowerCase();
+
+    const isDuplicate = categories.some(
+      (category) =>
+        category.id !== editedCategory.id &&
+        category.name.toLowerCase() === normalizedUpdatedName
+    );
+
+    if (isDuplicate) {
+      setIsDuplicateError(true);
+      return;
+    }
+
+    setCategories(
+      categories.map((category) =>
+        category.id === editedCategory.id ? editedCategory : category
+      )
+    );
+    setSuccessMessage("Category successfully updated!");
+    setIsEditCategory(null);
+  }
+
+  function handleDeleteCategory(category) {
+    setCategoryToDelete(category.name);
+  }
+
+  function handleConfirmDeleteCategory() {
+    setTransactionsList((prevTransactions) =>
+      prevTransactions.map((transaction) =>
+        transaction.category === categoryToDelete
+          ? { ...transaction, category: "Uncategorized" }
+          : transaction
+      )
+    );
+
+    setCategories((prevCategories) =>
+      prevCategories.filter((category) => category.name !== categoryToDelete)
+    );
+
+    setSuccessMessage("Category successfully deleted!");
+    setCategoryToDelete(null);
+    closeModal();
+  }
+
+  function handleCancelDeleteCategory() {
+    setCategoryToDelete(null);
+    closeModal();
+  }
+
   const componentProps = {
     transactionsList,
     categories,
@@ -151,7 +211,14 @@ export default function App({ Component, pageProps }) {
     closeSelection,
     handleAddCategory,
     isDuplicateError,
-
+    isEditCategory,
+    handleOpenEditModeCategory,
+    handleSaveEditCategory,
+    originalCategoryName,
+    handleDeleteCategory,
+    handleConfirmDeleteCategory,
+    categoryToDelete,
+    handleCancelDeleteCategory,
     ...pageProps,
   };
 

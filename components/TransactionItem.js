@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import OptionsMenu from "./OptionsMenu";
-import { useState } from "react";
 import { formatNumber } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -27,6 +28,10 @@ export default function Header() {
     </StyledHeader>
   );
 }
+
+const StyledImage = styled(Image)`
+  display: flex;
+`;
 
 const StyledHeader = styled.h1`
   position: fixed;
