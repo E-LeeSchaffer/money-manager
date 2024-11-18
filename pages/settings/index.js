@@ -74,8 +74,8 @@ export default function SettingsPage({
               <Image
                 src={getCategoryIcon(category.name)}
                 alt={`${category.name} icon`}
-                width={40}
-                height={40}
+                width={36}
+                height={36}
               />
               <StyledCategoryInput
                 ref={(element) => {
@@ -225,6 +225,7 @@ const StyledCategory = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 0.5rem;
+  padding-bottom: 4px;
 `;
 
 const StyledButtons = styled.div`
