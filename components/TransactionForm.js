@@ -171,7 +171,13 @@ export default function TransactionForm({
                       ))}
                   </DropdownList>
                 )}
-                <StyledLink href={"/settings"} aria-label="Settings">
+                <StyledLink
+                  href={"/settings"}
+                  aria-label="Settings"
+                  onClick={() => {
+                    closeModal();
+                  }}
+                >
                   <Image
                     aria-hidden="true"
                     src={"/images/settings.svg"}
