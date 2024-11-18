@@ -177,6 +177,11 @@ export default function App({ Component, pageProps }) {
     closeModal();
   }
 
+  function handleCancelDeleteCategory() {
+    setCategoryToDelete(null);
+    closeModal();
+  }
+
   const componentProps = {
     transactionsList,
     categories,
@@ -209,6 +214,7 @@ export default function App({ Component, pageProps }) {
     handleDeleteCategory,
     handleConfirmDeleteCategory,
     categoryToDelete,
+    handleCancelDeleteCategory,
     ...pageProps,
   };
 
