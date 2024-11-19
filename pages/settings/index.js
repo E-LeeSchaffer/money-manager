@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
+import { getCategoryIcon } from "@/lib/utils";
 import { useRef } from "react";
 import Modal from "@/components/Modal";
 
@@ -70,6 +71,12 @@ export default function SettingsPage({
         <StyledCategoryContainer id="category" name="category">
           {categories.map((category) => (
             <StyledCategory key={category.id}>
+              <Image
+                src={getCategoryIcon(category.name)}
+                alt={`${category.name} icon`}
+                width={36}
+                height={36}
+              />
               <StyledCategoryInput
                 ref={(element) => {
                   inputRefs.current[category.id] = element;
@@ -218,6 +225,7 @@ const StyledCategory = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 0.5rem;
+  padding-bottom: 4px;
 `;
 
 const StyledButtons = styled.div`
@@ -275,6 +283,13 @@ const StyledCategoryContainer = styled.div`
   flex-direction: column;
   width: 18rem;
   justify-content: center;
+`;
+
+const StyledCategoryItem = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 1px 0;
+  gap: 4px;
 `;
 
 const StyledCategoryInput = styled.input`

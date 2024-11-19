@@ -2,6 +2,9 @@ import styled from "styled-components";
 import OptionsMenu from "./OptionsMenu";
 import { formatNumber } from "@/lib/utils";
 import Link from "next/link";
+import Image from "next/image";
+import { categories as initialCategories } from "@/lib/categories";
+import { getCategoryIcon } from "@/lib/utils";
 
 export default function TransactionItem({
   transaction,
@@ -17,6 +20,8 @@ export default function TransactionItem({
 }) {
   const formattedAmount = formatNumber(transaction);
   const isDeleting = isDeletingId === transaction.id;
+
+  const categoryIcon = getCategoryIcon(transaction.category);
 
   if (isDeleting) {
     return (
@@ -41,7 +46,16 @@ export default function TransactionItem({
       <StyledLink href={`/transactions/${transaction.id}`}>
         <StyledCard>
           <StyledName>{transaction.name}</StyledName>
-          <StyledCategory>{transaction.category}</StyledCategory>
+          <StyledCategory>
+            <Image
+              src={categoryIcon}
+              alt={`${transaction.category} icon`}
+              width={24}
+              height={24}
+            />
+
+            {transaction.category}
+          </StyledCategory>
           <StyledAmount type={transaction.type}>{formattedAmount}</StyledAmount>
         </StyledCard>
       </StyledLink>
@@ -98,12 +112,15 @@ const StyledName = styled.div`
   grid-area: name;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding-bottom: 4px;
 `;
 
 const StyledCategory = styled.div`
   grid-area: category;
   font-size: x-small;
   display: flex;
+  gap: 4px;
+  align-items: center;
 `;
 
 const StyledAmount = styled.div`
