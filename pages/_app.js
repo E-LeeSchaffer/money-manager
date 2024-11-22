@@ -1,6 +1,8 @@
 import GlobalStyle from "../styles";
 import { useEffect, useState } from "react";
-import { transactions } from "@/lib/transactions";
+// import { transactions } from "@/lib/transactions";
+import Transaction from "@/db/models/Transaction";
+import useSWR, { SWRConfig } from "swr";
 import { ulid } from "ulid";
 import useLocalStorageState from "use-local-storage-state";
 import Layout from "@/components/Layout";
@@ -8,11 +10,15 @@ import { categories as initialCategories } from "@/lib/categories";
 import { getCategoryIcon } from "@/lib/utils";
 import { capitalizeFirstLetter } from "@/lib/utils";
 
+const fetcher = (url) => fetch(url).then((response) => response.json());
+
 export default function App({ Component, pageProps }) {
-  const [transactionsList, setTransactionsList] = useLocalStorageState(
-    "transactions",
-    { defaultValue: transactions }
-  );
+  // const [transactionsList, setTransactionsList] = useLocalStorageState(
+  //   "transactions",
+  //   { defaultValue: transactions }
+  // );
+  const [transactionsList, setTransactionsList] = useState([]);
+  // const { data: transactionsList } = useSWR(`api/transactions`, fetcher);
   const [successMessage, setSuccessMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,6 +44,13 @@ export default function App({ Component, pageProps }) {
       return () => clearTimeout(timer);
     }
   }, [successMessage]);
+
+  async function fetchTransactions() {
+    const response = await fetch("/api/transactions");
+    const data = await response.json();
+    setTransactionsList(data);
+  }
+  fetchTransactions();
 
   function handleAddTransaction(data) {
     const categoryIcon = getCategoryIcon(data.category);
@@ -225,9 +238,11 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <GlobalStyle />
-      <Layout>
-        <Component {...componentProps} />
-      </Layout>
+      <SWRConfig value={{ fetcher }}>
+        <Layout>
+          <Component {...componentProps} />
+        </Layout>
+      </SWRConfig>
     </>
   );
 }
