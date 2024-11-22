@@ -1,7 +1,5 @@
 import GlobalStyle from "../styles";
 import { useEffect, useState } from "react";
-// import { transactions } from "@/lib/transactions";
-import Transaction from "@/db/models/Transaction";
 import useSWR, { SWRConfig } from "swr";
 import { ulid } from "ulid";
 import useLocalStorageState from "use-local-storage-state";
@@ -17,8 +15,8 @@ export default function App({ Component, pageProps }) {
   //   "transactions",
   //   { defaultValue: transactions }
   // );
-  const [transactionsList, setTransactionsList] = useState([]);
-  // const { data: transactionsList } = useSWR(`api/transactions`, fetcher);
+  // const [transactionsList, setTransactionsList] = useState([]);
+  const { data: transactionsList } = useSWR(`api/transactions`, fetcher);
   const [successMessage, setSuccessMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,12 +43,12 @@ export default function App({ Component, pageProps }) {
     }
   }, [successMessage]);
 
-  async function fetchTransactions() {
-    const response = await fetch("/api/transactions");
-    const data = await response.json();
-    setTransactionsList(data);
-  }
-  fetchTransactions();
+  // async function fetchTransactions() {
+  //   const response = await fetch("/api/transactions");
+  //   const data = await response.json();
+  //   setTransactionsList(data);
+  // }
+  // fetchTransactions();
 
   function handleAddTransaction(data) {
     const categoryIcon = getCategoryIcon(data.category);

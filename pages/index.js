@@ -69,6 +69,7 @@ export default function HomePage({
         ? transactionDate >= customDateRange.start &&
           transactionDate <= customDateRange.end
         : true;
+
     return (
       matchesCategory &&
       matchesSearch &&
