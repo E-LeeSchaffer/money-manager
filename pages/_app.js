@@ -11,8 +11,10 @@ import { capitalizeFirstLetter } from "@/lib/utils";
 const fetcher = (url) => fetch(url).then((response) => response.json());
 
 export default function App({ Component, pageProps }) {
-  const { data: transactionsList } = useSWR(`api/transactions`, fetcher);
-  console.log(transactionsList);
+  const { data: transactionsList = [], mutate } = useSWR(
+    `api/transactions`,
+    fetcher
+  );
   const [successMessage, setSuccessMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,30 +41,21 @@ export default function App({ Component, pageProps }) {
     }
   }, [successMessage]);
 
-  // async function fetchTransactions() {
-  //   const response = await fetch("/api/transactions");
-  //   const data = await response.json();
-  //   setTransactionsList(data);
-  // }
-  // fetchTransactions();
-
-  function handleAddTransaction(data) {
-    const categoryIcon = getCategoryIcon(data.category);
-
-    setTransactionsList([
-      { ...data, id: ulid(), currency: "EUR", categoryIcon },
-      ...transactionsList,
-    ]);
-    setSuccessMessage("Transaction successfully added!");
+  async function handleAddTransaction(data) {
+    const response = await fetch("/api/transactions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((newTransaction) => {
+        mutate([...transactionsList, newTransaction], false);
+        setSuccessMessage("Transaction successfully added!");
+        console.log(newTransaction);
+      });
   }
-
-  // const response = await fetch("/api/jokes", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify(data),
-  // });
 
   function handleDeleteTransaction(id) {
     setTransactionsList(
