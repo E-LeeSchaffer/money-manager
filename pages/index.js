@@ -54,6 +54,7 @@ export default function HomePage({
   const [isCustomDatePickerOpen, setCustomDatePickerOpen] = useState(false);
 
   const filteredTransactions = transactionsList.filter((transaction) => {
+    console.log("Filtered transactions:", filteredTransactions);
     const transactionDate = new Date(transaction.date);
     const matchesCategory = selectedCategory
       ? transaction.category === selectedCategory

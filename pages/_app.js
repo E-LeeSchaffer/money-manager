@@ -11,12 +11,8 @@ import { capitalizeFirstLetter } from "@/lib/utils";
 const fetcher = (url) => fetch(url).then((response) => response.json());
 
 export default function App({ Component, pageProps }) {
-  // const [transactionsList, setTransactionsList] = useLocalStorageState(
-  //   "transactions",
-  //   { defaultValue: transactions }
-  // );
-  // const [transactionsList, setTransactionsList] = useState([]);
   const { data: transactionsList } = useSWR(`api/transactions`, fetcher);
+  console.log(transactionsList);
   const [successMessage, setSuccessMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,9 +56,17 @@ export default function App({ Component, pageProps }) {
     setSuccessMessage("Transaction successfully added!");
   }
 
+  // const response = await fetch("/api/jokes", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify(data),
+  // });
+
   function handleDeleteTransaction(id) {
     setTransactionsList(
-      transactionsList.filter((transaction) => transaction.id !== id)
+      transactionsList.filter((transaction) => transaction._id !== id)
     );
     setSuccessMessage("Transaction successfully deleted!");
   }
@@ -70,7 +74,7 @@ export default function App({ Component, pageProps }) {
   function handleEditTransaction(updatedTransaction) {
     setTransactionsList(
       transactionsList.map((transaction) =>
-        transaction.id === updatedTransaction.id
+        transaction._id === updatedTransaction._id
           ? updatedTransaction
           : transaction
       )
@@ -110,7 +114,7 @@ export default function App({ Component, pageProps }) {
   }
 
   function handleConfirmDelete(transaction) {
-    handleDeleteTransaction(transaction.id);
+    handleDeleteTransaction(transaction._id);
     setIsDeletingId(false);
   }
 

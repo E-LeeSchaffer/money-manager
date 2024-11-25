@@ -55,7 +55,7 @@ export default function TransactionsList({
               <StyledDate>{date}</StyledDate>
               <ul>
                 {groupedTransactions[date].map((transaction) => (
-                  <StyledList key={transaction.id}>
+                  <StyledList key={transaction._id}>
                     <TransactionItem
                       handleConfirmDelete={handleConfirmDelete}
                       handleOpenDeleteDialogue={handleOpenDeleteDialogue}
