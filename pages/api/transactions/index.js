@@ -7,13 +7,11 @@ export default async function handler(request, response) {
   try {
     if (request.method === "GET") {
       const transactions = await Transaction.find();
-      console.log("transactions:", transactions);
       return response.status(200).json(transactions);
     } else if (request.method === "POST") {
       const newTransaction = request.body;
-      console.log(newTransaction);
-      await Transaction.create(newTransaction);
-      return response.status(201).json({ message: "Transaction created." });
+      const createdTransaction = await Transaction.create(newTransaction);
+      return response.status(201).json(createdTransaction);
     } else if (request.method === "PUT") {
       const updatedTransaction = request.body;
       await Transaction.findByIdAndUpdate(id, updatedTransaction);

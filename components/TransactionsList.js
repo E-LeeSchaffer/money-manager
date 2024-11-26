@@ -20,7 +20,7 @@ const groupTransactionByDate = (transactions) => {
       groups[formatedDate] = [];
     }
 
-    groups[formatedDate].push(transaction);
+    groups[formatedDate].unshift(transaction);
     return groups;
   }, {});
 };
