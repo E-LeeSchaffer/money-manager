@@ -23,7 +23,7 @@ export default function TransactionDetailsPage({
   const [isDeleting, setIsDeleting] = useState(false);
 
   const transactionDetails = transactionsList.find(
-    (transaction) => transaction.id === id
+    (transaction) => transaction._id === id
   );
 
   if (!router.isReady) {
@@ -31,7 +31,7 @@ export default function TransactionDetailsPage({
   }
 
   function handleConfirmDelete() {
-    handleDeleteTransaction(transactionDetails.id);
+    handleDeleteTransaction(transactionDetails._id);
     setIsDeleting(false);
     router.push("/");
   }

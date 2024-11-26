@@ -1,5 +1,5 @@
 import GlobalStyle from "../styles";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import useSWR, { SWRConfig } from "swr";
 import { ulid } from "ulid";
 import useLocalStorageState from "use-local-storage-state";
@@ -7,6 +7,7 @@ import Layout from "@/components/Layout";
 import { categories as initialCategories } from "@/lib/categories";
 import { getCategoryIcon } from "@/lib/utils";
 import { capitalizeFirstLetter } from "@/lib/utils";
+import { useRouter } from "next/router";
 
 const fetcher = (url) => fetch(url).then((response) => response.json());
 
@@ -30,6 +31,8 @@ export default function App({ Component, pageProps }) {
   const [categoryToEdit, setcategoryToEdit] = useState(null);
   const [originalCategoryName, setOriginalCategoryName] = useState("");
   const [categoryToDelete, setCategoryToDelete] = useState(null);
+  const router = useRouter();
+  // const { id } = router.query;
 
   useEffect(() => {
     if (successMessage !== "") {
@@ -53,27 +56,47 @@ export default function App({ Component, pageProps }) {
       .then((newTransaction) => {
         mutate([...transactionsList, newTransaction], false);
         setSuccessMessage("Transaction successfully added!");
-        console.log(newTransaction);
       });
   }
 
-  function handleDeleteTransaction(id) {
-    setTransactionsList(
-      transactionsList.filter((transaction) => transaction._id !== id)
-    );
+  async function handleDeleteTransaction(id) {
+    const response = await fetch(`/api/transactions/${id}`, {
+      method: "DELETE",
+    });
+    mutate();
+    if (response.ok) {
+      router.push("/");
+    }
     setSuccessMessage("Transaction successfully deleted!");
   }
 
-  function handleEditTransaction(updatedTransaction) {
-    setTransactionsList(
-      transactionsList.map((transaction) =>
-        transaction._id === updatedTransaction._id
-          ? updatedTransaction
-          : transaction
-      )
+  async function handleEditTransaction(updatedTransaction) {
+    console.log("ID:", updatedTransaction);
+    console.log("Updated Transaction:", updatedTransaction);
+    const response = await fetch(
+      `/api/transactions/${updatedTransaction._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTransaction),
+      }
     );
+
+    if (response.ok) {
+      mutate();
+    }
     setSuccessMessage("Transaction successfully updated!");
   }
+
+  //   mutate(
+  //     transactionsList.map((transaction) =>
+  //       transaction._id === updatedTransaction._id
+  //         ? updatedTransaction
+  //         : transaction
+  //     ),
+  //     false
 
   function openSelection(selectionId) {
     setActiveSelectionId(selectionId);
@@ -99,6 +122,7 @@ export default function App({ Component, pageProps }) {
 
   function handleFormSubmit(updatedTransaction) {
     handleEditTransaction({ ...editTransaction, ...updatedTransaction });
+
     closeModal();
   }
 

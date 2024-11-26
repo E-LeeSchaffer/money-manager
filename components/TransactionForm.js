@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
 import { getCategoryIcon } from "@/lib/utils";
+import { format } from "date-fns";
 
 export default function TransactionForm({
   categories,
@@ -26,6 +27,12 @@ export default function TransactionForm({
   const [selectedCategoryInForm, setSelectedCategoryInForm] = useState(
     initialData.category || ""
   );
+
+  // TEST
+  const formatedDate = initialData.date
+    ? format(new Date(initialData.date), "yyyy-MM-dd")
+    : today;
+  // TEST ENDE
 
   useEffect(() => {
     if (initialData.amount) {
@@ -227,7 +234,11 @@ export default function TransactionForm({
                 type="date"
                 id="date"
                 name="date"
-                defaultValue={initialData.date || today}
+                // TEST
+                // defaultValue={initialData.date || today}
+                defaultValue={formatedDate}
+                // TEST ENDE
+
                 max={today}
                 required
               />

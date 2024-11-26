@@ -43,7 +43,7 @@ export default function TransactionItem({
 
   return (
     <StyledCardWrapper>
-      <StyledLink href={`/transactions/${transaction.id}`}>
+      <StyledLink href={`/transactions/${transaction._id}`}>
         <StyledCard>
           <StyledName>{transaction.name}</StyledName>
           <StyledCategory>
