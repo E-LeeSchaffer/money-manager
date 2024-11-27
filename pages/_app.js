@@ -13,7 +13,7 @@ const fetcher = (url) => fetch(url).then((response) => response.json());
 
 export default function App({ Component, pageProps }) {
   const { data: transactionsList = [], mutate } = useSWR(
-    `api/transactions`,
+    `/api/transactions`,
     fetcher
   );
   const [successMessage, setSuccessMessage] = useState("");
@@ -32,7 +32,6 @@ export default function App({ Component, pageProps }) {
   const [originalCategoryName, setOriginalCategoryName] = useState("");
   const [categoryToDelete, setCategoryToDelete] = useState(null);
   const router = useRouter();
-  // const { id } = router.query;
 
   useEffect(() => {
     if (successMessage !== "") {
