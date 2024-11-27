@@ -7,6 +7,9 @@ import Image from "next/image";
 import { capitalizeFirstLetter, formatDate, formatNumber } from "@/lib/utils";
 import Link from "next/link";
 import { categories } from "@/lib/categories";
+import useSWR from "swr";
+
+const fetcher = (url) => fetch(url).then((response) => response.json());
 
 export default function TransactionDetailsPage({
   transactionsList,
@@ -22,9 +25,21 @@ export default function TransactionDetailsPage({
   const { id } = router.query;
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const transactionDetails = transactionsList.find(
-    (transaction) => transaction._id === id
+  const { data: transactionDetails, error: transactionError } = useSWR(
+    id ? `/api/transactions/${id}` : null,
+    fetcher
   );
+
+  // const transactionDetails = transactionsList.find(
+  //   (transaction) => transaction._id === id
+  // );
+
+  if (!transactionDetails) {
+    if (transactionError) {
+      return <p>Failed to load transaction.</p>;
+    }
+    return <p>Loading</p>;
+  }
 
   if (!router.isReady) {
     return null;
