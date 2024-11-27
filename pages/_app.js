@@ -71,8 +71,6 @@ export default function App({ Component, pageProps }) {
   }
 
   async function handleEditTransaction(updatedTransaction) {
-    console.log("ID:", updatedTransaction);
-    console.log("Updated Transaction:", updatedTransaction);
     const response = await fetch(
       `/api/transactions/${updatedTransaction._id}`,
       {
@@ -85,18 +83,19 @@ export default function App({ Component, pageProps }) {
     );
 
     if (response.ok) {
-      mutate();
+      mutate(
+        transactionsList.map((transaction) =>
+          transaction._id === updatedTransaction._id
+            ? updatedTransaction
+            : transaction
+        ),
+        false
+      );
+      setSuccessMessage("Transaction successfully updated!");
+    } else {
+      console.error("Failed to update transaction.");
     }
-    setSuccessMessage("Transaction successfully updated!");
   }
-
-  //   mutate(
-  //     transactionsList.map((transaction) =>
-  //       transaction._id === updatedTransaction._id
-  //         ? updatedTransaction
-  //         : transaction
-  //     ),
-  //     false
 
   function openSelection(selectionId) {
     setActiveSelectionId(selectionId);
