@@ -7,6 +7,7 @@ const groupTransactionByDate = (transactions) => {
   return transactions.reduce((groups, transaction) => {
     const date = new Date(transaction.date);
     let formatedDate;
+    console.log("Date:", date);
 
     if (isToday(date)) {
       formatedDate = "Today";

@@ -22,8 +22,6 @@ export default function SettingsPage({
   handleConfirmDeleteCategory,
   handleCancelDeleteCategory,
 }) {
-  const inputRefs = useRef({});
-
   return (
     <>
       <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
@@ -33,7 +31,9 @@ export default function SettingsPage({
             Deleting a category will remove the category from every transaction
             associated!
           </StyledDeletionWarning>
-          <StyledCategoryName>Category: {categoryToDelete}</StyledCategoryName>
+          <StyledCategoryName>
+            Category: {categoryToDelete?.name}
+          </StyledCategoryName>
           <StyledConfirmActionContainer>
             <StyledCancelButton
               type="button"
@@ -46,7 +46,7 @@ export default function SettingsPage({
             <StyledConfirmButton
               type="button"
               onClick={() => {
-                handleConfirmDeleteCategory();
+                handleConfirmDeleteCategory(categoryToDelete._id);
               }}
             >
               Really Delete
@@ -68,42 +68,37 @@ export default function SettingsPage({
       <StyledTitle>Settings</StyledTitle>
       <StyledSettingsCard>
         <StyledSubheading>Customize Categories</StyledSubheading>
-        <StyledCategoryContainer id="category" name="category">
+        <StyledCategoryContainer>
           {categories.map((category) => (
-            <StyledCategory key={category.id}>
+            <StyledCategory key={category._id}>
               <Image
                 src={getCategoryIcon(category.name)}
                 alt={`${category.name} icon`}
                 width={36}
                 height={36}
               />
-              <StyledCategoryInput
-                ref={(element) => {
-                  inputRefs.current[category.id] = element;
-                }}
-                type="text"
-                defaultValue={category.name}
-                disabled={category.id !== isEditCategory}
-                autoFocus={category.id === isEditCategory}
-                onChange={(event) => {
-                  if (category.id === isEditCategory) {
-                    category.name = event.target.value;
-                  }
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" && category.id === isEditCategory) {
-                    handleSaveEditCategory(category);
-                  }
-                  if (
-                    event.key === "Escape" &&
-                    category.id === isEditCategory
-                  ) {
-                    category.name = originalCategoryName;
-                    event.target.value = originalCategoryName;
-                    event.target.blur();
-                  }
-                }}
-              />
+              {category._id === isEditCategory ? (
+                <StyledCategoryInput
+                  type="text"
+                  defaultValue={category.name}
+                  autoFocus
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      handleSaveEditCategory({
+                        ...category,
+                        name: event.target.value,
+                      });
+                    }
+                    if (event.key === "Escape") {
+                      category.name = originalCategoryName;
+                      event.target.value = originalCategoryName;
+                      event.target.blur();
+                    }
+                  }}
+                />
+              ) : (
+                <span>{category.name}</span>
+              )}
               <StyledButtons>
                 <StyledCategoryEditButton>
                   <StyledImage
@@ -112,16 +107,6 @@ export default function SettingsPage({
                     alt="edit button"
                     onClick={() => {
                       handleOpenEditModeCategory(category);
-                      setTimeout(() => {
-                        if (inputRefs.current[category.id]) {
-                          const inputElement = inputRefs.current[category.id];
-                          inputElement.focus();
-                          inputElement.setSelectionRange(
-                            inputElement.value.length,
-                            inputElement.value.length
-                          );
-                        }
-                      }, 0);
                     }}
                     width={15}
                     height={15}

@@ -28,11 +28,9 @@ export default function TransactionForm({
     initialData.category || ""
   );
 
-  // TEST
   const formatedDate = initialData.date
     ? format(new Date(initialData.date), "yyyy-MM-dd")
     : today;
-  // TEST ENDE
 
   useEffect(() => {
     if (initialData.amount) {
@@ -164,7 +162,8 @@ export default function TransactionForm({
                       .sort((a, b) => a.name.localeCompare(b.name))
                       .map((category) => (
                         <DropdownItem
-                          key={category.id}
+                          key={category._id}
+                          value={category._id}
                           onClick={() => handleCategorySelect(category.name)}
                         >
                           <Image
@@ -234,11 +233,7 @@ export default function TransactionForm({
                 type="date"
                 id="date"
                 name="date"
-                // TEST
-                // defaultValue={initialData.date || today}
                 defaultValue={formatedDate}
-                // TEST ENDE
-
                 max={today}
                 required
               />

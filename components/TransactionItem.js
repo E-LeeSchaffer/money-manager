@@ -3,7 +3,7 @@ import OptionsMenu from "./OptionsMenu";
 import { formatNumber } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
-import { categories as initialCategories } from "@/lib/categories";
+
 import { getCategoryIcon } from "@/lib/utils";
 
 export default function TransactionItem({
