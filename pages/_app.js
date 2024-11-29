@@ -81,14 +81,7 @@ export default function App({ Component, pageProps }) {
     );
 
     if (response.ok) {
-      mutateTransactions(
-        transactionsList.map((transaction) =>
-          transaction._id === updatedTransaction._id
-            ? updatedTransaction
-            : transaction
-        ),
-        false
-      );
+      mutateTransactions();
       setSuccessMessage("Transaction successfully updated!");
     } else {
       console.error("Failed to update transaction.");

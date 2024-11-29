@@ -6,8 +6,9 @@ import styled from "styled-components";
 import Image from "next/image";
 import { capitalizeFirstLetter, formatDate, formatNumber } from "@/lib/utils";
 import Link from "next/link";
-import { categories } from "@/lib/categories";
 import useSWR from "swr";
+
+const fetcher = (url) => fetch(url).then((response) => response.json());
 
 export default function TransactionDetailsPage({
   handleEditTransaction,
@@ -18,6 +19,7 @@ export default function TransactionDetailsPage({
   handleDeleteTransaction,
   successMessage,
 }) {
+  const { data: categories = [], mutate } = useSWR(`/api/categories`, fetcher);
   const router = useRouter();
   const { id } = router.query;
   const [isDeleting, setIsDeleting] = useState(false);
@@ -108,8 +110,10 @@ export default function TransactionDetailsPage({
           isEditing={isEditing}
           initialData={transactionDetails}
           onSubmit={(updatedTransaction) => {
+            console.log(updatedTransaction);
             handleEditTransaction(updatedTransaction);
             closeModal();
+            mutate();
           }}
           variant="edit"
           categories={categories}
@@ -156,7 +160,7 @@ export default function TransactionDetailsPage({
 
               <StyledDefinitionTerm>Category</StyledDefinitionTerm>
               <StyledDefinitionDescription>
-                {transactionDetails.category}
+                {transactionDetails.category.name}
               </StyledDefinitionDescription>
 
               <StyledDefinitionTerm>Type</StyledDefinitionTerm>
