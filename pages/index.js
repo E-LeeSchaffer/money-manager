@@ -56,7 +56,7 @@ export default function HomePage({
   const filteredTransactions = transactionsList.filter((transaction) => {
     const transactionDate = new Date(transaction.date);
     const matchesCategory = selectedCategory
-      ? transaction.category === selectedCategory
+      ? transaction.category._id === selectedCategory
       : true;
     const matchesSearch = searchItem
       ? transaction.name.toLowerCase().includes(searchItem.toLowerCase())

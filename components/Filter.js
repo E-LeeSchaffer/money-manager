@@ -47,17 +47,17 @@ export default function Filter({
       {isFilterOpen && (
         <>
           <Backdrop closeSelection={closeSelection} />
-          <StyledCategoryContainer id="category" name="category">
+          <StyledCategoryContainer>
             {[
               { id: "uncategorized", name: "Uncategorized" },
               ...sortedCategories,
             ].map((category) => (
               <StyledCategoryButton
-                key={category.id}
+                key={category._id}
                 type="button"
-                value={category.name}
+                value={category._id}
                 onClick={() => {
-                  onFilterTransactions(category.name);
+                  onFilterTransactions(category._id);
                   closeSelection();
                 }}
                 $isSelected={selectedCategory === category.name}
