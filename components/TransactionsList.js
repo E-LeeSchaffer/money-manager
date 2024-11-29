@@ -1,7 +1,6 @@
 import { isToday, isYesterday } from "date-fns";
 import TransactionItem from "./TransactionItem";
 import styled from "styled-components";
-import { format } from "date-fns";
 import { formatDate } from "@/lib/utils";
 
 const groupTransactionByDate = (transactions) => {

@@ -49,12 +49,12 @@ export default function TransactionItem({
           <StyledCategory>
             <Image
               src={categoryIcon}
-              alt={`${transaction.category} icon`}
+              alt={`${transaction.category.name} icon`}
               width={24}
               height={24}
             />
 
-            {transaction.category}
+            {transaction.category.name}
           </StyledCategory>
           <StyledAmount type={transaction.type}>{formattedAmount}</StyledAmount>
         </StyledCard>

@@ -9,7 +9,6 @@ export default async function handler(request, response) {
   try {
     if (request.method === "GET") {
       const transaction = await Transaction.findById(id).populate("category");
-      console.log(transaction);
       return response.status(200).json(transaction);
     }
     if (request.method === "PUT") {

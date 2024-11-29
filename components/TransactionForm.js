@@ -25,9 +25,11 @@ export default function TransactionForm({
     variant === "edit" ? "Edit Transaction" : "Add Transaction";
   const buttonText = variant === "edit" ? "Update" : "Add";
   const [selectedCategoryInForm, setSelectedCategoryInForm] = useState(
-    initialData.category || ""
+    initialData?.category?.name || ""
   );
-
+  const [selectedCategory, setSelectedCategory] = useState(
+    initialData?.category?._id || ""
+  );
   const formatedDate = initialData.date
     ? format(new Date(initialData.date), "yyyy-MM-dd")
     : today;
@@ -45,7 +47,7 @@ export default function TransactionForm({
     const data = Object.fromEntries(formData);
 
     data.amount = parseFloat(data.amount.replace(/\./g, "").replace(",", "."));
-    data.category = selectedCategoryInForm;
+    data.category = selectedCategory;
 
     if (data.amount <= 0) {
       setAmountError(true);
@@ -60,13 +62,15 @@ export default function TransactionForm({
     }
 
     onSubmit({ ...initialData, ...data });
+
     event.target.reset();
     setAmount("");
     setSelectedCategoryInForm("");
   }
 
-  function handleCategorySelect(categoryName) {
-    setSelectedCategoryInForm(categoryName);
+  function handleCategorySelect(category) {
+    setSelectedCategoryInForm(category.name);
+    setSelectedCategory(category._id);
     setIsDropdownOpen(false);
   }
 
@@ -164,7 +168,9 @@ export default function TransactionForm({
                         <DropdownItem
                           key={category._id}
                           value={category._id}
-                          onClick={() => handleCategorySelect(category.name)}
+                          name="name"
+                          id="name"
+                          onClick={() => handleCategorySelect(category)}
                         >
                           <Image
                             src={getCategoryIcon(category.name)}

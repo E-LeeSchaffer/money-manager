@@ -6,7 +6,7 @@ export default async function handler(request, response) {
 
   try {
     if (request.method === "GET") {
-      const transactions = await Transaction.find();
+      const transactions = await Transaction.find().populate("category");
       return response.status(200).json(transactions);
     } else if (request.method === "POST") {
       const newTransaction = request.body;

@@ -1,10 +1,7 @@
 import GlobalStyle from "../styles";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR, { SWRConfig } from "swr";
-import { ulid } from "ulid";
-import useLocalStorageState from "use-local-storage-state";
 import Layout from "@/components/Layout";
-// import { categories as initialCategories } from "@/lib/categories";
 import { getCategoryIcon } from "@/lib/utils";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import { useRouter } from "next/router";
@@ -19,7 +16,7 @@ export default function App({ Component, pageProps }) {
   const [successMessage, setSuccessMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editTransaction, setEditTransaction] = useState("");
+  const [editTransaction, setEditTransaction] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [isDeletingId, setIsDeletingId] = useState(false);
   const [activeSelectionId, setActiveSelectionId] = useState(null);
@@ -51,12 +48,13 @@ export default function App({ Component, pageProps }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((newTransaction) => {
-        mutateTransactions([...transactionsList, newTransaction], false);
-        setSuccessMessage("Transaction successfully added!");
-      });
+    });
+
+    const newTransaction = await response.json();
+
+    mutateTransactions();
+    setSuccessMessage("Transaction successfully added!");
+    return newTransaction;
   }
 
   async function handleDeleteTransaction(id) {
