@@ -78,6 +78,10 @@ export default function HomePage({
     );
   });
 
+  const selectedCategoryName = categories.find(
+    (category) => category._id === selectedCategory
+  )?.name;
+
   const displayedTransactions = sortTransactions(
     filteredTransactions,
     sortOrder
@@ -127,7 +131,9 @@ export default function HomePage({
 
   function handleSearch() {
     setIsSearching(!isSearching);
-    setSearchItem("");
+    if (isSearching) {
+      setSearchItem("");
+    }
   }
 
   function closeSearch() {
@@ -144,9 +150,9 @@ export default function HomePage({
   function handleInputChange(event) {
     const searchTerm = event.target.value;
     setSearchItem(searchTerm);
-    const searchedTransactions = filteredTransactions.filter((transaction) => {
-      return transaction.name.toLowerCase().includes(searchTerm.toLowerCase());
-    });
+    // const searchedTransactions = filteredTransactions.filter((transaction) => {
+    //   return transaction.name.toLowerCase().includes(searchTerm.toLowerCase());
+    // });
   }
 
   function handleToggleSortOrder() {
@@ -242,7 +248,7 @@ export default function HomePage({
         {selectedCategory !== "" ? (
           <StyledSelectedCategoryDisplay>
             <StyledSelectedCategoryName>
-              {selectedCategory}
+              {selectedCategoryName}
             </StyledSelectedCategoryName>
             <StyledDeselectButton
               type="button"
@@ -305,7 +311,7 @@ export default function HomePage({
       {displayedTransactions.length > 0 ? (
         <TransactionsList
           handleEditTransaction={handleEditTransaction}
-          transactions={displayedTransactions}
+          transactions={filteredTransactions}
           selectedCategory={selectedCategory}
           handleOpenEditMode={handleOpenEditMode}
           openModal={openModal}

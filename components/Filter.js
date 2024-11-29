@@ -60,7 +60,7 @@ export default function Filter({
                   onFilterTransactions(category._id);
                   closeSelection();
                 }}
-                $isSelected={selectedCategory === category.name}
+                $isSelected={selectedCategory === category._id}
               >
                 <StyledCategoryIcons>
                   {category.name}
