@@ -19,14 +19,16 @@ export default function TransactionDetailsPage({
   handleDeleteTransaction,
   successMessage,
 }) {
-  const { data: categories = [], mutate } = useSWR(`/api/categories`, fetcher);
+  const { data: categories = [] } = useSWR(`/api/categories`, fetcher);
   const router = useRouter();
   const { id } = router.query;
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const { data: transactionDetails, error: transactionError } = useSWR(
-    id ? `/api/transactions/${id}` : null
-  );
+  const {
+    data: transactionDetails,
+    error: transactionError,
+    mutate,
+  } = useSWR(id ? `/api/transactions/${id}` : null);
 
   if (!transactionDetails) {
     if (transactionError) {
