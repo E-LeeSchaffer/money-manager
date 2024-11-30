@@ -4,7 +4,10 @@ import styled from "styled-components";
 import { formatDate } from "@/lib/utils";
 
 const groupTransactionByDate = (transactions) => {
-  return transactions.reduce((groups, transaction) => {
+  const sortedTransactions = transactions.sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
+  return sortedTransactions.reduce((groups, transaction) => {
     const date = new Date(transaction.date);
     let formatedDate;
 
