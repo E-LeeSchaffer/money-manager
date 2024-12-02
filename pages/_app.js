@@ -211,13 +211,12 @@ export default function App({ Component, pageProps }) {
   }
 
   async function handleConfirmDeleteCategory(id) {
-    console.log("Category-Id:", id);
-
     const response = await fetch(`/api/categories/${id}`, {
       method: "DELETE",
     });
     if (response.ok) {
       mutateCategories();
+      mutateTransactions();
     }
     setSuccessMessage("Category successfully deleted!");
 
