@@ -49,7 +49,7 @@ export default function Filter({
           <Backdrop closeSelection={closeSelection} />
           <StyledCategoryContainer>
             {[
-              { id: "uncategorized", name: "Uncategorized" },
+              { _id: "uncategorized", name: "Uncategorized" },
               ...sortedCategories,
             ].map((category) => (
               <StyledCategoryButton

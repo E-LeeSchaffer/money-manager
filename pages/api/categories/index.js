@@ -12,15 +12,6 @@ export default async function handler(request, response) {
       const newCategory = JSON.parse(request.body);
       const createdCategory = await Category.create(newCategory);
       return response.status(201).json(createdCategory);
-    } else if (request.method === "PUT") {
-      const updatedCategory = request.body;
-      await Category.findByIdAndUpdate(id, updatedCategory);
-      return response.status(200).json({ message: "Category updated" });
-    } else if (request.method === "DELETE") {
-      await Category.findByIdAndDelete(id);
-      return response.status(200).json({ message: "Category deleted" });
-    } else {
-      return response.status(405).json({ message: "Method not allowed" });
     }
   } catch (error) {
     console.log("x");

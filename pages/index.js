@@ -55,15 +55,21 @@ export default function HomePage({
 
   const filteredTransactions = transactionsList.filter((transaction) => {
     const transactionDate = new Date(transaction.date);
-    const matchesCategory = selectedCategory
-      ? transaction.category._id === selectedCategory
-      : true;
+    const matchesCategory =
+      selectedCategory === "uncategorized"
+        ? transaction?.category === undefined
+        : selectedCategory
+        ? transaction?.category?._id === selectedCategory
+        : true;
+
     const matchesSearch = searchItem
       ? transaction.name.toLowerCase().includes(searchItem.toLowerCase())
       : true;
+
     const matchesTimeframe = selectedTimeframe
       ? transactionDate >= calculateDateRange(selectedTimeframe)
       : true;
+
     const matchesCustomDateRange =
       customDateRange.start && customDateRange.end
         ? transactionDate >= customDateRange.start &&
@@ -78,9 +84,10 @@ export default function HomePage({
     );
   });
 
-  const selectedCategoryName = categories.find(
-    (category) => category._id === selectedCategory
-  )?.name;
+  const selectedCategoryName =
+    selectedCategory === "uncategorized"
+      ? "Uncategorized"
+      : categories.find((category) => category._id === selectedCategory)?.name;
 
   const displayedTransactions = sortTransactions(
     filteredTransactions,
@@ -156,13 +163,23 @@ export default function HomePage({
   }
 
   function handleToggleSortOrder() {
-    setSortOrder(sortOrder === "desc" ? "asc" : "desc");
+    setSortOrder((prevSortOrder) => {
+      const newSortOrder = prevSortOrder === "desc" ? "asc" : "desc";
+      console.log("Toggled Sort Order:", newSortOrder);
+      return newSortOrder;
+    });
   }
 
   function sortTransactions(transactions, sortOrder) {
+    console.log("Transactions", transactions);
+    console.log("Sorting", sortOrder);
     return transactions.slice().sort((a, b) => {
       const dateA = new Date(a.date);
       const dateB = new Date(b.date);
+      if (isNaN(dateA) || isNaN(dateB)) {
+        console.log("no data");
+        return 0;
+      }
       return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
     });
   }

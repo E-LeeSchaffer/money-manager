@@ -53,7 +53,7 @@ export default function TransactionItem({
               width={24}
               height={24}
             />
-            {transaction?.category === null
+            {transaction?.category === undefined
               ? "Uncategorized"
               : transaction?.category?.name}
           </StyledCategory>

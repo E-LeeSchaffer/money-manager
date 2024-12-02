@@ -1,5 +1,6 @@
 import dbConnect from "@/db/connect";
 import Category from "@/db/models/Category";
+import Transaction from "@/db/models/Transaction";
 
 export default async function handler(request, response) {
   await dbConnect();
@@ -9,7 +10,7 @@ export default async function handler(request, response) {
   try {
     if (request.method === "GET") {
       const category = await Category.findById(id);
-      console.log(category);
+
       return response.status(200).json(category);
     }
     if (request.method === "PUT") {
@@ -27,6 +28,12 @@ export default async function handler(request, response) {
 
     if (request.method === "DELETE") {
       await Category.findByIdAndDelete(id);
+
+      await Transaction.updateMany(
+        { category: id },
+        { $unset: { category: "" } }
+      );
+
       return response.status(200).json({ message: "Category deleted" });
     }
   } catch (error) {
