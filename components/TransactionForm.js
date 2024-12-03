@@ -174,7 +174,7 @@ export default function TransactionForm({
                           onClick={() => handleCategorySelect(category)}
                         >
                           <Image
-                            src={getCategoryIcon(category.name, categories)}
+                            src={getCategoryIcon(category.name)}
                             alt={`${category.name}} icon`}
                             width={24}
                             height={24}

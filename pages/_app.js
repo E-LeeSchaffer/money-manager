@@ -176,12 +176,7 @@ export default function App({ Component, pageProps }) {
     });
 
     if (response.ok) {
-      mutateCategories(
-        categories.map((category) =>
-          category._id === editedCategory._id ? editedCategory : category
-        ),
-        false
-      );
+      mutateCategories();
       mutateTransactions();
       setSuccessMessage("Category successfully updated!");
       setIsEditCategory(null);

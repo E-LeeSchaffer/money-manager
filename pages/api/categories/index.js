@@ -7,11 +7,15 @@ export default async function handler(request, response) {
   try {
     if (request.method === "GET") {
       const categories = await Category.find();
-      return response.status(200).json(categories);
-    } else if (request.method === "POST") {
-      const newCategory = JSON.parse(request.body);
+      response.status(200).json(categories);
+      return;
+    }
+
+    if (request.method === "POST") {
+      const newCategory = request.body;
       const createdCategory = await Category.create(newCategory);
-      return response.status(201).json(createdCategory);
+      response.status(201).json(createdCategory);
+      return;
     }
   } catch (error) {
     return response.status(400).json({ error: error.message });
