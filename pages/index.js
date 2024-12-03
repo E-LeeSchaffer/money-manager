@@ -116,9 +116,6 @@ export default function HomePage({
   function handleInputChange(event) {
     const searchTerm = event.target.value;
     setSearchItem(searchTerm);
-    // const searchedTransactions = filteredTransactions.filter((transaction) => {
-    //   return transaction.name.toLowerCase().includes(searchTerm.toLowerCase());
-    // });
   }
 
   function handleToggleSortOrder() {
