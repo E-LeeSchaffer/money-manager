@@ -31,9 +31,9 @@ export default function SettingsPage({
             Deleting a category will remove the category from every transaction
             associated!
           </StyledDeletionWarning>
-          <StyledCategoryName>
+          <StyledCategoryToDelete>
             Category: {categoryToDelete?.name}
-          </StyledCategoryName>
+          </StyledCategoryToDelete>
           <StyledConfirmActionContainer>
             <StyledCancelButton
               type="button"
@@ -97,7 +97,9 @@ export default function SettingsPage({
                   }}
                 />
               ) : (
-                <span>{capitalizeFirstLetter(category.name)}</span>
+                <StyledCategoryName>
+                  {capitalizeFirstLetter(category.name)}
+                </StyledCategoryName>
               )}
               <StyledButtons>
                 <StyledCategoryEditButton>
@@ -151,7 +153,13 @@ export default function SettingsPage({
   );
 }
 
-const StyledCategoryName = styled.p`
+const StyledCategoryName = styled.span`
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+`;
+
+const StyledCategoryToDelete = styled.p`
   font-size: 1.2rem;
   margin: 0;
   padding: 0 0 8px 0;
@@ -208,7 +216,6 @@ const StyledImage = styled(Image)`
 
 const StyledCategory = styled.div`
   display: flex;
-  justify-content: space-between;
   gap: 0.5rem;
   padding-bottom: 4px;
 `;
