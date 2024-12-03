@@ -183,6 +183,7 @@ export default function App({ Component, pageProps }) {
         ),
         false
       );
+      mutateTransactions();
       setSuccessMessage("Category successfully updated!");
       setIsEditCategory(null);
     } else {
