@@ -65,7 +65,7 @@ export default function Filter({
                 <StyledCategoryIcons>
                   {category.name}
                   <Image
-                    src={getCategoryIcon(category.name)}
+                    src={getCategoryIcon(category.name, categories)}
                     alt={`${selectedCategory} icon`}
                     width={24}
                     height={24}

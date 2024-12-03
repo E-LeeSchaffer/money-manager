@@ -136,7 +136,6 @@ export default function App({ Component, pageProps }) {
   async function handleAddCategory(category) {
     const correctFormat = {
       name: category,
-      icon: "/icons/health.svg",
     };
     setIsDuplicateError(false);
 

@@ -42,6 +42,7 @@ export default function TransactionsList({
   activeSelectionId,
   openSelection,
   closeSelection,
+  categories,
 }) {
   const groupedTransactions = groupTransactionByDate(transactions);
   const emptyListMessage =
@@ -72,6 +73,7 @@ export default function TransactionsList({
                       activeSelectionId={activeSelectionId}
                       openSelection={openSelection}
                       closeSelection={closeSelection}
+                      categories={categories}
                     />
                   </StyledList>
                 ))}

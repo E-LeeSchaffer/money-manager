@@ -342,6 +342,7 @@ export default function HomePage({
           activeSelectionId={activeSelectionId}
           openSelection={openSelection}
           closeSelection={closeSelection}
+          categories={categories}
         />
       ) : (
         <StyledNoTransactionsFoundMessage>

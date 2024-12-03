@@ -72,7 +72,7 @@ export default function SettingsPage({
           {categories.map((category) => (
             <StyledCategory key={category._id}>
               <Image
-                src={getCategoryIcon(category.name)}
+                src={getCategoryIcon(category.name, categories)}
                 alt={`${category.name} icon`}
                 width={36}
                 height={36}

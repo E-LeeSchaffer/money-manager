@@ -17,11 +17,12 @@ export default function TransactionItem({
   activeSelectionId,
   openSelection,
   closeSelection,
+  categories,
 }) {
   const formattedAmount = formatNumber(transaction);
   const isDeleting = isDeletingId === transaction._id;
 
-  const categoryIcon = getCategoryIcon(transaction.category);
+  const categoryIcon = getCategoryIcon(transaction?.category?.name, categories);
 
   if (isDeleting) {
     return (
