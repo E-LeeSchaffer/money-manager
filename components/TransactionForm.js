@@ -164,7 +164,7 @@ export default function TransactionForm({
                 {isDropdownOpen && (
                   <DropdownList>
                     {categories
-                      .sort((a, b) => a.name.localeCompare(b.name))
+                      .toSorted((a, b) => a.name.localeCompare(b.name))
                       .map((category) => (
                         <DropdownItem
                           key={category._id}

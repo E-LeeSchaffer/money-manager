@@ -170,17 +170,11 @@ export default function HomePage({
       : categories.find((category) => category._id === selectedCategory)?.name;
 
   const displayedTransactions = filteredTransactions.toSorted((a, b) => {
-    const dateA = new Date(a.date).getTime();
-    const dateB = new Date(b.date).getTime();
-    console.log(dateA, dateB);
-    const diff = sortOrder === "desc" ? dateB - dateA : dateA - dateB;
-    console.log("Differenz", diff);
-    return diff;
-  });
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
 
-  console.log("Displayed Transactions", displayedTransactions);
-  console.log("Filtered Transactions", filteredTransactions);
-  console.log("Sort Order", sortOrder);
+    return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
+  });
 
   const incomeTotal = transactionsList
     .filter((transaction) => transaction.type === "income")

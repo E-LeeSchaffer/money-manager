@@ -12,7 +12,7 @@ export default function Filter({
   closeSearch,
   categories,
 }) {
-  const sortedCategories = [...categories].sort((a, b) =>
+  const sortedCategories = [...categories].toSorted((a, b) =>
     a.name.localeCompare(b.name)
   );
 
