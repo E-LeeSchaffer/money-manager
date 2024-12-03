@@ -53,47 +53,6 @@ export default function HomePage({
   });
   const [isCustomDatePickerOpen, setCustomDatePickerOpen] = useState(false);
 
-  const filteredTransactions = transactionsList.filter((transaction) => {
-    const transactionDate = new Date(transaction.date);
-    const matchesCategory =
-      selectedCategory === "uncategorized"
-        ? transaction?.category === undefined
-        : selectedCategory
-        ? transaction?.category?._id === selectedCategory
-        : true;
-
-    const matchesSearch = searchItem
-      ? transaction.name.toLowerCase().includes(searchItem.toLowerCase())
-      : true;
-
-    const matchesTimeframe = selectedTimeframe
-      ? transactionDate >= calculateDateRange(selectedTimeframe)
-      : true;
-
-    const matchesCustomDateRange =
-      customDateRange.start && customDateRange.end
-        ? transactionDate >= customDateRange.start &&
-          transactionDate <= customDateRange.end
-        : true;
-
-    return (
-      matchesCategory &&
-      matchesSearch &&
-      matchesTimeframe &&
-      matchesCustomDateRange
-    );
-  });
-
-  const selectedCategoryName =
-    selectedCategory === "uncategorized"
-      ? "Uncategorized"
-      : categories.find((category) => category._id === selectedCategory)?.name;
-
-  const displayedTransactions = sortTransactions(
-    filteredTransactions,
-    sortOrder
-  );
-
   function calculateDateRange(days) {
     const currentDate = new Date();
     const startDate = new Date();
@@ -165,24 +124,63 @@ export default function HomePage({
   function handleToggleSortOrder() {
     setSortOrder((prevSortOrder) => {
       const newSortOrder = prevSortOrder === "desc" ? "asc" : "desc";
-      console.log("Toggled Sort Order:", newSortOrder);
+
       return newSortOrder;
     });
   }
 
-  function sortTransactions(transactions, sortOrder) {
-    console.log("Transactions", transactions);
-    console.log("Sorting", sortOrder);
-    return transactions.slice().sort((a, b) => {
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
-      if (isNaN(dateA) || isNaN(dateB)) {
-        console.log("no data");
-        return 0;
-      }
-      return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
-    });
+  function sortTransactions(transactions) {
+    return;
   }
+
+  const filteredTransactions = transactionsList.filter((transaction) => {
+    const transactionDate = new Date(transaction.date);
+    const matchesCategory =
+      selectedCategory === "uncategorized"
+        ? transaction?.category === undefined
+        : selectedCategory
+        ? transaction?.category?._id === selectedCategory
+        : true;
+
+    const matchesSearch = searchItem
+      ? transaction.name.toLowerCase().includes(searchItem.toLowerCase())
+      : true;
+
+    const matchesTimeframe = selectedTimeframe
+      ? transactionDate >= calculateDateRange(selectedTimeframe)
+      : true;
+
+    const matchesCustomDateRange =
+      customDateRange.start && customDateRange.end
+        ? transactionDate >= customDateRange.start &&
+          transactionDate <= customDateRange.end
+        : true;
+
+    return (
+      matchesCategory &&
+      matchesSearch &&
+      matchesTimeframe &&
+      matchesCustomDateRange
+    );
+  });
+
+  const selectedCategoryName =
+    selectedCategory === "uncategorized"
+      ? "Uncategorized"
+      : categories.find((category) => category._id === selectedCategory)?.name;
+
+  const displayedTransactions = filteredTransactions.toSorted((a, b) => {
+    const dateA = new Date(a.date).getTime();
+    const dateB = new Date(b.date).getTime();
+    console.log(dateA, dateB);
+    const diff = sortOrder === "desc" ? dateB - dateA : dateA - dateB;
+    console.log("Differenz", diff);
+    return diff;
+  });
+
+  console.log("Displayed Transactions", displayedTransactions);
+  console.log("Filtered Transactions", filteredTransactions);
+  console.log("Sort Order", sortOrder);
 
   const incomeTotal = transactionsList
     .filter((transaction) => transaction.type === "income")
@@ -328,7 +326,7 @@ export default function HomePage({
       {displayedTransactions.length > 0 ? (
         <TransactionsList
           handleEditTransaction={handleEditTransaction}
-          transactions={filteredTransactions}
+          transactions={displayedTransactions}
           selectedCategory={selectedCategory}
           handleOpenEditMode={handleOpenEditMode}
           openModal={openModal}

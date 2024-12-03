@@ -22,7 +22,7 @@ export default function TransactionItem({
   const formattedAmount = formatNumber(transaction);
   const isDeleting = isDeletingId === transaction._id;
 
-  const categoryIcon = getCategoryIcon(transaction?.category?.name, categories);
+  const categoryIcon = getCategoryIcon(transaction?.category?.name);
 
   if (isDeleting) {
     return (
