@@ -161,7 +161,7 @@ export default function TransactionDetailsPage({
 
               <StyledDefinitionTerm>Category</StyledDefinitionTerm>
               <StyledDefinitionDescription>
-                {transactionDetails.category.name}
+                {capitalizeFirstLetter(transactionDetails?.category?.name)}
               </StyledDefinitionDescription>
 
               <StyledDefinitionTerm>Type</StyledDefinitionTerm>

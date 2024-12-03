@@ -32,7 +32,7 @@ export default function SettingsPage({
             associated!
           </StyledDeletionWarning>
           <StyledCategoryToDelete>
-            Category: {categoryToDelete?.name}
+            Category: {capitalizeFirstLetter(categoryToDelete?.name)}
           </StyledCategoryToDelete>
           <StyledConfirmActionContainer>
             <StyledCancelButton
