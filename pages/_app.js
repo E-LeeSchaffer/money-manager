@@ -28,7 +28,7 @@ export default function App({ Component, pageProps }) {
   const [originalCategoryName, setOriginalCategoryName] = useState("");
   const [categoryToDelete, setCategoryToDelete] = useState(null);
   const router = useRouter();
-
+  console.log(transactionsList);
   useEffect(() => {
     if (successMessage !== "") {
       const timer = setTimeout(() => {
