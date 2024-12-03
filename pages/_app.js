@@ -2,8 +2,6 @@ import GlobalStyle from "../styles";
 import { useEffect, useState } from "react";
 import useSWR, { SWRConfig } from "swr";
 import Layout from "@/components/Layout";
-import { getCategoryIcon } from "@/lib/utils";
-import { capitalizeFirstLetter } from "@/lib/utils";
 import { useRouter } from "next/router";
 
 const fetcher = (url) => fetch(url).then((response) => response.json());

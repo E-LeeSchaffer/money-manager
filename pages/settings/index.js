@@ -2,8 +2,8 @@ import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
 import { getCategoryIcon } from "@/lib/utils";
-import { useRef } from "react";
 import Modal from "@/components/Modal";
+import { capitalizeFirstLetter } from "@/lib/utils";
 
 export default function SettingsPage({
   handleAddCategory,
@@ -97,7 +97,7 @@ export default function SettingsPage({
                   }}
                 />
               ) : (
-                <span>{category.name}</span>
+                <span>{capitalizeFirstLetter(category.name)}</span>
               )}
               <StyledButtons>
                 <StyledCategoryEditButton>

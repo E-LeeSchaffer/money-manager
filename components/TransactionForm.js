@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { getCategoryIcon } from "@/lib/utils";
 import { format } from "date-fns";
+import { capitalizeFirstLetter } from "@/lib/utils";
 
 export default function TransactionForm({
   categories,
@@ -178,7 +179,7 @@ export default function TransactionForm({
                             width={24}
                             height={24}
                           />
-                          {category.name}
+                          {capitalizeFirstLetter(category.name)}
                         </DropdownItem>
                       ))}
                   </DropdownList>

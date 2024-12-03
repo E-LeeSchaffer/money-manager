@@ -3,6 +3,7 @@ import OptionsMenu from "./OptionsMenu";
 import { formatNumber } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
+import { capitalizeFirstLetter } from "@/lib/utils";
 
 import { getCategoryIcon } from "@/lib/utils";
 
@@ -56,7 +57,7 @@ export default function TransactionItem({
             />
             {transaction?.category === undefined
               ? "Uncategorized"
-              : transaction?.category?.name}
+              : capitalizeFirstLetter(transaction?.category?.name)}
           </StyledCategory>
           <StyledAmount type={transaction.type}>{formattedAmount}</StyledAmount>
         </StyledCard>
