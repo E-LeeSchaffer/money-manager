@@ -112,7 +112,6 @@ export default function TransactionDetailsPage({
           isEditing={isEditing}
           initialData={transactionDetails}
           onSubmit={(updatedTransaction) => {
-            console.log(updatedTransaction);
             handleEditTransaction(updatedTransaction);
             closeModal();
             mutate();
