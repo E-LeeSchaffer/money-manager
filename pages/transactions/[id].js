@@ -6,10 +6,9 @@ import styled from "styled-components";
 import Image from "next/image";
 import { capitalizeFirstLetter, formatDate, formatNumber } from "@/lib/utils";
 import Link from "next/link";
-import { categories } from "@/lib/categories";
+import useSWR from "swr";
 
 export default function TransactionDetailsPage({
-  transactionsList,
   handleEditTransaction,
   isModalOpen,
   isEditing,
@@ -18,20 +17,30 @@ export default function TransactionDetailsPage({
   handleDeleteTransaction,
   successMessage,
 }) {
+  const { data: categories = [] } = useSWR(`/api/categories`);
   const router = useRouter();
   const { id } = router.query;
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const transactionDetails = transactionsList.find(
-    (transaction) => transaction.id === id
-  );
+  const {
+    data: transactionDetails,
+    error: transactionError,
+    mutate,
+  } = useSWR(id ? `/api/transactions/${id}` : null);
+
+  if (!transactionDetails) {
+    if (transactionError) {
+      return <p>Failed to load transaction.</p>;
+    }
+    return <p>Loading</p>;
+  }
 
   if (!router.isReady) {
     return null;
   }
 
   function handleConfirmDelete() {
-    handleDeleteTransaction(transactionDetails.id);
+    handleDeleteTransaction(transactionDetails._id);
     setIsDeleting(false);
     router.push("/");
   }
@@ -103,6 +112,7 @@ export default function TransactionDetailsPage({
           onSubmit={(updatedTransaction) => {
             handleEditTransaction(updatedTransaction);
             closeModal();
+            mutate();
           }}
           variant="edit"
           categories={categories}
@@ -148,9 +158,15 @@ export default function TransactionDetailsPage({
               </StyledAmountDescription>
 
               <StyledDefinitionTerm>Category</StyledDefinitionTerm>
-              <StyledDefinitionDescription>
-                {transactionDetails.category}
-              </StyledDefinitionDescription>
+              {transactionDetails?.category ? (
+                <StyledDefinitionDescription>
+                  {capitalizeFirstLetter(transactionDetails?.category?.name)}
+                </StyledDefinitionDescription>
+              ) : (
+                <StyledDefinitionDescription>
+                  Uncategorized
+                </StyledDefinitionDescription>
+              )}
 
               <StyledDefinitionTerm>Type</StyledDefinitionTerm>
               <StyledDefinitionDescription>

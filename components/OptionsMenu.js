@@ -12,7 +12,7 @@ export default function OptionsMenu({
   openSelection,
   closeSelection,
 }) {
-  const menuId = `menu-${transaction.id}`;
+  const menuId = `menu-${transaction._id}`;
   const isMenuOpen = activeSelectionId === menuId;
 
   function toggleOptions() {

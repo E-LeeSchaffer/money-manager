@@ -53,35 +53,6 @@ export default function HomePage({
   });
   const [isCustomDatePickerOpen, setCustomDatePickerOpen] = useState(false);
 
-  const filteredTransactions = transactionsList.filter((transaction) => {
-    const transactionDate = new Date(transaction.date);
-    const matchesCategory = selectedCategory
-      ? transaction.category === selectedCategory
-      : true;
-    const matchesSearch = searchItem
-      ? transaction.name.toLowerCase().includes(searchItem.toLowerCase())
-      : true;
-    const matchesTimeframe = selectedTimeframe
-      ? transactionDate >= calculateDateRange(selectedTimeframe)
-      : true;
-    const matchesCustomDateRange =
-      customDateRange.start && customDateRange.end
-        ? transactionDate >= customDateRange.start &&
-          transactionDate <= customDateRange.end
-        : true;
-    return (
-      matchesCategory &&
-      matchesSearch &&
-      matchesTimeframe &&
-      matchesCustomDateRange
-    );
-  });
-
-  const displayedTransactions = sortTransactions(
-    filteredTransactions,
-    sortOrder
-  );
-
   function calculateDateRange(days) {
     const currentDate = new Date();
     const startDate = new Date();
@@ -126,7 +97,9 @@ export default function HomePage({
 
   function handleSearch() {
     setIsSearching(!isSearching);
-    setSearchItem("");
+    if (isSearching) {
+      setSearchItem("");
+    }
   }
 
   function closeSearch() {
@@ -143,22 +116,58 @@ export default function HomePage({
   function handleInputChange(event) {
     const searchTerm = event.target.value;
     setSearchItem(searchTerm);
-    const searchedTransactions = filteredTransactions.filter((transaction) => {
-      return transaction.name.toLowerCase().includes(searchTerm.toLowerCase());
-    });
   }
 
   function handleToggleSortOrder() {
-    setSortOrder(sortOrder === "desc" ? "asc" : "desc");
-  }
+    setSortOrder((prevSortOrder) => {
+      const newSortOrder = prevSortOrder === "desc" ? "asc" : "desc";
 
-  function sortTransactions(transactions, sortOrder) {
-    return transactions.slice().sort((a, b) => {
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
-      return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
+      return newSortOrder;
     });
   }
+
+  const filteredTransactions = transactionsList.filter((transaction) => {
+    const transactionDate = new Date(transaction.date);
+    const matchesCategory =
+      selectedCategory === "uncategorized"
+        ? transaction?.category === undefined
+        : selectedCategory
+        ? transaction?.category?._id === selectedCategory
+        : true;
+
+    const matchesSearch = searchItem
+      ? transaction.name.toLowerCase().includes(searchItem.toLowerCase())
+      : true;
+
+    const matchesTimeframe = selectedTimeframe
+      ? transactionDate >= calculateDateRange(selectedTimeframe)
+      : true;
+
+    const matchesCustomDateRange =
+      customDateRange.start && customDateRange.end
+        ? transactionDate >= customDateRange.start &&
+          transactionDate <= customDateRange.end
+        : true;
+
+    return (
+      matchesCategory &&
+      matchesSearch &&
+      matchesTimeframe &&
+      matchesCustomDateRange
+    );
+  });
+
+  const selectedCategoryName =
+    selectedCategory === "uncategorized"
+      ? "Uncategorized"
+      : categories.find((category) => category._id === selectedCategory)?.name;
+
+  const displayedTransactions = filteredTransactions.toSorted((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+
+    return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
+  });
 
   const incomeTotal = transactionsList
     .filter((transaction) => transaction.type === "income")
@@ -241,7 +250,7 @@ export default function HomePage({
         {selectedCategory !== "" ? (
           <StyledSelectedCategoryDisplay>
             <StyledSelectedCategoryName>
-              {selectedCategory}
+              {selectedCategoryName}
             </StyledSelectedCategoryName>
             <StyledDeselectButton
               type="button"
@@ -318,6 +327,7 @@ export default function HomePage({
           activeSelectionId={activeSelectionId}
           openSelection={openSelection}
           closeSelection={closeSelection}
+          categories={categories}
         />
       ) : (
         <StyledNoTransactionsFoundMessage>

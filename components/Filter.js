@@ -12,7 +12,7 @@ export default function Filter({
   closeSearch,
   categories,
 }) {
-  const sortedCategories = [...categories].sort((a, b) =>
+  const sortedCategories = [...categories].toSorted((a, b) =>
     a.name.localeCompare(b.name)
   );
 
@@ -47,25 +47,25 @@ export default function Filter({
       {isFilterOpen && (
         <>
           <Backdrop closeSelection={closeSelection} />
-          <StyledCategoryContainer id="category" name="category">
+          <StyledCategoryContainer>
             {[
-              { id: "uncategorized", name: "Uncategorized" },
+              { _id: "uncategorized", name: "Uncategorized" },
               ...sortedCategories,
             ].map((category) => (
               <StyledCategoryButton
-                key={category.id}
+                key={category._id}
                 type="button"
-                value={category.name}
+                value={category._id}
                 onClick={() => {
-                  onFilterTransactions(category.name);
+                  onFilterTransactions(category._id);
                   closeSelection();
                 }}
-                $isSelected={selectedCategory === category.name}
+                $isSelected={selectedCategory === category._id}
               >
                 <StyledCategoryIcons>
                   {category.name}
                   <Image
-                    src={getCategoryIcon(category.name)}
+                    src={getCategoryIcon(category.name, categories)}
                     alt={`${selectedCategory} icon`}
                     width={24}
                     height={24}

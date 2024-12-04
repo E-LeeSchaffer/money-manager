@@ -1,7 +1,7 @@
 import { isToday, isYesterday } from "date-fns";
 import TransactionItem from "./TransactionItem";
 import styled from "styled-components";
-import { format } from "date-fns";
+import { formatDate } from "@/lib/utils";
 
 const groupTransactionByDate = (transactions) => {
   return transactions.reduce((groups, transaction) => {
@@ -13,14 +13,14 @@ const groupTransactionByDate = (transactions) => {
     } else if (isYesterday(date)) {
       formatedDate = "Yesterday";
     } else {
-      formatedDate = format(date, "dd.MM.yyyy");
+      formatedDate = formatDate(date, "dd.MM.yyyy");
     }
 
     if (!groups[formatedDate]) {
       groups[formatedDate] = [];
     }
 
-    groups[formatedDate].push(transaction);
+    groups[formatedDate].unshift(transaction);
     return groups;
   }, {});
 };
@@ -39,6 +39,7 @@ export default function TransactionsList({
   activeSelectionId,
   openSelection,
   closeSelection,
+  categories,
 }) {
   const groupedTransactions = groupTransactionByDate(transactions);
   const emptyListMessage =
@@ -55,7 +56,7 @@ export default function TransactionsList({
               <StyledDate>{date}</StyledDate>
               <ul>
                 {groupedTransactions[date].map((transaction) => (
-                  <StyledList key={transaction.id}>
+                  <StyledList key={transaction._id}>
                     <TransactionItem
                       handleConfirmDelete={handleConfirmDelete}
                       handleOpenDeleteDialogue={handleOpenDeleteDialogue}
@@ -69,6 +70,7 @@ export default function TransactionsList({
                       activeSelectionId={activeSelectionId}
                       openSelection={openSelection}
                       closeSelection={closeSelection}
+                      categories={categories}
                     />
                   </StyledList>
                 ))}

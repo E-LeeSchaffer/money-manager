@@ -4,6 +4,8 @@ import styled from "styled-components";
 import Image from "next/image";
 import Link from "next/link";
 import { getCategoryIcon } from "@/lib/utils";
+import { format } from "date-fns";
+import { capitalizeFirstLetter } from "@/lib/utils";
 
 export default function TransactionForm({
   categories,
@@ -19,13 +21,20 @@ export default function TransactionForm({
   const [amount, setAmount] = useState(initialData.amount?.toString() || "");
   const [typeError, setTypeError] = useState(false);
   const [amountError, setAmountError] = useState(false);
+  const [categoryError, setCategoryError] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const formHeader =
     variant === "edit" ? "Edit Transaction" : "Add Transaction";
   const buttonText = variant === "edit" ? "Update" : "Add";
   const [selectedCategoryInForm, setSelectedCategoryInForm] = useState(
-    initialData.category || ""
+    initialData?.category?.name || ""
   );
+  const [selectedCategory, setSelectedCategory] = useState(
+    initialData?.category?._id || ""
+  );
+  const formatedDate = initialData.date
+    ? format(new Date(initialData.date), "yyyy-MM-dd")
+    : today;
 
   useEffect(() => {
     if (initialData.amount) {
@@ -40,7 +49,7 @@ export default function TransactionForm({
     const data = Object.fromEntries(formData);
 
     data.amount = parseFloat(data.amount.replace(/\./g, "").replace(",", "."));
-    data.category = selectedCategoryInForm;
+    data.category = selectedCategory;
 
     if (data.amount <= 0) {
       setAmountError(true);
@@ -54,14 +63,23 @@ export default function TransactionForm({
       return;
     }
 
+    if (!data.category) {
+      setCategoryError(true);
+      return;
+    } else {
+      setCategoryError(false);
+    }
+
     onSubmit({ ...initialData, ...data });
+
     event.target.reset();
     setAmount("");
     setSelectedCategoryInForm("");
   }
 
-  function handleCategorySelect(categoryName) {
-    setSelectedCategoryInForm(categoryName);
+  function handleCategorySelect(category) {
+    setSelectedCategoryInForm(category.name);
+    setSelectedCategory(category._id);
     setIsDropdownOpen(false);
   }
 
@@ -127,65 +145,78 @@ export default function TransactionForm({
                 Category
               </StyledCategoryLabel>
               <DropdownContainer>
-                <DropdownButton
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                >
-                  {selectedCategoryInForm ? (
-                    <>{selectedCategoryInForm}</>
-                  ) : (
-                    "Please select a category"
-                  )}
-                  <StyledArrowIcon
-                    src={
-                      isDropdownOpen
-                        ? "/images/arrow-up.svg"
-                        : "/images/arrow-down.svg"
-                    }
-                    width={20}
-                    height={20}
-                    alt={
-                      isDropdownOpen
-                        ? "arrow up to close form"
-                        : "arrow down to open form"
-                    }
-                  />
-                </DropdownButton>
+                <StyledCategorySelect>
+                  <DropdownButton
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  >
+                    {selectedCategoryInForm ? (
+                      <>{selectedCategoryInForm}</>
+                    ) : (
+                      "Please select a category"
+                    )}
+                    <StyledArrowIcon
+                      src={
+                        isDropdownOpen
+                          ? "/images/arrow-up.svg"
+                          : "/images/arrow-down.svg"
+                      }
+                      width={20}
+                      height={20}
+                      alt={
+                        isDropdownOpen
+                          ? "arrow up to close form"
+                          : "arrow down to open form"
+                      }
+                    />
+                  </DropdownButton>
 
-                {isDropdownOpen && (
-                  <DropdownList>
-                    {categories
-                      .sort((a, b) => a.name.localeCompare(b.name))
-                      .map((category) => (
-                        <DropdownItem
-                          key={category.id}
-                          onClick={() => handleCategorySelect(category.name)}
-                        >
-                          <Image
-                            src={getCategoryIcon(category.name)}
-                            alt={`${category.name}} icon`}
-                            width={24}
-                            height={24}
-                          />
-                          {category.name}
-                        </DropdownItem>
-                      ))}
-                  </DropdownList>
-                )}
-                <StyledLink
-                  href={"/settings"}
-                  aria-label="Settings"
-                  onClick={() => {
-                    closeModal();
-                  }}
-                >
-                  <Image
-                    aria-hidden="true"
-                    src={"/images/settings.svg"}
-                    alt="filter button"
-                    width={15}
-                    height={15}
-                  />
-                </StyledLink>
+                  {isDropdownOpen && (
+                    <DropdownList>
+                      {categories
+                        .toSorted((a, b) => a.name.localeCompare(b.name))
+                        .map((category) => (
+                          <DropdownItem
+                            key={category._id}
+                            value={category._id}
+                            name="name"
+                            id="name"
+                            onClick={() => handleCategorySelect(category)}
+                          >
+                            <Image
+                              src={getCategoryIcon(category.name, categories)}
+                              alt={`${category.name}} icon`}
+                              width={24}
+                              height={24}
+                            />
+                            {capitalizeFirstLetter(category.name)}
+                          </DropdownItem>
+                        ))}
+                    </DropdownList>
+                  )}
+
+                  <StyledLink
+                    href={"/settings"}
+                    aria-label="Settings"
+                    onClick={() => {
+                      closeModal();
+                    }}
+                  >
+                    <Image
+                      aria-hidden="true"
+                      src={"/images/settings.svg"}
+                      alt="filter button"
+                      width={15}
+                      height={15}
+                    />
+                  </StyledLink>
+                </StyledCategorySelect>
+                <div>
+                  {categoryError && (
+                    <ErrorMessageCategory>
+                      Please select a category.
+                    </ErrorMessageCategory>
+                  )}
+                </div>
               </DropdownContainer>
             </FormRow>
 
@@ -227,7 +258,7 @@ export default function TransactionForm({
                 type="date"
                 id="date"
                 name="date"
-                defaultValue={initialData.date || today}
+                defaultValue={formatedDate}
                 max={today}
                 required
               />
@@ -239,6 +270,17 @@ export default function TransactionForm({
     </>
   );
 }
+
+const ErrorMessageCategory = styled.p`
+  grid-area: categoryErrorMessage;
+  color: red;
+  font-size: 0.6rem;
+`;
+
+const StyledCategorySelect = styled.div`
+  display: flex;
+`;
+
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: inherit;
@@ -251,6 +293,7 @@ const DropdownContainer = styled.div`
   display: flex;
   grid-area: categoryInput;
   justify-content: space-between;
+  flex-direction: column;
   position: relative;
   width: 100%;
 `;
@@ -456,6 +499,7 @@ const ErrorMessageAmount = styled.p`
   color: red;
   font-size: 0.6rem;
 `;
+
 const ErrorMessageType = styled.p`
   grid-area: typeErrorMessage;
   color: red;

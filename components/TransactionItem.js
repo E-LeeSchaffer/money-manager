@@ -3,7 +3,8 @@ import OptionsMenu from "./OptionsMenu";
 import { formatNumber } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
-import { categories as initialCategories } from "@/lib/categories";
+import { capitalizeFirstLetter } from "@/lib/utils";
+
 import { getCategoryIcon } from "@/lib/utils";
 
 export default function TransactionItem({
@@ -17,11 +18,12 @@ export default function TransactionItem({
   activeSelectionId,
   openSelection,
   closeSelection,
+  categories,
 }) {
   const formattedAmount = formatNumber(transaction);
-  const isDeleting = isDeletingId === transaction.id;
+  const isDeleting = isDeletingId === transaction._id;
 
-  const categoryIcon = getCategoryIcon(transaction.category);
+  const categoryIcon = getCategoryIcon(transaction?.category?.name);
 
   if (isDeleting) {
     return (
@@ -43,18 +45,19 @@ export default function TransactionItem({
 
   return (
     <StyledCardWrapper>
-      <StyledLink href={`/transactions/${transaction.id}`}>
+      <StyledLink href={`/transactions/${transaction._id}`}>
         <StyledCard>
           <StyledName>{transaction.name}</StyledName>
           <StyledCategory>
             <Image
               src={categoryIcon}
-              alt={`${transaction.category} icon`}
+              alt={`${transaction?.category?.name} icon`}
               width={24}
               height={24}
             />
-
-            {transaction.category}
+            {transaction?.category === undefined
+              ? "Uncategorized"
+              : capitalizeFirstLetter(transaction?.category?.name)}
           </StyledCategory>
           <StyledAmount type={transaction.type}>{formattedAmount}</StyledAmount>
         </StyledCard>
@@ -62,7 +65,7 @@ export default function TransactionItem({
       <StyledOptionsContainer>
         <OptionsMenu
           handleOpenDeleteDialogue={() =>
-            handleOpenDeleteDialogue(transaction.id)
+            handleOpenDeleteDialogue(transaction._id)
           }
           onHandleOpenEditMode={handleOpenEditMode}
           onOpenModal={openModal}

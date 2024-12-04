@@ -1,34 +1,33 @@
 import GlobalStyle from "../styles";
 import { useEffect, useState } from "react";
-import { transactions } from "@/lib/transactions";
-import { ulid } from "ulid";
-import useLocalStorageState from "use-local-storage-state";
+import useSWR, { SWRConfig } from "swr";
 import Layout from "@/components/Layout";
-import { categories as initialCategories } from "@/lib/categories";
-import { getCategoryIcon } from "@/lib/utils";
-import { capitalizeFirstLetter } from "@/lib/utils";
+import { useRouter } from "next/router";
+
+const fetcher = (url) => fetch(url).then((response) => response.json());
 
 export default function App({ Component, pageProps }) {
-  const [transactionsList, setTransactionsList] = useLocalStorageState(
-    "transactions",
-    { defaultValue: transactions }
+  const { data: transactionsList = [], mutate: mutateTransactions } = useSWR(
+    `/api/transactions`,
+    fetcher
   );
   const [successMessage, setSuccessMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editTransaction, setEditTransaction] = useState("");
+  const [editTransaction, setEditTransaction] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [isDeletingId, setIsDeletingId] = useState(false);
   const [activeSelectionId, setActiveSelectionId] = useState(null);
   const [isDuplicateError, setIsDuplicateError] = useState(false);
-  const [categories, setCategories] = useLocalStorageState("categories", {
-    defaultValue: initialCategories,
-  });
+  const { data: categories = [], mutate: mutateCategories } = useSWR(
+    `/api/categories`,
+    fetcher
+  );
   const [isEditCategory, setIsEditCategory] = useState(null);
   const [categoryToEdit, setcategoryToEdit] = useState(null);
   const [originalCategoryName, setOriginalCategoryName] = useState("");
   const [categoryToDelete, setCategoryToDelete] = useState(null);
-
+  const router = useRouter();
   useEffect(() => {
     if (successMessage !== "") {
       const timer = setTimeout(() => {
@@ -39,32 +38,51 @@ export default function App({ Component, pageProps }) {
     }
   }, [successMessage]);
 
-  function handleAddTransaction(data) {
-    const categoryIcon = getCategoryIcon(data.category);
+  async function handleAddTransaction(data) {
+    const response = await fetch("/api/transactions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
-    setTransactionsList([
-      { ...data, id: ulid(), currency: "EUR", categoryIcon },
-      ...transactionsList,
-    ]);
+    const newTransaction = await response.json();
+
+    mutateTransactions();
     setSuccessMessage("Transaction successfully added!");
+    return newTransaction;
   }
 
-  function handleDeleteTransaction(id) {
-    setTransactionsList(
-      transactionsList.filter((transaction) => transaction.id !== id)
-    );
+  async function handleDeleteTransaction(id) {
+    const response = await fetch(`/api/transactions/${id}`, {
+      method: "DELETE",
+    });
+    mutateTransactions();
+    if (response.ok) {
+      router.push("/");
+    }
     setSuccessMessage("Transaction successfully deleted!");
   }
 
-  function handleEditTransaction(updatedTransaction) {
-    setTransactionsList(
-      transactionsList.map((transaction) =>
-        transaction.id === updatedTransaction.id
-          ? updatedTransaction
-          : transaction
-      )
+  async function handleEditTransaction(updatedTransaction) {
+    const response = await fetch(
+      `/api/transactions/${updatedTransaction._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTransaction),
+      }
     );
-    setSuccessMessage("Transaction successfully updated!");
+
+    if (response.ok) {
+      mutateTransactions();
+      setSuccessMessage("Transaction successfully updated!");
+    } else {
+      console.error("Failed to update transaction.");
+    }
   }
 
   function openSelection(selectionId) {
@@ -91,6 +109,7 @@ export default function App({ Component, pageProps }) {
 
   function handleFormSubmit(updatedTransaction) {
     handleEditTransaction({ ...editTransaction, ...updatedTransaction });
+
     closeModal();
   }
 
@@ -99,7 +118,7 @@ export default function App({ Component, pageProps }) {
   }
 
   function handleConfirmDelete(transaction) {
-    handleDeleteTransaction(transaction.id);
+    handleDeleteTransaction(transaction._id);
     setIsDeletingId(false);
   }
 
@@ -111,7 +130,10 @@ export default function App({ Component, pageProps }) {
     setIsDeletingId(false);
   }
 
-  function handleAddCategory(category) {
+  async function handleAddCategory(category) {
+    const correctFormat = {
+      name: category,
+    };
     setIsDuplicateError(false);
 
     const normalizedCategoryName = category.trim().toLowerCase();
@@ -125,18 +147,43 @@ export default function App({ Component, pageProps }) {
       return;
     }
 
-    const newCategory = { name: capitalizeFirstLetter(category), id: ulid() };
-    setCategories([...categories, newCategory]);
-    setSuccessMessage("Category successfully added!");
+    const response = await fetch("/api/categories", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(correctFormat),
+    });
+
+    if (response.ok) {
+      mutateCategories();
+    }
   }
 
   function handleOpenEditModeCategory(category) {
     setOriginalCategoryName(category.name);
-    setIsEditCategory(category.id);
+    setIsEditCategory(category._id);
     setcategoryToEdit(category);
   }
 
-  function handleSaveEditCategory(editedCategory) {
+  async function handleSaveEditCategory(editedCategory) {
+    const response = await fetch(`/api/categories/${editedCategory._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editedCategory),
+    });
+
+    if (response.ok) {
+      mutateCategories();
+      mutateTransactions();
+      setSuccessMessage("Category successfully updated!");
+      setIsEditCategory(null);
+    } else {
+      console.error("Failed to update category.");
+    }
+
     const normalizedUpdatedName = editedCategory.name.trim().toLowerCase();
 
     const isDuplicate = categories.some(
@@ -149,34 +196,22 @@ export default function App({ Component, pageProps }) {
       setIsDuplicateError(true);
       return;
     }
-
-    setCategories(
-      categories.map((category) =>
-        category.id === editedCategory.id ? editedCategory : category
-      )
-    );
-    setSuccessMessage("Category successfully updated!");
-    setIsEditCategory(null);
   }
 
   function handleDeleteCategory(category) {
-    setCategoryToDelete(category.name);
+    setCategoryToDelete(category);
   }
 
-  function handleConfirmDeleteCategory() {
-    setTransactionsList((prevTransactions) =>
-      prevTransactions.map((transaction) =>
-        transaction.category === categoryToDelete
-          ? { ...transaction, category: "Uncategorized" }
-          : transaction
-      )
-    );
-
-    setCategories((prevCategories) =>
-      prevCategories.filter((category) => category.name !== categoryToDelete)
-    );
-
+  async function handleConfirmDeleteCategory(id) {
+    const response = await fetch(`/api/categories/${id}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      mutateCategories();
+      mutateTransactions();
+    }
     setSuccessMessage("Category successfully deleted!");
+
     setCategoryToDelete(null);
     closeModal();
   }
@@ -225,9 +260,11 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <GlobalStyle />
-      <Layout>
-        <Component {...componentProps} />
-      </Layout>
+      <SWRConfig value={{ fetcher }}>
+        <Layout>
+          <Component {...componentProps} />
+        </Layout>
+      </SWRConfig>
     </>
   );
 }
