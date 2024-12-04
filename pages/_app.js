@@ -150,7 +150,7 @@ export default function App({ Component, pageProps }) {
     const response = await fetch("/api/categories", {
       method: "POST",
       headers: {
-        "Content-Type": "applications/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(correctFormat),
     });
