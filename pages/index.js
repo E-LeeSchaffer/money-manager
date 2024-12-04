@@ -126,10 +126,6 @@ export default function HomePage({
     });
   }
 
-  function sortTransactions(transactions) {
-    return;
-  }
-
   const filteredTransactions = transactionsList.filter((transaction) => {
     const transactionDate = new Date(transaction.date);
     const matchesCategory =

@@ -11,7 +11,8 @@ export default async function handler(request, response) {
     if (request.method === "GET") {
       const category = await Category.findById(id);
 
-      return response.status(200).json(category);
+      response.status(200).json(category);
+      return;
     }
     if (request.method === "PUT") {
       const updatedCategory = await Category.findByIdAndUpdate(

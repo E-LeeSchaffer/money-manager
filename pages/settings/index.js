@@ -92,6 +92,7 @@ export default function SettingsPage({
                     if (event.key === "Escape") {
                       category.name = originalCategoryName;
                       event.target.value = originalCategoryName;
+
                       event.target.blur();
                     }
                   }}

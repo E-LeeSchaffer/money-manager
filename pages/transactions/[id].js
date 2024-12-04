@@ -8,8 +8,6 @@ import { capitalizeFirstLetter, formatDate, formatNumber } from "@/lib/utils";
 import Link from "next/link";
 import useSWR from "swr";
 
-const fetcher = (url) => fetch(url).then((response) => response.json());
-
 export default function TransactionDetailsPage({
   handleEditTransaction,
   isModalOpen,
@@ -19,7 +17,7 @@ export default function TransactionDetailsPage({
   handleDeleteTransaction,
   successMessage,
 }) {
-  const { data: categories = [] } = useSWR(`/api/categories`, fetcher);
+  const { data: categories = [] } = useSWR(`/api/categories`);
   const router = useRouter();
   const { id } = router.query;
   const [isDeleting, setIsDeleting] = useState(false);
