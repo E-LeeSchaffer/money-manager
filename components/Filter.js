@@ -1,8 +1,7 @@
 import Image from "next/image";
 import styled from "styled-components";
 import Backdrop from "./Backdrop";
-import { getCategoryIcon } from "@/lib/utils";
-import { useMemo } from "react";
+import { capitalizeFirstLetter, getCategoryIcon } from "@/lib/utils";
 
 export default function Filter({
   onFilterTransactions,
@@ -39,15 +38,13 @@ export default function Filter({
     }, {});
   }
 
-  const categoriesWithCounts = useMemo(() => {
+  const categoriesWithCounts = categories.map((category) => {
     const counts = getCategoriesWithTransactionCount(transactionsList);
-
-    return categories.map((category) => ({
+    return {
       ...category,
       count: counts[category._id] || 0,
-    }));
-  }, [transactionsList, categories]);
-
+    };
+  });
   return (
     <StyledFilterContainer>
       <StyledFilterButton onClick={toggleFilter} aria-label="Filter">
@@ -100,7 +97,9 @@ export default function Filter({
                       height={24}
                     />
                   </StyledCategoryIconWrapper>
-                  <StyledCategoryName>{category.name}</StyledCategoryName>
+                  <StyledCategoryName>
+                    {capitalizeFirstLetter(category.name)}
+                  </StyledCategoryName>
                   <StyledTransactionCount>
                     {category.count}
                   </StyledTransactionCount>
@@ -136,7 +135,7 @@ const StyledCategoryContainer = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
-  top: 20px;
+  top: 24px;
   right: 0;
   text-align: end;
   z-index: 50;
@@ -165,12 +164,8 @@ const StyledCategoryButton = styled.button`
 const StyledCategoryIcons = styled.div`
   display: flex;
   align-items: center;
-<<<<<<< HEAD
-  gap: 2px;
-=======
-  gap: 4px;
   height: 24px;
->>>>>>> a38b62b7928f3a8c0fe031c832dd869021db956c
+  gap: 2px;
 `;
 
 const StyledCategoryIconWrapper = styled.div`
@@ -184,15 +179,9 @@ const StyledCategoryIconWrapper = styled.div`
 `;
 
 const StyledCategoryName = styled.span`
-<<<<<<< HEAD
-  flex-grow: 1;
-  font-size: 0.75rem;
-  text-align: center;
-=======
   flex: 1;
   font-size: 0.85rem;
   text-align: left;
->>>>>>> a38b62b7928f3a8c0fe031c832dd869021db956c
 `;
 
 const StyledTransactionCount = styled.div`
