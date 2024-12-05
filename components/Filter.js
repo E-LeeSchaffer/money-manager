@@ -164,9 +164,9 @@ const StyledCategoryButton = styled.button`
 
 const StyledCategoryIcons = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: 4px;
+  height: 24px;
 `;
 
 const StyledCategoryIconWrapper = styled.div`
@@ -180,9 +180,9 @@ const StyledCategoryIconWrapper = styled.div`
 `;
 
 const StyledCategoryName = styled.span`
-  flex-grow: 1;
+  flex: 1;
   font-size: 0.85rem;
-  text-align: center;
+  text-align: left;
 `;
 
 const StyledTransactionCount = styled.div`
@@ -193,7 +193,7 @@ const StyledTransactionCount = styled.div`
   height: 18px;
   background-color: var(--dark-grey-color);
   color: black;
-  border-radius: 50%;
+  border-radius: 20%;
   font-size: 0.75rem;
   font-weight: bold;
 `;
