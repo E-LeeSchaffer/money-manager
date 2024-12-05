@@ -164,9 +164,13 @@ const StyledCategoryButton = styled.button`
 
 const StyledCategoryIcons = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
+<<<<<<< HEAD
   gap: 2px;
+=======
+  gap: 4px;
+  height: 24px;
+>>>>>>> a38b62b7928f3a8c0fe031c832dd869021db956c
 `;
 
 const StyledCategoryIconWrapper = styled.div`
@@ -180,9 +184,15 @@ const StyledCategoryIconWrapper = styled.div`
 `;
 
 const StyledCategoryName = styled.span`
+<<<<<<< HEAD
   flex-grow: 1;
   font-size: 0.75rem;
   text-align: center;
+=======
+  flex: 1;
+  font-size: 0.85rem;
+  text-align: left;
+>>>>>>> a38b62b7928f3a8c0fe031c832dd869021db956c
 `;
 
 const StyledTransactionCount = styled.div`
@@ -193,7 +203,7 @@ const StyledTransactionCount = styled.div`
   height: 18px;
   background-color: var(--dark-grey-color);
   color: black;
-  border-radius: 50%;
+  border-radius: 20%;
   font-size: 0.75rem;
   font-weight: bold;
 `;
