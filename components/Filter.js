@@ -38,13 +38,18 @@ export default function Filter({
     }, {});
   }
 
-  const categoriesWithCounts = categories.map((category) => {
-    const counts = getCategoriesWithTransactionCount(transactionsList);
-    return {
-      ...category,
-      count: counts[category._id] || 0,
-    };
-  });
+  const categoryCounts = getCategoriesWithTransactionCount(transactionsList);
+
+  const categoriesWithUncategorized = [
+    { _id: "uncategorized", name: "Uncategorized" },
+    ...sortedCategories,
+  ];
+
+  const categoriesWithCounts = categoriesWithUncategorized.map((category) => ({
+    ...category,
+    count: categoryCounts[category._id] || 0,
+  }));
+
   return (
     <StyledFilterContainer>
       <StyledFilterButton onClick={toggleFilter} aria-label="Filter">
@@ -65,19 +70,7 @@ export default function Filter({
         <>
           <Backdrop closeSelection={closeSelection} />
           <StyledCategoryContainer>
-            {[
-              {
-                _id: "uncategorized",
-                name: "Uncategorized",
-                count: transactionsList.filter(
-                  (transaction) =>
-                    !transaction.category ||
-                    transaction.category === null ||
-                    transaction.category === undefined
-                ).length,
-              },
-              ...categoriesWithCounts,
-            ].map((category) => (
+            {categoriesWithCounts.map((category) => (
               <StyledCategoryButton
                 key={category._id}
                 type="button"
