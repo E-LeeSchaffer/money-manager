@@ -166,7 +166,7 @@ const StyledCategoryIcons = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 `;
 
 const StyledCategoryIconWrapper = styled.div`
@@ -181,7 +181,7 @@ const StyledCategoryIconWrapper = styled.div`
 
 const StyledCategoryName = styled.span`
   flex-grow: 1;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   text-align: center;
 `;
 
