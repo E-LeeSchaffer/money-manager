@@ -21,6 +21,7 @@
     "react-datepicker": "^7.5.0",
     "react-dom": "18.2.0",
     "styled-components": "^6.0.2",
+    "swr": "^2.2.5",
     "ulid": "^2.3.0",
     "use-local-storage-state": "^19.4.1",
     "uuid": "^10.0.0"
