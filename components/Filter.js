@@ -1,7 +1,7 @@
 import Image from "next/image";
 import styled from "styled-components";
 import Backdrop from "./Backdrop";
-import { getCategoryIcon } from "@/lib/utils";
+import { capitalizeFirstLetter, getCategoryIcon } from "@/lib/utils";
 
 export default function Filter({
   onFilterTransactions,
@@ -11,6 +11,7 @@ export default function Filter({
   activeSelectionId,
   closeSearch,
   categories,
+  transactionsList,
 }) {
   const sortedCategories = [...categories].toSorted((a, b) =>
     a.name.localeCompare(b.name)
@@ -27,6 +28,27 @@ export default function Filter({
       closeSearch();
     }
   }
+
+  function getCategoriesWithTransactionCount(transactionsList) {
+    return transactionsList.reduce((acc, transaction) => {
+      const categoryId =
+        transaction.category?._id || transaction.category || "uncategorized";
+      acc[categoryId] = (acc[categoryId] || 0) + 1;
+      return acc;
+    }, {});
+  }
+
+  const categoryCounts = getCategoriesWithTransactionCount(transactionsList);
+
+  const categoriesWithUncategorized = [
+    { _id: "uncategorized", name: "Uncategorized" },
+    ...sortedCategories,
+  ];
+
+  const categoriesWithCounts = categoriesWithUncategorized.map((category) => ({
+    ...category,
+    count: categoryCounts[category._id] || 0,
+  }));
 
   return (
     <StyledFilterContainer>
@@ -48,10 +70,7 @@ export default function Filter({
         <>
           <Backdrop closeSelection={closeSelection} />
           <StyledCategoryContainer>
-            {[
-              { _id: "uncategorized", name: "Uncategorized" },
-              ...sortedCategories,
-            ].map((category) => (
+            {categoriesWithCounts.map((category) => (
               <StyledCategoryButton
                 key={category._id}
                 type="button"
@@ -63,13 +82,20 @@ export default function Filter({
                 $isSelected={selectedCategory === category._id}
               >
                 <StyledCategoryIcons>
-                  {category.name}
-                  <Image
-                    src={getCategoryIcon(category.name, categories)}
-                    alt={`${selectedCategory} icon`}
-                    width={24}
-                    height={24}
-                  />
+                  <StyledCategoryIconWrapper>
+                    <Image
+                      src={getCategoryIcon(category.name, categories)}
+                      alt={`${category.name} icon`}
+                      width={24}
+                      height={24}
+                    />
+                  </StyledCategoryIconWrapper>
+                  <StyledCategoryName>
+                    {capitalizeFirstLetter(category.name)}
+                  </StyledCategoryName>
+                  <StyledTransactionCount>
+                    {category.count}
+                  </StyledTransactionCount>
                 </StyledCategoryIcons>
               </StyledCategoryButton>
             ))}
@@ -102,7 +128,7 @@ const StyledCategoryContainer = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
-  top: 20px;
+  top: 24px;
   right: 0;
   text-align: end;
   z-index: 50;
@@ -110,8 +136,8 @@ const StyledCategoryContainer = styled.div`
   border: 0.1px solid var(--dark-grey-color);
   border-radius: 4px;
   padding: 4px;
-  width: 120px;
-  max-height: 200px;
+  width: 180px;
+  max-height: 250px;
   overflow-y: auto;
 `;
 
@@ -130,7 +156,36 @@ const StyledCategoryButton = styled.button`
 
 const StyledCategoryIcons = styled.div`
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  gap: 4px;
+  height: 24px;
+  gap: 2px;
+`;
+
+const StyledCategoryIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: var(--light-grey-color);
+  border-radius: 50%;
+`;
+
+const StyledCategoryName = styled.span`
+  flex: 1;
+  font-size: 0.85rem;
+  text-align: left;
+`;
+
+const StyledTransactionCount = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background-color: var(--dark-grey-color);
+  color: black;
+  border-radius: 20%;
+  font-size: 0.75rem;
+  font-weight: bold;
 `;

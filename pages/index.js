@@ -288,6 +288,7 @@ export default function HomePage({
             activeSelectionId={activeSelectionId}
             closeSearch={closeSearch}
             categories={categories}
+            transactionsList={transactionsList}
           />
         </StyledControls>
       </StyledSelectionBar>

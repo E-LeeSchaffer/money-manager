@@ -330,6 +330,7 @@ const DropdownList = styled.div`
   padding: 4px;
   cursor: pointer;
   font-size: 0.8rem;
+  z-index: 50;
 `;
 
 const DropdownItem = styled.div`
