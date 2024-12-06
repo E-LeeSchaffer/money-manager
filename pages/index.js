@@ -194,6 +194,12 @@ export default function HomePage({
       {!showForm && (
         <StyledLink href={"/settings"} aria-label="Settings">
           <Image
+            src={"/images/report.svg"}
+            alt="report button"
+            width={15}
+            height={15}
+          />
+          <Image
             aria-hidden="true"
             src={"/images/settings.svg"}
             alt="filter button"
@@ -349,10 +355,12 @@ const StyledNoTransactionsFoundMessage = styled.div`
 const StyledLink = styled(Link)`
   position: absolute;
   right: 16px;
-  top: 10px;
+  top: 16px;
   text-decoration: none;
   color: inherit;
   z-index: 2000;
+  display: flex;
+  gap: 12px;
 `;
 
 const StyledTitle = styled.h2`
