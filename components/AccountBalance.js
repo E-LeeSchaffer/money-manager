@@ -101,7 +101,7 @@ const StyledAccountBalanceContainer = styled.div`
   border-radius: 16px;
   width: 16rem;
   height: 6rem;
-  background-color: #e9ff70;
+  background-color: var(--accent-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   gap: 4px;
 `;

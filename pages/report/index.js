@@ -1,9 +1,8 @@
-// import PieChartPage from "@/components/Chart";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-const PieChartPage = dynamic(() => import("@/components/Chart"), {
+const BarChartPage = dynamic(() => import("@/components/Chart"), {
   ssr: false,
 });
 
@@ -21,7 +20,7 @@ export default function ReportPage() {
         Back
       </StyledBackLink>
       <StyledTitle>Report</StyledTitle>
-      <PieChartPage />
+      <BarChartPage />
     </>
   );
 }
@@ -51,9 +50,4 @@ const StyledTitle = styled.h2`
   text-align: center;
   font-size: 1.7rem;
   font-weight: 700;
-`;
-
-const StyledChartHeader = styled.h3`
-  text-align: center;
-  font-size: 1rem;
 `;

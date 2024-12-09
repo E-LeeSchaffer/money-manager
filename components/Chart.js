@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { BarChart, YAxis, XAxis, Tooltip, Bar, Text } from "recharts";
+import { BarChart, YAxis, XAxis, Bar } from "recharts";
 import useSWR from "swr";
 
 export default function BarChartPage() {
   const { data: transactionsList = [] } = useSWR("/api/transactions");
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const totalExpensesByCategory = transactionsList
     .filter((transaction) => transaction.type === "expense")
@@ -21,75 +22,97 @@ export default function BarChartPage() {
     .map(([name, value]) => ({
       name,
       value,
-      fill: getRandomColor(),
+      fill: "var(--text-color-dark)",
     }))
     .sort((a, b) => b.value - a.value);
 
-  function getRandomColor() {
-    const colors = [
-      "#FF6384",
-      "#36A2EB",
-      "#FFCE56",
-      "#4BC0C0",
-      "#9966FF",
-      "#BCCCDC",
-      "#E68369",
-      "#ECCEAE",
-      "#BB9AB1",
-      "#CCD5AE",
-      "#FFAD60",
-      "#179BAE",
-      "#507687",
-      "#2C4E80",
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-  }
-
   const renderCustomLabel = ({ x, y, width, value }) => {
     return (
-      <StyledLabelText x={x + width + 10} y={y + 33}>
+      <StyledLabelText x={x + width + 10} y={y + 22}>
         {value} €
       </StyledLabelText>
     );
   };
 
-  return (
-    <Card>
-      <CardHeader>
-        <StyledTitle>Expenses by Category</StyledTitle>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer>
-          <BarChart
-            data={chartData}
-            layout="vertical"
-            margin={{ left: 80, right: 40 }}
-            width={500}
-            height={400}
-          >
-            <YAxis
-              dataKey="name"
-              type="category"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            />
-            <XAxis dataKey="value" type="number" hide />
+  const handleCategoryClick = (categoryName) => {
+    setSelectedCategory((prev) =>
+      prev === categoryName ? null : categoryName
+    );
+  };
 
-            <Bar dataKey="value" radius={5} label={renderCustomLabel} />
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-      <CardFooter>
-        <FooterText>Updated with recent transactions</FooterText>
-      </CardFooter>
-    </Card>
+  const CustomTick = ({ x, y, payload }) => {
+    const isSelected = selectedCategory === payload.value;
+
+    return (
+      <text
+        x={x + 5}
+        y={y + 5}
+        textAnchor="end"
+        fill={
+          isSelected ? "var(--friendly-red-color)" : "var(--text-color-dark)"
+        }
+        fontWeight={isSelected ? "bold" : "normal"}
+        onClick={() => handleCategoryClick(payload.value)}
+      >
+        {payload.value}
+      </text>
+    );
+  };
+
+  return (
+    <>
+      <Card>
+        <StyledTitle>Expenses by Category</StyledTitle>
+        <CardContent>
+          <ChartContainer>
+            <BarChart
+              data={chartData}
+              layout="vertical"
+              margin={{ left: 80, right: 40 }}
+              width={400}
+              height={300}
+            >
+              <YAxis
+                dataKey="name"
+                type="category"
+                tick={<CustomTick />}
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+              />
+              <XAxis dataKey="value" type="number" hide />
+
+              <Bar
+                dataKey="value"
+                radius={5}
+                label={renderCustomLabel}
+                onClick={(data) => handleCategoryClick(data.name)}
+              />
+            </BarChart>
+          </ChartContainer>
+        </CardContent>
+        <CardFooter>
+          <FooterText>Updated with recent transactions</FooterText>
+        </CardFooter>
+      </Card>
+
+      <StyledCardWrapper>
+        <StyledSummaryCard>
+          <StyledSummaryTitle>{selectedCategory}</StyledSummaryTitle>
+          <StyledSummaryAmount>
+            {selectedCategory
+              ? `Total Expense: ${totalExpensesByCategory[selectedCategory]} €`
+              : "Select a category for details"}
+          </StyledSummaryAmount>
+        </StyledSummaryCard>
+      </StyledCardWrapper>
+    </>
   );
 }
 
 const StyledTitle = styled.h2`
   text-align: center;
-  font-size: 1.7rem;
+  font-size: 1rem;
   font-weight: 700;
 `;
 
@@ -104,17 +127,7 @@ const Card = styled.div`
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 16px;
-  width: 500px;
-`;
-
-const CardHeader = styled.div`
-  margin-bottom: 16px;
-`;
-
-const CardTitle = styled.h2`
-  font-size: 18px;
-  font-weight: bold;
-  margin: 0;
+  width: 100%;
 `;
 
 const CardContent = styled.div`
@@ -126,12 +139,11 @@ const ChartContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  /* overflow-x: auto; */
 `;
 
 const CardFooter = styled.div`
   font-size: 14px;
-  color: #333;
+  color: var(--text-color-dark);
 `;
 
 const FooterText = styled.div`
@@ -139,4 +151,35 @@ const FooterText = styled.div`
   align-items: center;
   gap: 8px;
   font-weight: 500;
+`;
+
+const StyledCardWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const StyledSummaryCard = styled.div`
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 12px;
+  align-items: center;
+  border: 0.1px solid var(--dark-grey-color);
+  border-radius: 16px;
+  width: 16rem;
+  height: 4rem;
+  background-color: var(--accent-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+const StyledSummaryTitle = styled.h3`
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+`;
+
+const StyledSummaryAmount = styled.p`
+  margin: 4px 0 0;
+  font-size: 1rem;
 `;
