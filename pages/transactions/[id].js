@@ -31,6 +31,7 @@ export default function TransactionDetailsPage({
 
   const [isDeletingTransaction, setIsDeletingTransaction] = useState(false);
   const [isDeletingNote, setIsDeletingNote] = useState(false);
+
   const [isNoteError, setIsNoteError] = useState(false);
 
   if (!transactionDetails) {
@@ -248,7 +249,6 @@ export default function TransactionDetailsPage({
               id="note"
               name="note"
               defaultValue={transactionDetails.note}
-              minLength={1}
               maxLength={140}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
