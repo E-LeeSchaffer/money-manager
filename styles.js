@@ -39,5 +39,6 @@ export default createGlobalStyle`
 
   label {
     font-size: 0.8rem;
+
   }
 `;
