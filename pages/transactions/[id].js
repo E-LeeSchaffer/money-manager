@@ -1,7 +1,7 @@
 import Modal from "@/components/Modal";
 import TransactionForm from "@/components/TransactionForm";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { capitalizeFirstLetter, formatDate, formatNumber } from "@/lib/utils";
@@ -16,17 +16,22 @@ export default function TransactionDetailsPage({
   handleOpenEditMode,
   handleDeleteTransaction,
   successMessage,
+  handleAddNote,
+  handleDeleteNote,
 }) {
-  const { data: categories = [] } = useSWR(`/api/categories`);
   const router = useRouter();
   const { id } = router.query;
-  const [isDeleting, setIsDeleting] = useState(false);
 
   const {
     data: transactionDetails,
     error: transactionError,
     mutate,
   } = useSWR(id ? `/api/transactions/${id}` : null);
+  const { data: categories = [] } = useSWR(`/api/categories`);
+
+  const [isDeletingTransaction, setIsDeletingTransaction] = useState(false);
+  const [isDeletingNote, setIsDeletingNote] = useState(false);
+  const [isNoteError, setIsNoteError] = useState(false);
 
   if (!transactionDetails) {
     if (transactionError) {
@@ -40,17 +45,26 @@ export default function TransactionDetailsPage({
   }
 
   function handleConfirmDelete() {
-    handleDeleteTransaction(transactionDetails._id);
-    setIsDeleting(false);
-    router.push("/");
+    if (isDeletingTransaction) {
+      handleDeleteTransaction(transactionDetails._id);
+      setIsDeletingTransaction(false);
+      router.push("/");
+    }
+
+    if (isDeletingNote) {
+      handleDeleteNote(transactionDetails);
+      setIsDeletingNote(false);
+    }
   }
 
   function handleCancelDeleteDialogue() {
-    setIsDeleting(false);
-  }
+    if (isDeletingTransaction) {
+      setIsDeletingTransaction(false);
+    }
 
-  function handleOpenDeleteDialogue() {
-    setIsDeleting(true);
+    if (isDeletingNote) {
+      setIsDeletingNote(false);
+    }
   }
 
   if (!transactionDetails) {
@@ -126,7 +140,7 @@ export default function TransactionDetailsPage({
       <StyledTransactionDetails>
         <StyledTitle>Transaction Details</StyledTitle>
 
-        {isDeleting ? (
+        {isDeletingTransaction ? (
           <StyledConfirmActionContainer>
             <StyledCancelButton
               type="button"
@@ -196,7 +210,7 @@ export default function TransactionDetailsPage({
               <StyledDeleteButton
                 type="button"
                 onClick={() => {
-                  handleOpenDeleteDialogue();
+                  setIsDeletingTransaction(true);
                 }}
               >
                 <StyledImage
@@ -210,10 +224,90 @@ export default function TransactionDetailsPage({
             </StyledOptionsContainer>
           </StyledDetailsContainer>
         )}
+        {isDeletingNote ? (
+          <StyledConfirmActionContainer>
+            <StyledCancelButton
+              type="button"
+              onClick={handleCancelDeleteDialogue}
+            >
+              Cancel
+            </StyledCancelButton>
+            <StyledConfirmButton
+              type="button"
+              onClick={() => {
+                handleConfirmDelete(transactionDetails);
+              }}
+            >
+              Really Delete
+            </StyledConfirmButton>
+          </StyledConfirmActionContainer>
+        ) : (
+          <StyledNoteArea>
+            Notes
+            <StyledTextArea
+              id="note"
+              name="note"
+              defaultValue={transactionDetails.note}
+              minLength={1}
+              maxLength={140}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  const noteContent = event.target.value.trim();
+                  if (noteContent.length > 0) {
+                    handleAddNote(event.target.value, transactionDetails);
+                    event.target.blur();
+                  } else {
+                    setIsNoteError(true);
+                  }
+                }
+                if (event.key !== "Enter") {
+                  setIsNoteError(false);
+                }
+              }}
+            />
+            {isNoteError && (
+              <ErrorMessageNote>
+                Please enter at least 1 character to submit.
+              </ErrorMessageNote>
+            )}
+            <StyledOptionsContainer>
+              <StyledDeleteButton
+                type="button"
+                onClick={() => {
+                  setIsDeletingNote(true);
+                }}
+              >
+                <StyledImage
+                  aria-hidden="true"
+                  src="/images/trash.svg"
+                  alt="delete button"
+                  width={15}
+                  height={15}
+                />
+              </StyledDeleteButton>
+            </StyledOptionsContainer>
+          </StyledNoteArea>
+        )}
       </StyledTransactionDetails>
     </>
   );
 }
+
+const ErrorMessageNote = styled.p`
+  grid-area: typeErrorMessage;
+  color: red;
+  font-size: 0.6rem;
+`;
+
+const StyledTextArea = styled.textarea`
+  border-bottom: 1px solid black;
+  border: none;
+  background-color: inherit;
+  min-height: 150px;
+  line-height: 24px;
+  font-size: inherit;
+  font-family: inherit;
+`;
 
 const StyledLink = styled(Link)`
   position: absolute;
@@ -272,6 +366,19 @@ const StyledTransactionDetails = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 8px;
+`;
+
+const StyledNoteArea = styled.div`
+  border: 0.1px solid var(--dark-grey-color);
+  border-radius: 16px;
+  padding: 8px 16px;
+  min-height: 13rem;
+  width: 18rem;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--accent-color);
+  gap: 8px;
 `;
 
 const StyledTitle = styled.h2`
