@@ -247,7 +247,11 @@ export default function App({ Component, pageProps }) {
 
     if (response.ok) {
       mutateTransactions();
-      setSuccessMessage("Note successfully added!");
+      setSuccessMessage(
+        transaction.note
+          ? "Note successfully updated!"
+          : "Note successfully added!"
+      );
     } else {
       console.error("Failed to add note.");
     }
