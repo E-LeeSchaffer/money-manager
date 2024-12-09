@@ -87,6 +87,12 @@ export default function TransactionDetailsPage({
     <>
       <StyledLink href={"/settings"} aria-label="Settings">
         <Image
+          src={"/images/report.svg"}
+          alt="report button"
+          width={15}
+          height={15}
+        />
+        <Image
           aria-hidden="true"
           src={"/images/settings.svg"}
           alt="filter button"
@@ -94,6 +100,7 @@ export default function TransactionDetailsPage({
           height={15}
         />
       </StyledLink>
+
       <StyledBackLink href="/">
         <StyledImage
           aria-hidden="true"
@@ -218,10 +225,12 @@ export default function TransactionDetailsPage({
 const StyledLink = styled(Link)`
   position: absolute;
   right: 16px;
-  top: 10px;
+  top: 16px;
   text-decoration: none;
   color: inherit;
   z-index: 2000;
+  display: flex;
+  gap: 12px;
 `;
 const StyledPageNotFoundMessage = styled.p`
   display: flex;

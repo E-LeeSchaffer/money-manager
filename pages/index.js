@@ -202,6 +202,23 @@ export default function HomePage({
           />
         </StyledLink>
       )}
+      <StyledReportLink
+        href={{
+          pathname: "/report",
+          query: {
+            filteredTransactionType: "expense",
+            selectedCategory: "uncategorized",
+          },
+        }}
+        aria-label="Report"
+      >
+        <Image
+          src={"/images/report.svg"}
+          alt="report button"
+          width={15}
+          height={15}
+        />
+      </StyledReportLink>
 
       <StyledTitle>Transactions</StyledTitle>
 
@@ -349,10 +366,23 @@ const StyledNoTransactionsFoundMessage = styled.div`
 const StyledLink = styled(Link)`
   position: absolute;
   right: 16px;
-  top: 10px;
+  top: 16px;
   text-decoration: none;
   color: inherit;
   z-index: 2000;
+  display: flex;
+  gap: 12px;
+`;
+
+const StyledReportLink = styled(Link)`
+  position: absolute;
+  right: 40px;
+  top: 16px;
+  text-decoration: none;
+  color: inherit;
+  z-index: 2000;
+  display: flex;
+  gap: 12px;
 `;
 
 const StyledTitle = styled.h2`
