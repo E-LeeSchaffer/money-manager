@@ -34,15 +34,6 @@ export default function TransactionDetailsPage({
   const [isDeletingNote, setIsDeletingNote] = useState(false);
 
   const [isNoteError, setIsNoteError] = useState(false);
-  const [charactersLeft, setCharactersLeft] = useLocalStorageState(
-    "charactersLeft",
-    { defaultValue: 140 }
-  );
-
-  function handleCharacterCount(event) {
-    const remainingCharacters = 140 - event.target.value.length;
-    setCharactersLeft(remainingCharacters);
-  }
 
   if (!transactionDetails) {
     if (transactionError) {
@@ -261,7 +252,6 @@ export default function TransactionDetailsPage({
               name="note"
               defaultValue={transactionDetails.note}
               maxLength={140}
-              onChange={handleCharacterCount}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
                   const noteContent = event.target.value.trim();
@@ -277,9 +267,6 @@ export default function TransactionDetailsPage({
                 }
               }}
             />
-            <StyledCharacterCount>
-              {charactersLeft} characters left
-            </StyledCharacterCount>
             {isNoteError && (
               <ErrorMessageNote>
                 Please enter at least 1 valid character (letter, number or
@@ -308,14 +295,6 @@ export default function TransactionDetailsPage({
     </>
   );
 }
-
-const StyledCharacterCount = styled.p`
-  padding: 0;
-  margin: 0;
-  font-size: 0.7rem;
-  color: grey;
-  padding-bottom: 8px;
-`;
 
 const ErrorMessageNote = styled.p`
   grid-area: typeErrorMessage;
