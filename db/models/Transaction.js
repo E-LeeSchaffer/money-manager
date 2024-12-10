@@ -9,7 +9,7 @@ const transactionSchema = new Schema({
   category: { type: Schema.Types.ObjectId, ref: "Category", required: false },
   type: { type: String, required: true },
   date: { type: Date, required: true },
-  note: { type: String, default: "", required: false },
+  note: { type: String, default: "" },
 });
 
 const Transaction =

@@ -150,7 +150,6 @@ export default function TransactionDetailsPage({
               type="button"
               onClick={() => {
                 handleConfirmDeleteTransaction();
-                router.push("/");
               }}
             >
               Really Delete
@@ -254,11 +253,8 @@ export default function TransactionDetailsPage({
                 onBlur={() => setIsNoteEdit(false)}
               />
             ) : (
-              <StyledNoteContentButton
-                onClick={() => setIsNoteEdit(true)}
-                empty={!transactionDetails.note}
-              >
-                {transactionDetails.note}
+              <StyledNoteContentButton onClick={() => setIsNoteEdit(true)}>
+                {transactionDetails.note || "Click to add a note"}
               </StyledNoteContentButton>
             )}
             {isNoteError && (
@@ -302,14 +298,9 @@ const StyledNoteContentButton = styled.button`
   text-align: left;
   font-size: 1rem;
   line-height: 1.5;
-  padding-top: 10px;
-  padding-left: 2px;
   font-family: inherit;
-
-  &::after {
-    content: ${(props) => (props.empty ? '"Click to add a note"' : '""')};
-    color: grey;
-  }
+  padding-left: 2px;
+  padding-top: 10px;
 `;
 
 const ErrorMessageNote = styled.p`
