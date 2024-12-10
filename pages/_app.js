@@ -237,13 +237,12 @@ export default function App({ Component, pageProps }) {
   }
 
   async function handleAddNote(note, transaction) {
-    const trimmedNote = note.trim();
     const response = await fetch(`/api/transactions/${transaction._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...transaction, note: trimmedNote }),
+      body: JSON.stringify({ ...transaction, note }),
     });
 
     if (response.ok) {

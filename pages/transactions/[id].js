@@ -33,44 +33,43 @@ export default function TransactionDetailsPage({
   const [isDeletingTransaction, setIsDeletingTransaction] = useState(false);
   const [isDeletingNote, setIsDeletingNote] = useState(false);
 
+  const [isNoteEdit, setIsNoteEdit] = useState(false);
   const [isNoteError, setIsNoteError] = useState(false);
 
-  if (!transactionDetails) {
-    if (transactionError) {
-      return <p>Failed to load transaction.</p>;
+  function handleConfirmDeleteTransaction() {
+    handleDeleteTransaction(transactionDetails._id);
+    setIsDeletingTransaction(false);
+    router.push("/");
+  }
+
+  async function handleConfirmDeleteNote() {
+    await handleDeleteNote(transactionDetails);
+    mutate();
+    setIsDeletingNote(false);
+  }
+
+  async function handleNoteUpdate(event) {
+    if (event.key !== "Enter") {
+      setIsNoteError(false);
+      return;
     }
-    return <p>Loading</p>;
+
+    const noteContent = event.target.value.trim();
+    if (noteContent.length <= 0) {
+      setIsNoteError(true);
+      return;
+    }
+
+    await handleAddNote(noteContent, transactionDetails);
+    event.target.blur();
+    mutate();
   }
 
   if (!router.isReady) {
     return null;
   }
 
-  function handleConfirmDelete() {
-    if (isDeletingTransaction) {
-      handleDeleteTransaction(transactionDetails._id);
-      setIsDeletingTransaction(false);
-      router.push("/");
-    }
-
-    if (isDeletingNote) {
-      handleDeleteNote(transactionDetails);
-      setIsDeletingNote(false);
-      setCharactersLeft(140);
-    }
-  }
-
-  function handleCancelDeleteDialogue() {
-    if (isDeletingTransaction) {
-      setIsDeletingTransaction(false);
-    }
-
-    if (isDeletingNote) {
-      setIsDeletingNote(false);
-    }
-  }
-
-  if (!transactionDetails) {
+  if (!transactionDetails || transactionError) {
     return (
       <>
         <StyledPageNotFoundMessage>
@@ -136,10 +135,6 @@ export default function TransactionDetailsPage({
         />
       </Modal>
 
-      {successMessage && (
-        <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
-      )}
-
       <StyledTransactionDetails>
         <StyledTitle>Transaction Details</StyledTitle>
 
@@ -147,14 +142,14 @@ export default function TransactionDetailsPage({
           <StyledConfirmActionContainer>
             <StyledCancelButton
               type="button"
-              onClick={handleCancelDeleteDialogue}
+              onClick={() => setIsDeletingTransaction(false)}
             >
               Cancel
             </StyledCancelButton>
             <StyledConfirmButton
               type="button"
               onClick={() => {
-                handleConfirmDelete(transactionDetails);
+                handleConfirmDeleteTransaction();
                 router.push("/");
               }}
             >
@@ -227,18 +222,19 @@ export default function TransactionDetailsPage({
             </StyledOptionsContainer>
           </StyledDetailsContainer>
         )}
+
         {isDeletingNote ? (
           <StyledConfirmActionContainer>
             <StyledCancelButton
               type="button"
-              onClick={handleCancelDeleteDialogue}
+              onClick={() => setIsDeletingNote(false)}
             >
               Cancel
             </StyledCancelButton>
             <StyledConfirmButton
               type="button"
               onClick={() => {
-                handleConfirmDelete(transactionDetails);
+                handleConfirmDeleteNote();
               }}
             >
               Really Delete
@@ -246,27 +242,22 @@ export default function TransactionDetailsPage({
           </StyledConfirmActionContainer>
         ) : (
           <StyledNoteArea>
-            Notes
-            <StyledTextArea
-              id="note"
-              name="note"
-              defaultValue={transactionDetails.note}
-              maxLength={140}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  const noteContent = event.target.value.trim();
-                  if (noteContent.length > 0) {
-                    handleAddNote(event.target.value, transactionDetails);
-                    event.target.blur();
-                  } else {
-                    setIsNoteError(true);
-                  }
-                }
-                if (event.key !== "Enter") {
-                  setIsNoteError(false);
-                }
-              }}
-            />
+            <p>Notes</p>
+            {isNoteEdit ? (
+              <StyledTextArea
+                id="note"
+                name="note"
+                defaultValue={transactionDetails.note}
+                autoFocus
+                maxLength={140}
+                onKeyDown={handleNoteUpdate}
+                onBlur={() => setIsNoteEdit(false)}
+              />
+            ) : (
+              <button onClick={() => setIsNoteEdit(true)}>
+                {transactionDetails.note || "click to add a note"}
+              </button>
+            )}
             {isNoteError && (
               <ErrorMessageNote>
                 Please enter at least 1 valid character (letter, number or
@@ -292,6 +283,9 @@ export default function TransactionDetailsPage({
           </StyledNoteArea>
         )}
       </StyledTransactionDetails>
+      {successMessage && (
+        <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
+      )}
     </>
   );
 }
