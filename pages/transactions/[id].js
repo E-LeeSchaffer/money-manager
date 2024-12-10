@@ -254,7 +254,10 @@ export default function TransactionDetailsPage({
                 onBlur={() => setIsNoteEdit(false)}
               />
             ) : (
-              <StyledNoteContentButton onClick={() => setIsNoteEdit(true)}>
+              <StyledNoteContentButton
+                onClick={() => setIsNoteEdit(true)}
+                empty={!transactionDetails.note}
+              >
                 {transactionDetails.note}
               </StyledNoteContentButton>
             )}
@@ -302,6 +305,11 @@ const StyledNoteContentButton = styled.button`
   padding-top: 10px;
   padding-left: 2px;
   font-family: inherit;
+
+  &::after {
+    content: ${(props) => (props.empty ? '"Click to add a note"' : '""')};
+    color: grey;
+  }
 `;
 
 const ErrorMessageNote = styled.p`
