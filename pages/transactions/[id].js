@@ -7,6 +7,7 @@ import Image from "next/image";
 import { capitalizeFirstLetter, formatDate, formatNumber } from "@/lib/utils";
 import Link from "next/link";
 import useSWR from "swr";
+import useLocalStorageState from "use-local-storage-state";
 
 export default function TransactionDetailsPage({
   handleEditTransaction,
@@ -33,6 +34,15 @@ export default function TransactionDetailsPage({
   const [isDeletingNote, setIsDeletingNote] = useState(false);
 
   const [isNoteError, setIsNoteError] = useState(false);
+  const [charactersLeft, setCharactersLeft] = useLocalStorageState(
+    "charactersLeft",
+    { defaultValue: 140 }
+  );
+
+  function handleCharacterCount(event) {
+    const remainingCharacters = 140 - event.target.value.length;
+    setCharactersLeft(remainingCharacters);
+  }
 
   if (!transactionDetails) {
     if (transactionError) {
@@ -55,6 +65,7 @@ export default function TransactionDetailsPage({
     if (isDeletingNote) {
       handleDeleteNote(transactionDetails);
       setIsDeletingNote(false);
+      setCharactersLeft(140);
     }
   }
 
@@ -250,6 +261,7 @@ export default function TransactionDetailsPage({
               name="note"
               defaultValue={transactionDetails.note}
               maxLength={140}
+              onChange={handleCharacterCount}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
                   const noteContent = event.target.value.trim();
@@ -265,9 +277,13 @@ export default function TransactionDetailsPage({
                 }
               }}
             />
+            <StyledCharacterCount>
+              {charactersLeft} characters left
+            </StyledCharacterCount>
             {isNoteError && (
               <ErrorMessageNote>
-                Please enter at least 1 character to submit.
+                Please enter at least 1 valid character (letter, number or
+                special character) to submit.
               </ErrorMessageNote>
             )}
             <StyledOptionsContainer>
@@ -293,10 +309,20 @@ export default function TransactionDetailsPage({
   );
 }
 
+const StyledCharacterCount = styled.p`
+  padding: 0;
+  margin: 0;
+  font-size: 0.7rem;
+  color: grey;
+  padding-bottom: 8px;
+`;
+
 const ErrorMessageNote = styled.p`
   grid-area: typeErrorMessage;
   color: red;
   font-size: 0.6rem;
+  padding: 0;
+  margin: 0;
 `;
 
 const StyledTextArea = styled.textarea`
@@ -307,6 +333,7 @@ const StyledTextArea = styled.textarea`
   line-height: 24px;
   font-size: inherit;
   font-family: inherit;
+  margin-top: 8px;
 `;
 
 const StyledLink = styled(Link)`
@@ -373,12 +400,11 @@ const StyledNoteArea = styled.div`
   border: 0.1px solid var(--dark-grey-color);
   border-radius: 16px;
   padding: 8px 16px;
-  min-height: 13rem;
+  min-height: 15.3rem;
   width: 18rem;
   display: flex;
   flex-direction: column;
   background-color: var(--accent-color);
-  gap: 8px;
 `;
 
 const StyledTitle = styled.h2`
