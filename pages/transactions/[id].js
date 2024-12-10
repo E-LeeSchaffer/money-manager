@@ -242,7 +242,7 @@ export default function TransactionDetailsPage({
           </StyledConfirmActionContainer>
         ) : (
           <StyledNoteArea>
-            <p>Notes</p>
+            Notes
             {isNoteEdit ? (
               <StyledTextArea
                 id="note"
@@ -254,9 +254,9 @@ export default function TransactionDetailsPage({
                 onBlur={() => setIsNoteEdit(false)}
               />
             ) : (
-              <button onClick={() => setIsNoteEdit(true)}>
-                {transactionDetails.note || "click to add a note"}
-              </button>
+              <StyledNoteContentButton onClick={() => setIsNoteEdit(true)}>
+                {transactionDetails.note}
+              </StyledNoteContentButton>
             )}
             {isNoteError && (
               <ErrorMessageNote>
@@ -290,6 +290,20 @@ export default function TransactionDetailsPage({
   );
 }
 
+const StyledNoteContentButton = styled.button`
+  border: none;
+  background-color: inherit;
+  min-height: 158px;
+  display: flex;
+  padding: 0;
+  text-align: left;
+  font-size: 1rem;
+  line-height: 1.5;
+  padding-top: 10px;
+  padding-left: 2px;
+  font-family: inherit;
+`;
+
 const ErrorMessageNote = styled.p`
   grid-area: typeErrorMessage;
   color: red;
@@ -318,6 +332,7 @@ const StyledLink = styled(Link)`
   color: inherit;
   z-index: 2000;
 `;
+
 const StyledPageNotFoundMessage = styled.p`
   display: flex;
   justify-content: center;
@@ -374,11 +389,12 @@ const StyledNoteArea = styled.div`
   border: 0.1px solid var(--dark-grey-color);
   border-radius: 16px;
   padding: 8px 16px;
-  min-height: 13.5rem;
+  min-height: 14rem;
   width: 18rem;
   display: flex;
   flex-direction: column;
   background-color: var(--accent-color);
+  gap: 8px;
 `;
 
 const StyledTitle = styled.h2`
