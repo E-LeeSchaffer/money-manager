@@ -23,6 +23,7 @@ export default function App({ Component, pageProps }) {
     `/api/categories`,
     fetcher
   );
+
   const [isEditCategory, setIsEditCategory] = useState(null);
   const [categoryToEdit, setcategoryToEdit] = useState(null);
   const [originalCategoryName, setOriginalCategoryName] = useState("");
@@ -210,15 +211,50 @@ export default function App({ Component, pageProps }) {
       mutateCategories();
       mutateTransactions();
     }
-    setSuccessMessage("Category successfully deleted!");
-
-    setCategoryToDelete(null);
-    closeModal();
+    setSuccessMessage("Note successfully deleted!");
   }
 
   function handleCancelDeleteCategory() {
     setCategoryToDelete(null);
     closeModal();
+  }
+
+  async function handleDeleteNote(transaction) {
+    const response = await fetch(`/api/transactions/${transaction._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...transaction, note: "" }),
+    });
+
+    if (response.ok) {
+      mutateTransactions();
+      setSuccessMessage("Note successfully deleted!");
+    } else {
+      console.error("Failed to delete note.");
+    }
+  }
+
+  async function handleAddNote(note, transaction) {
+    const response = await fetch(`/api/transactions/${transaction._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...transaction, note }),
+    });
+
+    if (response.ok) {
+      mutateTransactions();
+      setSuccessMessage(
+        transaction.note
+          ? "Note successfully updated!"
+          : "Note successfully added!"
+      );
+    } else {
+      console.error("Failed to add note.");
+    }
   }
 
   const componentProps = {
@@ -254,6 +290,8 @@ export default function App({ Component, pageProps }) {
     handleConfirmDeleteCategory,
     categoryToDelete,
     handleCancelDeleteCategory,
+    handleAddNote,
+    handleDeleteNote,
     ...pageProps,
   };
 

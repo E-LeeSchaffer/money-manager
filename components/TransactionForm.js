@@ -302,7 +302,6 @@ const DropdownButton = styled.div`
   display: flex;
   align-items: center;
   padding: 2px 12px;
-  cursor: pointer;
   border: 1px solid var(--dark-grey-color);
   border-radius: 24px;
   background-color: white;
@@ -328,7 +327,6 @@ const DropdownList = styled.div`
   background-color: white;
   color: var() (--text-color-dark);
   padding: 4px;
-  cursor: pointer;
   font-size: 0.8rem;
   z-index: 50;
 `;
@@ -337,7 +335,6 @@ const DropdownItem = styled.div`
   display: flex;
   align-items: center;
   padding: 4px;
-  cursor: pointer;
   gap: 4px;
 `;
 

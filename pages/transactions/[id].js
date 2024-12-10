@@ -1,12 +1,13 @@
 import Modal from "@/components/Modal";
 import TransactionForm from "@/components/TransactionForm";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { capitalizeFirstLetter, formatDate, formatNumber } from "@/lib/utils";
 import Link from "next/link";
 import useSWR from "swr";
+import useLocalStorageState from "use-local-storage-state";
 
 export default function TransactionDetailsPage({
   handleEditTransaction,
@@ -16,44 +17,59 @@ export default function TransactionDetailsPage({
   handleOpenEditMode,
   handleDeleteTransaction,
   successMessage,
+  handleAddNote,
+  handleDeleteNote,
 }) {
-  const { data: categories = [] } = useSWR(`/api/categories`);
   const router = useRouter();
   const { id } = router.query;
-  const [isDeleting, setIsDeleting] = useState(false);
 
   const {
     data: transactionDetails,
     error: transactionError,
     mutate,
   } = useSWR(id ? `/api/transactions/${id}` : null);
+  const { data: categories = [] } = useSWR(`/api/categories`);
 
-  if (!transactionDetails) {
-    if (transactionError) {
-      return <p>Failed to load transaction.</p>;
+  const [isDeletingTransaction, setIsDeletingTransaction] = useState(false);
+  const [isDeletingNote, setIsDeletingNote] = useState(false);
+
+  const [isNoteEdit, setIsNoteEdit] = useState(false);
+  const [isNoteError, setIsNoteError] = useState(false);
+
+  function handleConfirmDeleteTransaction() {
+    handleDeleteTransaction(transactionDetails._id);
+    setIsDeletingTransaction(false);
+    router.push("/");
+  }
+
+  async function handleConfirmDeleteNote() {
+    await handleDeleteNote(transactionDetails);
+    mutate();
+    setIsDeletingNote(false);
+  }
+
+  async function handleNoteUpdate(event) {
+    if (event.key !== "Enter") {
+      setIsNoteError(false);
+      return;
     }
-    return <p>Loading</p>;
+
+    const noteContent = event.target.value.trim();
+    if (noteContent.length <= 0) {
+      setIsNoteError(true);
+      return;
+    }
+
+    await handleAddNote(noteContent, transactionDetails);
+    event.target.blur();
+    mutate();
   }
 
   if (!router.isReady) {
     return null;
   }
 
-  function handleConfirmDelete() {
-    handleDeleteTransaction(transactionDetails._id);
-    setIsDeleting(false);
-    router.push("/");
-  }
-
-  function handleCancelDeleteDialogue() {
-    setIsDeleting(false);
-  }
-
-  function handleOpenDeleteDialogue() {
-    setIsDeleting(true);
-  }
-
-  if (!transactionDetails) {
+  if (!transactionDetails || transactionError) {
     return (
       <>
         <StyledPageNotFoundMessage>
@@ -126,26 +142,21 @@ export default function TransactionDetailsPage({
         />
       </Modal>
 
-      {successMessage && (
-        <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
-      )}
-
       <StyledTransactionDetails>
         <StyledTitle>Transaction Details</StyledTitle>
 
-        {isDeleting ? (
+        {isDeletingTransaction ? (
           <StyledConfirmActionContainer>
             <StyledCancelButton
               type="button"
-              onClick={handleCancelDeleteDialogue}
+              onClick={() => setIsDeletingTransaction(false)}
             >
               Cancel
             </StyledCancelButton>
             <StyledConfirmButton
               type="button"
               onClick={() => {
-                handleConfirmDelete(transactionDetails);
-                router.push("/");
+                handleConfirmDeleteTransaction();
               }}
             >
               Really Delete
@@ -203,7 +214,7 @@ export default function TransactionDetailsPage({
               <StyledDeleteButton
                 type="button"
                 onClick={() => {
-                  handleOpenDeleteDialogue();
+                  setIsDeletingTransaction(true);
                 }}
               >
                 <StyledImage
@@ -217,10 +228,107 @@ export default function TransactionDetailsPage({
             </StyledOptionsContainer>
           </StyledDetailsContainer>
         )}
+
+        {isDeletingNote ? (
+          <StyledConfirmActionContainer>
+            <StyledCancelButton
+              type="button"
+              onClick={() => setIsDeletingNote(false)}
+            >
+              Cancel
+            </StyledCancelButton>
+            <StyledConfirmButton
+              type="button"
+              onClick={() => {
+                handleConfirmDeleteNote();
+              }}
+            >
+              Really Delete
+            </StyledConfirmButton>
+          </StyledConfirmActionContainer>
+        ) : (
+          <StyledNoteArea>
+            Notes
+            {isNoteEdit ? (
+              <StyledTextArea
+                id="note"
+                name="note"
+                defaultValue={transactionDetails.note}
+                autoFocus
+                maxLength={140}
+                onKeyDown={handleNoteUpdate}
+                onBlur={() => setIsNoteEdit(false)}
+              />
+            ) : (
+              <StyledNoteContentButton onClick={() => setIsNoteEdit(true)}>
+                {transactionDetails.note || "Click to add a note"}
+              </StyledNoteContentButton>
+            )}
+            {isNoteError && (
+              <ErrorMessageNote>
+                Please enter at least 1 valid character (letter, number or
+                special character) to submit.
+              </ErrorMessageNote>
+            )}
+            <StyledOptionsContainer>
+              <StyledDeleteButton
+                type="button"
+                onClick={() => {
+                  setIsDeletingNote(true);
+                }}
+              >
+                <StyledImage
+                  aria-hidden="true"
+                  src="/images/trash.svg"
+                  alt="delete button"
+                  width={15}
+                  height={15}
+                />
+              </StyledDeleteButton>
+            </StyledOptionsContainer>
+          </StyledNoteArea>
+        )}
       </StyledTransactionDetails>
+      {successMessage && (
+        <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
+      )}
     </>
   );
 }
+
+const StyledNoteContentButton = styled.button`
+  border: none;
+  background-color: inherit;
+  min-height: 158px;
+  display: flex;
+  padding: 0;
+  text-align: left;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-family: inherit;
+  padding-left: 2px;
+  padding-top: 10px;
+`;
+
+const ErrorMessageNote = styled.p`
+  grid-area: typeErrorMessage;
+  color: red;
+  font-size: 0.6rem;
+  padding: 0;
+  margin: 0;
+  margin-top: 8px;
+`;
+
+const StyledTextArea = styled.textarea`
+  border-bottom: 1px solid black;
+  border: none;
+  background-color: inherit;
+  min-height: 150px;
+  line-height: 24px;
+  font-size: inherit;
+  font-family: inherit;
+  margin-top: 8px;
+`;
 
 const StyledLink = styled(Link)`
   position: absolute;
@@ -232,6 +340,7 @@ const StyledLink = styled(Link)`
   display: flex;
   gap: 12px;
 `;
+
 const StyledPageNotFoundMessage = styled.p`
   display: flex;
   justify-content: center;
@@ -281,6 +390,19 @@ const StyledTransactionDetails = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 8px;
+`;
+
+const StyledNoteArea = styled.div`
+  border: 0.1px solid var(--dark-grey-color);
+  border-radius: 16px;
+  padding: 8px 16px;
+  min-height: 14rem;
+  width: 18rem;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--accent-color);
+  gap: 8px;
 `;
 
 const StyledTitle = styled.h2`
