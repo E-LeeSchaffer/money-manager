@@ -81,6 +81,7 @@ export default function SettingsPage({
                 <StyledCategoryInput
                   type="text"
                   defaultValue={category.name}
+                  maxLength={20}
                   autoFocus
                   onKeyDown={(event) => {
                     if (event.key === "Enter") {
@@ -134,6 +135,7 @@ export default function SettingsPage({
           <StyledAddCategoryInput
             type="text"
             placeholder="+ Add new category"
+            maxLength={20}
             onKeyDown={(event) => {
               if (event.key === "Enter") {
                 handleAddCategory(event.target.value);

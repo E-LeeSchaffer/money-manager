@@ -68,7 +68,7 @@ export default function BarChartPage() {
             <BarChart
               data={chartData}
               layout="vertical"
-              margin={{ left: 80, right: 40 }}
+              margin={{ left: 80, right: 60 }}
               width={400}
               height={300}
             >
