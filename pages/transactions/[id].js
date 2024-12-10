@@ -302,6 +302,7 @@ const ErrorMessageNote = styled.p`
   font-size: 0.6rem;
   padding: 0;
   margin: 0;
+  margin-top: 8px;
 `;
 
 const StyledTextArea = styled.textarea`
@@ -379,7 +380,7 @@ const StyledNoteArea = styled.div`
   border: 0.1px solid var(--dark-grey-color);
   border-radius: 16px;
   padding: 8px 16px;
-  min-height: 15.3rem;
+  min-height: 13.5rem;
   width: 18rem;
   display: flex;
   flex-direction: column;
