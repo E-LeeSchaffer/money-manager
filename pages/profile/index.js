@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import Image from "next/image";
 import useLocalStorageState from "use-local-storage-state";
+import { useRouter } from "next/router";
 
 const avatars = [
   "/avatars/avatar1.png",
@@ -24,6 +25,7 @@ export default function UserProfile({
   });
 
   const [tempProfile, setTempProfile] = useState({ ...profile });
+  const router = useRouter();
 
   const handleSave = () => {
     setProfile(tempProfile);
@@ -43,10 +45,24 @@ export default function UserProfile({
     setTempProfile((prev) => ({ ...prev, avatar }));
   };
 
+  const handleBack = () => {
+    if (isEditing) {
+      setIsEditing(false);
+    } else {
+      router.push("/");
+    }
+  };
+
+  const title = isEditing
+    ? profile.firstName || profile.lastName
+      ? "Edit Profile"
+      : "Create Profile"
+    : "Profile";
+
   return (
     <>
       {" "}
-      <StyledBackLink href="/">
+      <StyledBackLink as="button" onClick={handleBack}>
         <StyledImage
           aria-hidden="true"
           src="/images/arrow-return-left.svg"
@@ -57,7 +73,7 @@ export default function UserProfile({
         Back
       </StyledBackLink>
       <StyledProfileContainer>
-        <StyledTitle>Profile</StyledTitle>
+        <StyledTitle>{title}</StyledTitle>
         <EditButton onClick={handleEdit}>
           <StyledImage
             aria-hidden="true"
@@ -103,6 +119,7 @@ export default function UserProfile({
                   }))
                 }
               />
+              <Counter>{tempProfile.firstName.length}/20</Counter>
             </InputField>
             <InputField>
               <label>Last Name</label>
@@ -117,6 +134,7 @@ export default function UserProfile({
                   }))
                 }
               />
+              <Counter>{tempProfile.lastName.length}/20</Counter>
             </InputField>
             <ButtonRow>
               <CancelButton onClick={handleCancel}>Cancel</CancelButton>
@@ -161,8 +179,8 @@ const Avatar = styled.img`
 `;
 
 const AvatarSelectionImage = styled.img`
-  width: 65px;
-  height: 65px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   margin: 10px auto;
 `;
@@ -199,10 +217,16 @@ const InputField = styled.div`
     margin-bottom: 4px;
   }
   input {
-    padding: 8px;
+    padding: 6px;
     border: 1px solid gray;
     border-radius: 4px;
   }
+`;
+
+const Counter = styled.span`
+  font-size: 12px;
+  color: gray;
+  text-align: right;
 `;
 
 const ButtonRow = styled.div`
@@ -252,6 +276,6 @@ const StyledImage = styled(Image)`
 
 const StyledTitle = styled.h2`
   text-align: center;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   font-weight: 700;
 `;
