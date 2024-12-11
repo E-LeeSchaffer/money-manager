@@ -274,6 +274,7 @@ export default function App({ Component, pageProps }) {
     handleCancelDeleteDialogue,
     isModalOpen,
     isEditing,
+    setIsEditing,
     editTransaction,
     toggleForm,
     showForm,
