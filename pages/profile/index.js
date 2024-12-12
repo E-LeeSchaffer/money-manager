@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import useLocalStorageState from "use-local-storage-state";
 import { useRouter } from "next/router";
-import ProfileForm from "./ProfileForm";
 
 const avatars = [
   "/avatars/avatar1.png",
@@ -193,4 +192,159 @@ const StyledSuccessMessage = styled.p`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   background-color: var(--friendly-green-color);
+`;
+
+function ProfileForm({ initialProfile, avatars, onSave, onCancel }) {
+  const [formValues, setFormValues] = useState(initialProfile);
+
+  function handleAvatarChange(event) {
+    setFormValues((previous) => ({ ...previous, avatar: event.target.value }));
+  }
+
+  function handleInputChange(event) {
+    const { name, value } = event.target;
+    setFormValues((previous) => ({ ...previous, [name]: value }));
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    onSave(formValues);
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <AvatarSelection>
+        <p>Select Avatar:</p>
+        {avatars?.map((avatar) => (
+          <AvatarOption key={avatar}>
+            <StyledRadioinput
+              type="radio"
+              id={`avatar-${avatar}`}
+              name="avatar"
+              value={avatar}
+              checked={formValues.avatar === avatar}
+              onChange={handleAvatarChange}
+            />
+            <AvatarLabel
+              htmlFor={`avatar-${avatar}`}
+              $isSelected={formValues.avatar === avatar}
+            >
+              <AvatarSelectionImage src={avatar} alt="Avatar Option" />
+            </AvatarLabel>
+          </AvatarOption>
+        ))}
+      </AvatarSelection>
+
+      <InputField>
+        <StyledLabel htmlFor="firstName">First Name</StyledLabel>
+        <StyledInput
+          id="firstName"
+          name="firstName"
+          type="text"
+          maxLength={20}
+          value={formValues.firstName}
+          onChange={handleInputChange}
+        />
+        <Counter>{formValues.firstName?.length}/20</Counter>
+      </InputField>
+      <InputField>
+        <StyledLabel htmlFor="lastName">Last Name</StyledLabel>
+        <StyledInput
+          id="lastName"
+          name="lastName"
+          type="text"
+          maxLength={20}
+          value={formValues.lastName}
+          onChange={handleInputChange}
+        />
+        <Counter>{formValues.lastName?.length}/20</Counter>
+      </InputField>
+      <ButtonRow>
+        <CancelButton type="button" onClick={onCancel}>
+          Cancel
+        </CancelButton>
+        <SaveButton type="submit">Save</SaveButton>
+      </ButtonRow>
+    </form>
+  );
+}
+
+const AvatarSelection = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
+
+const AvatarOption = styled.label`
+  padding: 4px;
+
+  cursor: pointer;
+`;
+
+const AvatarLabel = styled.label`
+  display: block;
+  cursor: pointer;
+  border: 2px solid ${(props) => (props.$isSelected ? "black" : "transparent")};
+  border-radius: 50%;
+  padding: 4px;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: black;
+  }
+`;
+
+const StyledRadioinput = styled.input`
+  display: none;
+`;
+
+const AvatarSelectionImage = styled.img`
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+`;
+
+const InputField = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Counter = styled.span`
+  font-size: 12px;
+  color: gray;
+  text-align: right;
+`;
+
+const ButtonRow = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+`;
+
+const SaveButton = styled.button`
+  padding: 10px 20px;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+`;
+
+const CancelButton = styled.button`
+  padding: 10px 20px;
+  background: none;
+  color: black;
+  border: solid 1px;
+  border-radius: 8px;
+  cursor: pointer;
+`;
+
+const StyledInput = styled.input`
+  padding: 6px;
+  border: 1px solid gray;
+  border-radius: 4px;
+`;
+
+const StyledLabel = styled.label`
+  font-size: 14px;
+  margin-bottom: 4px;
 `;
