@@ -27,7 +27,7 @@ export default function ProfileForm({
     <form onSubmit={handleSubmit}>
       <AvatarSelection>
         <p>Select Avatar:</p>
-        {avatars.map((avatar) => (
+        {avatars?.map((avatar) => (
           <AvatarOption
             key={avatar}
             isSelected={tempProfile.avatar === avatar}
@@ -47,7 +47,7 @@ export default function ProfileForm({
           value={tempProfile.firstName}
           onChange={handleInputChange}
         />
-        <Counter>{tempProfile.firstName.length}/20</Counter>
+        <Counter>{tempProfile.firstName?.length}/20</Counter>
       </InputField>
       <InputField>
         <label htmlFor="lastName">Last Name</label>
@@ -59,7 +59,7 @@ export default function ProfileForm({
           value={tempProfile.lastName}
           onChange={handleInputChange}
         />
-        <Counter>{tempProfile.lastName.length}/20</Counter>
+        <Counter>{tempProfile.lastName?.length}/20</Counter>
       </InputField>
       <ButtonRow>
         <CancelButton type="button" onClick={onCancel}>
