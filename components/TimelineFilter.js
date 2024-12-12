@@ -2,12 +2,14 @@ import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
+import { format } from "date-fns";
+import { useState } from "react";
 
 const timeframes = [
-  { label: "7 Days", value: 7 },
-  { label: "30 Days", value: 30 },
-  { label: "Half Year", value: 180 },
-  { label: "Full Year", value: 365 },
+  { label: "7 D", value: 7 },
+  { label: "30 D", value: 30 },
+  { label: "6 Mo", value: 180 },
+  { label: "12 Mo", value: 365 },
 ];
 
 export default function TimelineFilter({
@@ -26,7 +28,18 @@ export default function TimelineFilter({
 
   const customDateLabel =
     customDateRange.start && customDateRange.end ? (
-      `${customDateRange.start.toLocaleDateString()} - ${customDateRange.end.toLocaleDateString()}`
+      customDateRange.start.getFullYear() ===
+      customDateRange.end.getFullYear() ? (
+        `${format(customDateRange.start, "dd.MM.")} - ${format(
+          customDateRange.end,
+          "dd.MM.yyyy"
+        )}`
+      ) : (
+        `${format(customDateRange.start, "dd.MM.yyyy")} - ${format(
+          customDateRange.end,
+          "dd.MM.yyyy"
+        )}`
+      )
     ) : (
       <Image
         src="/images/calendar-week.svg"
@@ -59,13 +72,20 @@ export default function TimelineFilter({
         >
           {customDateLabel}
         </StyledTimelineFilterButton>
-        {!(customDateRange.start === null && customDateRange.end === null) && (
-          <StyledClearButton
+        {customDateRange.start !== null && customDateRange.end !== null && (
+          <StyledDeselectButton
+            type="button"
             onClick={handleClearCustomDateRange}
-            aria-label="Clear custom date range"
+            aria-label="Deselect"
           >
-            &times;
-          </StyledClearButton>
+            <StyledImage
+              aria-hidden="true"
+              src={"/images/x-square-fill.svg"}
+              alt="filter button"
+              width={15}
+              height={15}
+            />
+          </StyledDeselectButton>
         )}
       </StyledCustomDateButtonContainer>
 
@@ -92,12 +112,12 @@ const StyledTimelineFilterContainer = styled.div`
 
 const StyledTimelineFilterButton = styled.button`
   border: 0.1px solid var(--dark-grey-color);
-  border-radius: 14px;
+  border-radius: 8px;
   display: flex;
-  width: fit-content;
+  min-width: fit-content;
   align-items: center;
-  height: 1.6rem;
-  padding: 8px;
+  height: 2.1rem;
+  padding: 4px 6px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   font-size: 0.8rem;
   border: ${({ $active }) =>
@@ -108,25 +128,26 @@ const StyledTimelineFilterButton = styled.button`
     $active ? "var(--dark-grey-color)" : "var(--light-bg-color)"};
 `;
 
-const StyledClearButton = styled.button`
-  position: absolute;
-  border-radius: 50%;
-  right: -4px;
-  top: -6px;
-  border: none;
-  background-color: black;
-  color: var(--dark-grey-color);
-  font-size: 0.8rem;
-  cursor: pointer;
-  z-index: 9999;
+const StyledCustomDateButtonContainer = styled.div`
+  position: relative;
 `;
 
 const StyledDatePickerContainer = styled.div`
   position: absolute;
+  top: 390px;
   z-index: 1000;
   margin-top: 10px;
 `;
 
-const StyledCustomDateButtonContainer = styled.div`
-  position: relative;
+const StyledDeselectButton = styled.button`
+  border: none;
+  background-color: transparent;
+  z-index: 9;
+  position: absolute;
+  top: -8px;
+  right: -12px;
+`;
+
+const StyledImage = styled(Image)`
+  display: flex;
 `;

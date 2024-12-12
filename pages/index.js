@@ -43,6 +43,8 @@ export default function HomePage({
     "selectedCategory",
     { defaultValue: "" }
   );
+  const [isCustomDatePickerOpen, setIsCustomDatePickerOpen] = useState(false);
+
   const [sortOrder, setSortOrder] = useState("desc");
   const [selectedTimeframe, setSelectedTimeframe] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
@@ -51,7 +53,6 @@ export default function HomePage({
     start: null,
     end: null,
   });
-  const [isCustomDatePickerOpen, setCustomDatePickerOpen] = useState(false);
 
   function calculateDateRange(days) {
     const currentDate = new Date();
@@ -68,7 +69,7 @@ export default function HomePage({
       setSelectedTimeframe(value);
       setCustomDateRange({ start: null, end: null });
     }
-    setCustomDatePickerOpen(false);
+    setIsCustomDatePickerOpen(false);
   }
 
   function handleCustomDateChange(dates) {
@@ -84,7 +85,7 @@ export default function HomePage({
 
       if (start && end) {
         setSelectedTimeframe(null);
-        setCustomDatePickerOpen(false);
+        setIsCustomDatePickerOpen(false);
       }
     }
   }
@@ -242,10 +243,6 @@ export default function HomePage({
         categories={categories}
       />
 
-      {successMessage && (
-        <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
-      )}
-
       {!showForm && (
         <StyledBalanceContainer>
           <IncomeExpense
@@ -316,52 +313,50 @@ export default function HomePage({
           onTimeframeChange={handleTimeframeClick}
           customDateRange={customDateRange}
           onCustomDateChange={handleCustomDateChange}
-          setIsCustomDatePickerOpen={setCustomDatePickerOpen}
           isCustomDatePickerOpen={isCustomDatePickerOpen}
+          setIsCustomDatePickerOpen={setIsCustomDatePickerOpen}
         />
       </StyledTimelineFilterContainer>
 
-      <StyledSortContainer>
-        <SortControl
-          sortOrder={sortOrder}
-          onToggleSortOrder={handleToggleSortOrder}
-        />
-      </StyledSortContainer>
-
       {displayedTransactions.length > 0 ? (
-        <TransactionsList
-          handleEditTransaction={handleEditTransaction}
-          transactions={displayedTransactions}
-          selectedCategory={selectedCategory}
-          handleOpenEditMode={handleOpenEditMode}
-          openModal={openModal}
-          onCloseModal={closeModal}
-          handleOpenDeleteDialogue={handleOpenDeleteDialogue}
-          handleConfirmDelete={handleConfirmDelete}
-          handleCancelDeleteDialogue={handleCancelDeleteDialogue}
-          handleDeleteTransaction={handleDeleteTransaction}
-          isDeletingId={isDeletingId}
-          sortOrder={sortOrder}
-          activeSelectionId={activeSelectionId}
-          openSelection={openSelection}
-          closeSelection={closeSelection}
-          categories={categories}
-        />
+        <>
+          <StyledSortContainer>
+            <SortControl
+              sortOrder={sortOrder}
+              onToggleSortOrder={handleToggleSortOrder}
+            />
+          </StyledSortContainer>
+          <TransactionsList
+            handleEditTransaction={handleEditTransaction}
+            transactions={displayedTransactions}
+            selectedCategory={selectedCategory}
+            handleOpenEditMode={handleOpenEditMode}
+            openModal={openModal}
+            onCloseModal={closeModal}
+            handleOpenDeleteDialogue={handleOpenDeleteDialogue}
+            handleConfirmDelete={handleConfirmDelete}
+            handleCancelDeleteDialogue={handleCancelDeleteDialogue}
+            handleDeleteTransaction={handleDeleteTransaction}
+            isDeletingId={isDeletingId}
+            sortOrder={sortOrder}
+            activeSelectionId={activeSelectionId}
+            openSelection={openSelection}
+            closeSelection={closeSelection}
+            categories={categories}
+          />
+        </>
       ) : (
         <StyledNoTransactionsFoundMessage>
           No transactions found.
         </StyledNoTransactionsFoundMessage>
       )}
+
+      {successMessage && (
+        <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
+      )}
     </>
   );
 }
-
-const StyledNoTransactionsFoundMessage = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 44px;
-  color: var(--dark-grey-color);
-`;
 
 const StyledLink = styled(Link)`
   position: absolute;
@@ -395,26 +390,12 @@ const StyledTitle = styled.h2`
   margin-top: 0;
 `;
 
-const StyledSuccessMessage = styled.p`
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: var(--text-color-dark);
-  font-size: 0.8rem;
-  padding: 6px 4px;
-  width: 220px;
-  font-weight: 800;
-  text-align: center;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  background-color: var(--friendly-green-color);
-`;
-
-const StyledTimelineFilterContainer = styled.div`
+const StyledBalanceContainer = styled.div`
   display: flex;
-  padding: 0 12px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
 `;
 
 const StyledSelectionBar = styled.div`
@@ -423,12 +404,6 @@ const StyledSelectionBar = styled.div`
   padding: 12px 10px;
   display: grid;
   grid-template-areas: "selectedCategory controls";
-`;
-
-const StyledSortContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding: 2px 10px;
 `;
 
 const StyledSelectedCategoryDisplay = styled.div`
@@ -455,22 +430,14 @@ const StyledDeselectButton = styled.button`
   padding: 0;
 `;
 
-const StyledControls = styled.div`
-  display: flex;
-  grid-area: controls;
-  justify-content: flex-end;
-`;
-
 const StyledImage = styled(Image)`
   display: flex;
 `;
 
-const StyledBalanceContainer = styled.div`
+const StyledControls = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
+  grid-area: controls;
+  justify-content: flex-end;
 `;
 
 const StyledInput = styled.input`
@@ -483,4 +450,41 @@ const StyledInput = styled.input`
   &:focus {
     outline: none;
   }
+`;
+
+const StyledTimelineFilterContainer = styled.div`
+  display: flex;
+  padding: 0 12px;
+`;
+
+const StyledSortContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  position: absolute;
+  right: 44px;
+  top: 428px;
+`;
+
+const StyledNoTransactionsFoundMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 44px;
+  color: var(--dark-grey-color);
+`;
+
+const StyledSuccessMessage = styled.p`
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text-color-dark);
+  font-size: 0.8rem;
+  padding: 6px 4px;
+  width: 220px;
+  font-weight: 800;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  background-color: var(--friendly-green-color);
 `;

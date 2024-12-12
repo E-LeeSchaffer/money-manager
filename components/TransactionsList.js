@@ -89,6 +89,7 @@ const StyledListContainer = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-top: 30px;
 `;
 
 const StyledDate = styled.h3`

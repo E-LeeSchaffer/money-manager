@@ -27,4 +27,5 @@ const StyledSortButton = styled.button`
   background-color: transparent;
   padding: 0;
   border: none;
+  display: flex;
 `;
