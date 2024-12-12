@@ -21,30 +21,36 @@ export default function UserProfile({
     defaultValue: {
       firstName: "",
       lastName: "",
-      avatar: "/avatars/avatar1.png",
+      avatar: avatars[0],
     },
   });
 
-  const [tempProfile, setTempProfile] = useState({ ...profile });
   const router = useRouter();
 
-  function handleSave() {
+  function handleSubmit(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const updatedProfile = {
+      firstName: formData.get("firstName"),
+      lastName: formData.get("lastName"),
+      avatar: formData.get("avatar") || profile.avatar,
+    };
+
     const isNewProfile = !profile.firstName && !profile.lastName;
 
-    setProfile(tempProfile);
+    setProfile(updatedProfile);
     setIsEditing(false);
 
-    if (isNewProfile) {
-      setSuccessMessage("Profile successfully created.");
-    } else {
-      setSuccessMessage("Profile successfully updated.");
-    }
+    setSuccessMessage(
+      isNewProfile
+        ? "Profile successfully created."
+        : "Profile successfully updated."
+    );
 
     router.push("/profile");
   }
 
   function handleCancel() {
-    setTempProfile({ ...profile });
     setIsEditing(false);
   }
 
@@ -53,8 +59,7 @@ export default function UserProfile({
   }
 
   function handleAvatarChange(avatar) {
-    const updatedProfile = { ...tempProfile, avatar };
-    setTempProfile(updatedProfile);
+    setProfile((previous) => ({ ...previous, avatar }));
   }
 
   function handleBack() {
@@ -73,7 +78,6 @@ export default function UserProfile({
 
   return (
     <>
-      {" "}
       <StyledBackLink as="button" onClick={handleBack}>
         <StyledImage
           aria-hidden="true"
@@ -106,52 +110,51 @@ export default function UserProfile({
           </ProfileView>
         ) : (
           <ProfileEdit>
-            <AvatarSelection>
-              <p>Select Avatar:</p>
-              {avatars.map((avatar) => (
-                <AvatarOption
-                  key={avatar}
-                  isSelected={tempProfile.avatar === avatar}
-                  onClick={() => handleAvatarChange(avatar)}
-                >
-                  <AvatarSelectionImage src={avatar} alt="Avatar Option" />
-                </AvatarOption>
-              ))}
-            </AvatarSelection>
-            <InputField>
-              <label>First Name</label>
-              <input
-                type="text"
-                maxLength={20}
-                value={tempProfile.firstName}
-                onChange={(event) =>
-                  setTempProfile((previous) => ({
-                    ...previous,
-                    firstName: event.target.value,
-                  }))
-                }
-              />
-              <Counter>{tempProfile.firstName.length}/20</Counter>
-            </InputField>
-            <InputField>
-              <label>Last Name</label>
-              <input
-                type="text"
-                maxLength={20}
-                value={tempProfile.lastName}
-                onChange={(event) =>
-                  setTempProfile((previous) => ({
-                    ...previous,
-                    lastName: event.target.value,
-                  }))
-                }
-              />
-              <Counter>{tempProfile.lastName.length}/20</Counter>
-            </InputField>
-            <ButtonRow>
-              <CancelButton onClick={handleCancel}>Cancel</CancelButton>
-              <SaveButton onClick={handleSave}>Save</SaveButton>
-            </ButtonRow>
+            <form onSubmit={handleSubmit}>
+              <AvatarSelection>
+                <p>Select Avatar:</p>
+                {avatars.map((avatar) => (
+                  <AvatarOption
+                    key={avatar}
+                    isSelected={profile.avatar === avatar}
+                    onClick={() => handleAvatarChange(avatar)}
+                  >
+                    <AvatarSelectionImage src={avatar} alt="Avatar Option" />
+                  </AvatarOption>
+                ))}
+              </AvatarSelection>
+
+              <InputField>
+                <label htmlFor="firstName">First Name</label>
+                <input
+                  id="firstName"
+                  name="firstName"
+                  type="text"
+                  maxLength={20}
+                  defaultValue={profile.firstName}
+                />
+                <Counter>{profile.firstName.length}/20</Counter>
+              </InputField>
+
+              <InputField>
+                <label htmlFor="lastName">Last Name</label>
+                <input
+                  id="lastName"
+                  name="lastName"
+                  type="text"
+                  maxLength={20}
+                  defaultValue={profile.lastName}
+                />
+                <Counter>{profile.lastName.length}/20</Counter>
+              </InputField>
+
+              <ButtonRow>
+                <CancelButton type="reset" onClick={handleCancel}>
+                  Cancel
+                </CancelButton>
+                <SaveButton type="submit">Save</SaveButton>
+              </ButtonRow>
+            </form>
           </ProfileEdit>
         )}
       </Container>
