@@ -261,6 +261,7 @@ export default function App({ Component, pageProps }) {
     transactionsList,
     categories,
     successMessage,
+    setSuccessMessage,
     handleOpenEditMode,
     openModal,
     closeModal,

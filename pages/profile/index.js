@@ -15,6 +15,7 @@ export default function UserProfile({
   isEditing,
   setIsEditing,
   successMessage,
+  setSuccessMessage,
 }) {
   const [profile, setProfile] = useLocalStorageState("userProfile", {
     defaultValue: {
@@ -27,31 +28,42 @@ export default function UserProfile({
   const [tempProfile, setTempProfile] = useState({ ...profile });
   const router = useRouter();
 
-  const handleSave = () => {
+  function handleSave() {
+    const isNewProfile = !profile.firstName && !profile.lastName;
+
     setProfile(tempProfile);
     setIsEditing(false);
-  };
 
-  const handleCancel = () => {
+    if (isNewProfile) {
+      setSuccessMessage("Profile successfully created.");
+    } else {
+      setSuccessMessage("Profile successfully updated.");
+    }
+
+    router.push("/profile");
+  }
+
+  function handleCancel() {
     setTempProfile({ ...profile });
     setIsEditing(false);
-  };
+  }
 
-  const handleEdit = () => {
+  function handleEdit() {
     setIsEditing(true);
-  };
+  }
 
-  const handleAvatarChange = (avatar) => {
-    setTempProfile((prev) => ({ ...prev, avatar }));
-  };
+  function handleAvatarChange(avatar) {
+    const updatedProfile = { ...tempProfile, avatar };
+    setTempProfile(updatedProfile);
+  }
 
-  const handleBack = () => {
+  function handleBack() {
     if (isEditing) {
       setIsEditing(false);
     } else {
       router.push("/");
     }
-  };
+  }
 
   const title = isEditing
     ? profile.firstName || profile.lastName
@@ -143,6 +155,9 @@ export default function UserProfile({
           </ProfileEdit>
         )}
       </Container>
+      {successMessage && (
+        <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
+      )}
     </>
   );
 }
@@ -278,4 +293,21 @@ const StyledTitle = styled.h2`
   text-align: center;
   font-size: 1.5rem;
   font-weight: 700;
+`;
+
+const StyledSuccessMessage = styled.p`
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text-color-dark);
+  font-size: 0.8rem;
+  padding: 6px 4px;
+  width: 220px;
+  font-weight: 800;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  background-color: var(--friendly-green-color);
 `;
