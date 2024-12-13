@@ -10,15 +10,11 @@ import useSWR from "swr";
 import useLocalStorageState from "use-local-storage-state";
 
 export default function TransactionDetailsPage({
-  handleEditTransaction,
-  isModalOpen,
-  isEditing,
-  closeModal,
-  handleOpenEditMode,
   handleDeleteTransaction,
   successMessage,
   handleAddNote,
   handleDeleteNote,
+  setSuccessMessage,
 }) {
   const router = useRouter();
   const { id } = router.query;
@@ -28,6 +24,8 @@ export default function TransactionDetailsPage({
     error: transactionError,
     mutate,
   } = useSWR(id ? `/api/transactions/${id}` : null);
+  const { data: transactionsList = [], mutate: mutateTransactions } =
+    useSWR(`/api/transactions`);
   const { data: categories = [] } = useSWR(`/api/categories`);
 
   const [isDeletingTransaction, setIsDeletingTransaction] = useState(false);
@@ -35,6 +33,44 @@ export default function TransactionDetailsPage({
 
   const [isNoteEdit, setIsNoteEdit] = useState(false);
   const [isNoteError, setIsNoteError] = useState(false);
+  const [isDeletingId, setIsDeletingId] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editTransaction, setEditTransaction] = useState(null);
+
+  async function handleEditTransaction(updatedTransaction) {
+    const response = await fetch(
+      `/api/transactions/${updatedTransaction._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTransaction),
+      }
+    );
+
+    if (response.ok) {
+      mutateTransactions();
+      setSuccessMessage("Transaction successfully updated!");
+    } else {
+      console.error("Failed to update transaction.");
+    }
+  }
+
+  function handleOpenEditMode(transaction) {
+    setIsEditing(true);
+    setEditTransaction(transaction);
+    setIsModalOpen(true);
+  }
+
+  function openModal() {
+    setIsModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsModalOpen(false);
+  }
 
   function handleConfirmDeleteTransaction() {
     handleDeleteTransaction(transactionDetails._id);

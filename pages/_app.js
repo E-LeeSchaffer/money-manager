@@ -8,9 +8,7 @@ const fetcher = (url) => fetch(url).then((response) => response.json());
 
 export default function App({ Component, pageProps }) {
   const [successMessage, setSuccessMessage] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editTransaction, setEditTransaction] = useState(null);
+
   const [showForm, setShowForm] = useState(false);
   const [activeSelectionId, setActiveSelectionId] = useState(null);
   const [isDuplicateError, setIsDuplicateError] = useState(false);
@@ -39,20 +37,6 @@ export default function App({ Component, pageProps }) {
 
   function closeSelection() {
     setActiveSelectionId(null);
-  }
-
-  function handleOpenEditMode(transaction) {
-    setIsEditing(true);
-    setEditTransaction(transaction);
-    setIsModalOpen(true);
-  }
-
-  function openModal() {
-    setIsModalOpen(true);
-  }
-
-  function closeModal() {
-    setIsModalOpen(false);
   }
 
   function toggleForm() {
@@ -189,13 +173,6 @@ export default function App({ Component, pageProps }) {
     categories,
     successMessage,
     setSuccessMessage,
-    handleOpenEditMode,
-    openModal,
-    closeModal,
-    isModalOpen,
-    isEditing,
-    setIsEditing,
-    editTransaction,
     toggleForm,
     showForm,
     activeSelectionId,

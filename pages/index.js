@@ -15,15 +15,8 @@ import TimelineFilter from "@/components/TimelineFilter";
 import useSWR from "swr";
 
 export default function HomePage({
-  // transactionsList,
   successMessage,
   setSuccessMessage,
-  handleOpenEditMode,
-  openModal,
-  closeModal,
-  isModalOpen,
-  isEditing,
-  editTransaction,
   toggleForm,
   showForm,
   activeSelectionId,
@@ -49,6 +42,24 @@ export default function HomePage({
   });
   const [isCustomDatePickerOpen, setCustomDatePickerOpen] = useState(false);
   const [isDeletingId, setIsDeletingId] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editTransaction, setEditTransaction] = useState(null);
+
+  function handleOpenEditMode(transaction) {
+    setIsEditing(true);
+    setEditTransaction(transaction);
+    setIsModalOpen(true);
+  }
+
+  function openModal() {
+    setIsModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsModalOpen(false);
+  }
+
   function handleOpenDeleteDialogue(id) {
     setIsDeletingId(id);
   }
