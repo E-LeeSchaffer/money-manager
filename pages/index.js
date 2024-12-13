@@ -21,18 +21,11 @@ export default function HomePage({
   handleOpenEditMode,
   openModal,
   closeModal,
-  handleFormSubmit,
-  handleDeleteTransaction,
-  handleEditTransaction,
   isModalOpen,
   isEditing,
   editTransaction,
   toggleForm,
   showForm,
-  handleOpenDeleteDialogue,
-  handleConfirmDelete,
-  handleCancelDeleteDialogue,
-  isDeletingId,
   activeSelectionId,
   openSelection,
   closeSelection,
@@ -55,6 +48,14 @@ export default function HomePage({
     end: null,
   });
   const [isCustomDatePickerOpen, setCustomDatePickerOpen] = useState(false);
+  const [isDeletingId, setIsDeletingId] = useState(false);
+  function handleOpenDeleteDialogue(id) {
+    setIsDeletingId(id);
+  }
+
+  function handleCancelDeleteDialogue() {
+    setIsDeletingId(false);
+  }
 
   async function handleAddTransaction(data) {
     const response = await fetch("/api/transactions", {
@@ -70,6 +71,45 @@ export default function HomePage({
     mutateTransactions();
     setSuccessMessage("Transaction successfully added!");
     return newTransaction;
+  }
+
+  async function handleDeleteTransaction(id) {
+    const response = await fetch(`/api/transactions/${id}`, {
+      method: "DELETE",
+    });
+    mutateTransactions();
+    setSuccessMessage("Transaction successfully deleted!");
+  }
+
+  async function handleEditTransaction(updatedTransaction) {
+    const response = await fetch(
+      `/api/transactions/${updatedTransaction._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTransaction),
+      }
+    );
+
+    if (response.ok) {
+      mutateTransactions();
+      setSuccessMessage("Transaction successfully updated!");
+    } else {
+      console.error("Failed to update transaction.");
+    }
+  }
+
+  function handleFormSubmit(updatedTransaction) {
+    handleEditTransaction({ ...editTransaction, ...updatedTransaction });
+
+    closeModal();
+  }
+
+  function handleConfirmDelete(transaction) {
+    handleDeleteTransaction(transaction._id);
+    setIsDeletingId(false);
   }
 
   function calculateDateRange(days) {

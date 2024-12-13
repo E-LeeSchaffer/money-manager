@@ -12,7 +12,6 @@ export default function App({ Component, pageProps }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editTransaction, setEditTransaction] = useState(null);
   const [showForm, setShowForm] = useState(false);
-  const [isDeletingId, setIsDeletingId] = useState(false);
   const [activeSelectionId, setActiveSelectionId] = useState(null);
   const [isDuplicateError, setIsDuplicateError] = useState(false);
   const { data: categories = [], mutate: mutateCategories } = useSWR(
@@ -33,37 +32,6 @@ export default function App({ Component, pageProps }) {
       return () => clearTimeout(timer);
     }
   }, [successMessage]);
-
-  async function handleDeleteTransaction(id) {
-    const response = await fetch(`/api/transactions/${id}`, {
-      method: "DELETE",
-    });
-    mutateTransactions();
-    if (response.ok) {
-      router.push("/");
-    }
-    setSuccessMessage("Transaction successfully deleted!");
-  }
-
-  async function handleEditTransaction(updatedTransaction) {
-    const response = await fetch(
-      `/api/transactions/${updatedTransaction._id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedTransaction),
-      }
-    );
-
-    if (response.ok) {
-      mutateTransactions();
-      setSuccessMessage("Transaction successfully updated!");
-    } else {
-      console.error("Failed to update transaction.");
-    }
-  }
 
   function openSelection(selectionId) {
     setActiveSelectionId(selectionId);
@@ -87,27 +55,8 @@ export default function App({ Component, pageProps }) {
     setIsModalOpen(false);
   }
 
-  function handleFormSubmit(updatedTransaction) {
-    handleEditTransaction({ ...editTransaction, ...updatedTransaction });
-
-    closeModal();
-  }
-
   function toggleForm() {
     setShowForm(!showForm);
-  }
-
-  function handleConfirmDelete(transaction) {
-    handleDeleteTransaction(transaction._id);
-    setIsDeletingId(false);
-  }
-
-  function handleOpenDeleteDialogue(id) {
-    setIsDeletingId(id);
-  }
-
-  function handleCancelDeleteDialogue() {
-    setIsDeletingId(false);
   }
 
   async function handleAddCategory(category) {
@@ -243,13 +192,6 @@ export default function App({ Component, pageProps }) {
     handleOpenEditMode,
     openModal,
     closeModal,
-    handleFormSubmit,
-    handleConfirmDelete,
-    handleDeleteTransaction,
-    handleEditTransaction,
-    isDeletingId,
-    handleOpenDeleteDialogue,
-    handleCancelDeleteDialogue,
     isModalOpen,
     isEditing,
     setIsEditing,
