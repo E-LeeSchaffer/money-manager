@@ -7,10 +7,6 @@ import { useRouter } from "next/router";
 const fetcher = (url) => fetch(url).then((response) => response.json());
 
 export default function App({ Component, pageProps }) {
-  const { data: transactionsList = [], mutate: mutateTransactions } = useSWR(
-    `/api/transactions`,
-    fetcher
-  );
   const [successMessage, setSuccessMessage] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,7 +19,6 @@ export default function App({ Component, pageProps }) {
     `/api/categories`,
     fetcher
   );
-
   const [isEditCategory, setIsEditCategory] = useState(null);
   const [categoryToEdit, setcategoryToEdit] = useState(null);
   const [originalCategoryName, setOriginalCategoryName] = useState("");
@@ -38,22 +33,6 @@ export default function App({ Component, pageProps }) {
       return () => clearTimeout(timer);
     }
   }, [successMessage]);
-
-  async function handleAddTransaction(data) {
-    const response = await fetch("/api/transactions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    const newTransaction = await response.json();
-
-    mutateTransactions();
-    setSuccessMessage("Transaction successfully added!");
-    return newTransaction;
-  }
 
   async function handleDeleteTransaction(id) {
     const response = await fetch(`/api/transactions/${id}`, {
@@ -258,7 +237,6 @@ export default function App({ Component, pageProps }) {
   }
 
   const componentProps = {
-    transactionsList,
     categories,
     successMessage,
     setSuccessMessage,
@@ -266,7 +244,6 @@ export default function App({ Component, pageProps }) {
     openModal,
     closeModal,
     handleFormSubmit,
-    handleAddTransaction,
     handleConfirmDelete,
     handleDeleteTransaction,
     handleEditTransaction,

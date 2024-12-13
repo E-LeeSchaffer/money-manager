@@ -12,15 +12,16 @@ import Search from "@/components/Search";
 import SortControl from "@/components/SortControl";
 import Link from "next/link";
 import TimelineFilter from "@/components/TimelineFilter";
+import useSWR from "swr";
 
 export default function HomePage({
-  transactionsList,
+  // transactionsList,
   successMessage,
+  setSuccessMessage,
   handleOpenEditMode,
   openModal,
   closeModal,
   handleFormSubmit,
-  handleAddTransaction,
   handleDeleteTransaction,
   handleEditTransaction,
   isModalOpen,
@@ -37,6 +38,8 @@ export default function HomePage({
   closeSelection,
   categories,
 }) {
+  const { data: transactionsList = [], mutate: mutateTransactions } =
+    useSWR(`/api/transactions`);
   const [filteredTransactionType, setFilteredTransactionType] =
     useLocalStorageState("balance");
   const [selectedCategory, setSelectedCategory] = useLocalStorageState(
@@ -52,6 +55,22 @@ export default function HomePage({
     end: null,
   });
   const [isCustomDatePickerOpen, setCustomDatePickerOpen] = useState(false);
+
+  async function handleAddTransaction(data) {
+    const response = await fetch("/api/transactions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const newTransaction = await response.json();
+
+    mutateTransactions();
+    setSuccessMessage("Transaction successfully added!");
+    return newTransaction;
+  }
 
   function calculateDateRange(days) {
     const currentDate = new Date();
