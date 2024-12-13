@@ -197,10 +197,6 @@ const StyledSuccessMessage = styled.p`
 function ProfileForm({ initialProfile, avatars, onSave, onCancel }) {
   const [formValues, setFormValues] = useState(initialProfile);
 
-  function handleAvatarChange(event) {
-    setFormValues((previous) => ({ ...previous, avatar: event.target.value }));
-  }
-
   function handleInputChange(event) {
     const { name, value } = event.target;
     setFormValues((previous) => ({ ...previous, [name]: value }));
@@ -223,7 +219,7 @@ function ProfileForm({ initialProfile, avatars, onSave, onCancel }) {
               name="avatar"
               value={avatar}
               checked={formValues.avatar === avatar}
-              onChange={handleAvatarChange}
+              onChange={handleInputChange}
             />
             <AvatarLabel
               htmlFor={`avatar-${avatar}`}
