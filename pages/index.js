@@ -219,6 +219,15 @@ export default function HomePage({
           height={15}
         />
       </StyledReportLink>
+      <StyledProfileLink href={"/profile"} aria-label="Profile">
+        <Image
+          aria-hidden="true"
+          src={"/images/profile.svg"}
+          alt="profile button"
+          width={18}
+          height={18}
+        />
+      </StyledProfileLink>
 
       <StyledTitle>Transactions</StyledTitle>
 
@@ -377,6 +386,17 @@ const StyledLink = styled(Link)`
 const StyledReportLink = styled(Link)`
   position: absolute;
   right: 40px;
+  top: 16px;
+  text-decoration: none;
+  color: inherit;
+  z-index: 2000;
+  display: flex;
+  gap: 12px;
+`;
+
+const StyledProfileLink = styled(Link)`
+  position: absolute;
+  right: 65px;
   top: 16px;
   text-decoration: none;
   color: inherit;
