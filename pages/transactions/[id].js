@@ -10,7 +10,6 @@ import useSWR from "swr";
 import useLocalStorageState from "use-local-storage-state";
 
 export default function TransactionDetailsPage({
-  handleDeleteTransaction,
   successMessage,
   handleAddNote,
   handleDeleteNote,
@@ -37,6 +36,14 @@ export default function TransactionDetailsPage({
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editTransaction, setEditTransaction] = useState(null);
+
+  async function handleDeleteTransaction(id) {
+    const response = await fetch(`/api/transactions/${id}`, {
+      method: "DELETE",
+    });
+    mutateTransactions();
+    setSuccessMessage("Transaction successfully deleted!");
+  }
 
   async function handleEditTransaction(updatedTransaction) {
     const response = await fetch(
