@@ -522,7 +522,6 @@ const StyledButton = styled.button`
   border-radius: 24px;
   background-color: var(--accent-color);
   padding: 4px 24px;
-  color: var(--text-color-dark);
   border: none;
   box-shadow: var(--shadow-brand);
 `;

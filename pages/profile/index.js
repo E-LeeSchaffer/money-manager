@@ -68,6 +68,7 @@ export default function UserProfile({
   return (
     <>
       <BackButton />
+
       <StyledPageLinks>
         <>
           <Link href={"/report"} aria-label="Report">
@@ -89,28 +90,28 @@ export default function UserProfile({
           </Link>
         </>
       </StyledPageLinks>
-      <main>
-        <StyledProfileContainer>
-          <StyledTitle>{title}</StyledTitle>
-          {!isEditing && (
-            <EditButton onClick={handleEdit}>
-              <StyledImage
-                aria-hidden="true"
-                src="/images/pencil.svg"
-                alt="edit button"
-                width={15}
-                height={15}
-              />
-            </EditButton>
-          )}
-        </StyledProfileContainer>
+      <StyledPageMain>
+        <h2>{title}</h2>
+
+        {!isEditing && (
+          <EditButton onClick={handleEdit}>
+            <StyledImage
+              aria-hidden="true"
+              src="/images/pencil.svg"
+              alt="edit button"
+              width={15}
+              height={15}
+            />
+          </EditButton>
+        )}
+
         <Container>
           {!isEditing ? (
             <ProfileView>
               <Avatar src={profile.avatar} alt="Profile Avatar" />
-              <Name>
+              <h3>
                 {`${profile.firstName} ${profile.lastName}` || "Your Name"}
-              </Name>
+              </h3>
             </ProfileView>
           ) : (
             <ProfileForm
@@ -124,7 +125,7 @@ export default function UserProfile({
         {successMessage && (
           <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
         )}
-      </main>
+      </StyledPageMain>
     </>
   );
 }
@@ -138,22 +139,29 @@ const StyledPageLinks = styled.div`
   z-index: 2000;
 `;
 
-const StyledProfileContainer = styled.div`
+const StyledPageMain = styled.main`
   display: flex;
-  justify-content: center;
-  gap: 30px;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-md);
 `;
 
 const Container = styled.div`
-  padding: 20px;
-  max-width: 400px;
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ProfileView = styled.div`
-  text-align: center;
-  border: solid 1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-lg);
+  border: var(--border-brand);
+  background-color: var(--white-bg-color);
   border-radius: 30px;
+  width: 300px;
+  padding: 6px 16px;
 `;
 
 const Avatar = styled.img`
@@ -163,42 +171,17 @@ const Avatar = styled.img`
   margin: 10px auto;
 `;
 
-const Name = styled.h2`
-  margin: 10px 0;
-  font-size: 1rem;
-`;
-
 const EditButton = styled.button`
   border: none;
   background-color: transparent;
   padding: 0;
-`;
-
-const StyledBackLink = styled(Link)`
-  display: flex;
-  align-items: center;
-  background-color: var(--accent-color);
-  text-decoration: none;
-  width: fit-content;
-  color: black;
-  position: relative;
-  top: 10px;
-  left: 10px;
-  border: var(--accent-color);
-  padding: 4px 8px;
-  border-radius: 4px;
-  display: flex;
-  gap: 0.5rem;
+  position: absolute;
+  top: 127px;
+  right: 115px;
 `;
 
 const StyledImage = styled(Image)`
   display: flex;
-`;
-
-const StyledTitle = styled.h2`
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: 700;
 `;
 
 const StyledSuccessMessage = styled.p`
@@ -233,52 +216,54 @@ function ProfileForm({ initialProfile, avatars, onSave, onCancel }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <AvatarSelection>
-        <p>Select Avatar:</p>
-        {avatars?.map((avatar) => (
-          <AvatarOption key={avatar}>
-            <StyledRadioinput
-              type="radio"
-              id={`avatar-${avatar}`}
-              name="avatar"
-              value={avatar}
-              checked={formValues.avatar === avatar}
-              onChange={handleInputChange}
-            />
-            <AvatarLabel
-              htmlFor={`avatar-${avatar}`}
-              $isSelected={formValues.avatar === avatar}
-            >
-              <AvatarSelectionImage src={avatar} alt="Avatar Option" />
-            </AvatarLabel>
-          </AvatarOption>
-        ))}
-      </AvatarSelection>
+      <StyledFieldset>
+        <AvatarSelection>
+          <StyledSelectLabel>Select Avatar:</StyledSelectLabel>
+          {avatars?.map((avatar) => (
+            <div key={avatar}>
+              <StyledRadioInput
+                type="radio"
+                id={`avatar-${avatar}`}
+                name="avatar"
+                value={avatar}
+                checked={formValues.avatar === avatar}
+                onChange={handleInputChange}
+              />
+              <AvatarLabel
+                htmlFor={`avatar-${avatar}`}
+                $isSelected={formValues.avatar === avatar}
+              >
+                <AvatarSelectionImage src={avatar} alt="Avatar Option" />
+              </AvatarLabel>
+            </div>
+          ))}
+        </AvatarSelection>
 
-      <InputField>
-        <StyledLabel htmlFor="firstName">First Name</StyledLabel>
-        <StyledInput
-          id="firstName"
-          name="firstName"
-          type="text"
-          maxLength={20}
-          value={formValues.firstName}
-          onChange={handleInputChange}
-        />
+        <InputField>
+          <StyledLabel htmlFor="firstName">First Name</StyledLabel>
+          <StyledInput
+            id="firstName"
+            name="firstName"
+            type="text"
+            maxLength={20}
+            value={formValues.firstName}
+            onChange={handleInputChange}
+          />
+        </InputField>
         <Counter>{formValues.firstName?.length}/20</Counter>
-      </InputField>
-      <InputField>
-        <StyledLabel htmlFor="lastName">Last Name</StyledLabel>
-        <StyledInput
-          id="lastName"
-          name="lastName"
-          type="text"
-          maxLength={20}
-          value={formValues.lastName}
-          onChange={handleInputChange}
-        />
+        <InputField>
+          <StyledLabel htmlFor="lastName">Last Name</StyledLabel>
+          <StyledInput
+            id="lastName"
+            name="lastName"
+            type="text"
+            maxLength={20}
+            value={formValues.lastName}
+            onChange={handleInputChange}
+          />
+        </InputField>
         <Counter>{formValues.lastName?.length}/20</Counter>
-      </InputField>
+      </StyledFieldset>
       <ButtonRow>
         <CancelButton type="button" onClick={onCancel}>
           Cancel
@@ -289,31 +274,44 @@ function ProfileForm({ initialProfile, avatars, onSave, onCancel }) {
   );
 }
 
-const AvatarSelection = styled.div`
+const StyledFieldset = styled.fieldset`
+  border-radius: 16px;
+  border-width: 1px;
+  border: var(--border-brand);
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  padding: 12px 16px;
+  gap: var(--gap-sm);
+  margin-bottom: 20px;
 `;
 
-const AvatarOption = styled.label`
-  padding: 4px;
+const StyledSelectLabel = styled.p`
+  font-weight: bold;
+  width: 100px;
+`;
 
-  cursor: pointer;
+const AvatarSelection = styled.div`
+  display: flex;
+  gap: var(--gap-md);
+  align-items: center;
+  font-size: var(--font-size-lg);
+  margin-bottom: 20px;
 `;
 
 const AvatarLabel = styled.label`
   display: block;
-  cursor: pointer;
-  border: 2px solid ${(props) => (props.$isSelected ? "black" : "transparent")};
+  border: ${(props) =>
+    props.$isSelected ? "0.1px solid black" : "var(--border-brand)"};
   border-radius: 50%;
-  padding: 4px;
   transition: border-color 0.2s ease;
+  box-shadow: var(--shadow-brand);
 
   &:hover {
     border-color: black;
   }
 `;
 
-const StyledRadioinput = styled.input`
+const StyledRadioInput = styled.input`
   display: none;
 `;
 
@@ -325,46 +323,54 @@ const AvatarSelectionImage = styled.img`
 
 const InputField = styled.div`
   display: flex;
-  flex-direction: column;
+  gap: var(--gap-sm);
 `;
 
 const Counter = styled.span`
-  font-size: 12px;
-  color: gray;
-  text-align: right;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
+  color: var(--dark-grey-color);
+  display: flex;
+  justify-content: end;
 `;
 
 const ButtonRow = styled.div`
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--gap-xs);
 `;
 
 const SaveButton = styled.button`
-  padding: 10px 20px;
-  background: black;
-  color: white;
+  border-radius: 24px;
+  background-color: var(--accent-color);
+  padding: 4px 24px;
   border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  box-shadow: var(--shadow-brand);
 `;
 
 const CancelButton = styled.button`
-  padding: 10px 20px;
-  background: none;
-  color: black;
-  border: solid 1px;
-  border-radius: 8px;
-  cursor: pointer;
+  border-radius: 24px;
+  background-color: transparent;
+  padding: 4px 24px;
 `;
 
 const StyledInput = styled.input`
-  padding: 6px;
-  border: 1px solid gray;
-  border-radius: 4px;
+  display: flex;
+  flex: 1;
+  padding: 2px 12px;
+  border: var(--border-brand);
+  border-radius: 24px;
+  background-color: var(--white-bg-color);
+  box-shadow: var(--shadow-brand);
+
+  &:focus {
+    outline: var(--border-accent);
+  }
 `;
 
 const StyledLabel = styled.label`
-  font-size: 14px;
-  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  width: 100px;
 `;

@@ -81,93 +81,94 @@ export default function SettingsPage({
           />
         </Link>
       </StyledPageLinks>
-      <h2>Settings</h2>
-      <StyledSettingsCard>
-        <h3>Customize Categories</h3>
-        <StyledCategoryContainer>
-          {categories.map((category) => (
-            <StyledCategory key={category._id}>
-              <Image
-                src={getCategoryIcon(category.name, categories)}
-                alt={`${category.name} icon`}
-                width={36}
-                height={36}
-              />
-              {category._id === isEditCategory ? (
-                <StyledCategoryInput
-                  type="text"
-                  defaultValue={category.name}
-                  maxLength={20}
-                  autoFocus
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") {
-                      handleSaveEditCategory({
-                        ...category,
-                        name: event.target.value,
-                      });
-                    }
-                    if (event.key === "Escape") {
-                      category.name = originalCategoryName;
-                      event.target.value = originalCategoryName;
-
-                      event.target.blur();
-                    }
-                  }}
+      <main>
+        <h2>Settings</h2>
+        <StyledSettingsCard>
+          <h3>Customize Categories</h3>
+          <StyledCategoryContainer>
+            {categories.map((category) => (
+              <StyledCategory key={category._id}>
+                <Image
+                  src={getCategoryIcon(category.name, categories)}
+                  alt={`${category.name} icon`}
+                  width={36}
+                  height={36}
                 />
-              ) : (
-                <StyledCategoryName>
-                  {capitalizeFirstLetter(category.name)}
-                </StyledCategoryName>
-              )}
-              <StyledButtons>
-                <StyledCategoryEditButton>
-                  <StyledImage
-                    aria-hidden="true"
-                    src="/images/pencil.svg"
-                    alt="edit button"
-                    onClick={() => {
-                      handleOpenEditModeCategory(category);
+                {category._id === isEditCategory ? (
+                  <StyledCategoryInput
+                    type="text"
+                    defaultValue={capitalizeFirstLetter(category.name)}
+                    maxLength={20}
+                    autoFocus
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        handleSaveEditCategory({
+                          ...category,
+                          name: event.target.value,
+                        });
+                      }
+                      if (event.key === "Escape") {
+                        category.name = originalCategoryName;
+                        event.target.value = originalCategoryName;
+                        event.target.blur();
+                      }
                     }}
-                    width={15}
-                    height={15}
                   />
-                </StyledCategoryEditButton>
-                <StyledCategoryDeleteButton>
-                  <StyledImage
-                    aria-hidden="true"
-                    src="/images/trash.svg"
-                    alt="delete button"
-                    onClick={() => {
-                      openModal();
-                      handleDeleteCategory(category);
-                    }}
-                    width={15}
-                    height={15}
-                  />
-                </StyledCategoryDeleteButton>
-              </StyledButtons>
-            </StyledCategory>
-          ))}
-          <StyledAddCategoryInput
-            type="text"
-            placeholder="+ Add new category"
-            maxLength={20}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                handleAddCategory(event.target.value);
-                event.target.value = "";
-                event.target.blur();
-              }
-            }}
-          ></StyledAddCategoryInput>
-          {isDuplicateError && (
-            <ErrorMessage>Category already exists!</ErrorMessage>
-          )}
-        </StyledCategoryContainer>
-      </StyledSettingsCard>
-      {successMessage && (
-        <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
-      )}
+                ) : (
+                  <StyledCategoryName>
+                    {capitalizeFirstLetter(category.name)}
+                  </StyledCategoryName>
+                )}
+                <StyledButtons>
+                  <StyledCategoryEditButton>
+                    <StyledImage
+                      aria-hidden="true"
+                      src="/images/pencil.svg"
+                      alt="edit button"
+                      onClick={() => {
+                        handleOpenEditModeCategory(category);
+                      }}
+                      width={15}
+                      height={15}
+                    />
+                  </StyledCategoryEditButton>
+                  <StyledCategoryDeleteButton>
+                    <StyledImage
+                      aria-hidden="true"
+                      src="/images/trash.svg"
+                      alt="delete button"
+                      onClick={() => {
+                        openModal();
+                        handleDeleteCategory(category);
+                      }}
+                      width={15}
+                      height={15}
+                    />
+                  </StyledCategoryDeleteButton>
+                </StyledButtons>
+              </StyledCategory>
+            ))}
+            <StyledAddCategoryInput
+              type="text"
+              placeholder="+ Add a new category"
+              maxLength={20}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  handleAddCategory(event.target.value);
+                  event.target.value = "";
+                  event.target.blur();
+                }
+              }}
+            ></StyledAddCategoryInput>
+            {isDuplicateError && (
+              <ErrorMessage>Category already exists!</ErrorMessage>
+            )}
+          </StyledCategoryContainer>
+        </StyledSettingsCard>
+        {successMessage && (
+          <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
+        )}
+      </main>
     </>
   );
 }
@@ -241,7 +242,6 @@ const StyledImage = styled(Image)`
 const StyledCategory = styled.div`
   display: flex;
   gap: var(--gap-md);
-  padding-bottom: 4px;
 `;
 
 const StyledButtons = styled.div`
@@ -263,13 +263,15 @@ const StyledSettingsCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: var(--gap-xl);
 `;
 
 const StyledCategoryContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 18rem;
   justify-content: center;
+  gap: var(--gap-xs);
+  width: 300px;
 `;
 
 const StyledCategoryItem = styled.div`
@@ -294,6 +296,7 @@ const StyledAddCategoryInput = styled.input`
   display: flex;
   border: none;
   background-color: inherit;
+  margin: 10px 0 0 44px;
 
   &:focus {
     outline: none;
