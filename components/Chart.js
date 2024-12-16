@@ -115,6 +115,7 @@ const StyledLabelText = styled.text`
   font-size: var(--font-size-xs);
   line-height: 1.4;
   text-anchor: start;
+  font-size: var(--font-size-sm);
 `;
 
 const Card = styled.div`
