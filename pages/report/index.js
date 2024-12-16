@@ -20,6 +20,15 @@ export default function ReportPage() {
             height={20}
           />
         </Link>
+        <Link href={"/profile"} aria-label="Profile">
+          <Image
+            aria-hidden="true"
+            src={"/images/profile.svg"}
+            alt="profile button"
+            width={20}
+            height={20}
+          />
+        </Link>
       </StyledPageLinks>
 
       <BackButton />

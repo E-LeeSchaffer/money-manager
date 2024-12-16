@@ -49,7 +49,11 @@ export default function BarChartPage() {
         y={y + 5}
         textAnchor="end"
         fill={
-          isSelected ? "var(--friendly-red-color)" : "var(--text-color-dark)"
+          selectedCategory
+            ? isSelected
+              ? "var(--text-color-dark))"
+              : "var(--dark-grey-color)"
+            : "var(--text-color-dark)"
         }
         fontWeight={isSelected ? "bold" : "normal"}
         onClick={() => handleCategoryClick(payload.value)}
@@ -63,7 +67,7 @@ export default function BarChartPage() {
     <>
       <Card>
         <h3>Expenses by Category</h3>
-        <CardContent>
+        <div>
           <ChartContainer>
             <BarChart
               data={chartData}
@@ -90,7 +94,7 @@ export default function BarChartPage() {
               />
             </BarChart>
           </ChartContainer>
-        </CardContent>
+        </div>
         <CardFooter>
           <FooterText>Updated with recent transactions</FooterText>
         </CardFooter>
@@ -99,11 +103,11 @@ export default function BarChartPage() {
       <StyledCardWrapper>
         <StyledSummaryCard>
           <StyledSummaryTitle>{selectedCategory}</StyledSummaryTitle>
-          <StyledSummaryAmount>
+          <p>
             {selectedCategory
               ? `Total Expense: ${totalExpensesByCategory[selectedCategory]} €`
               : "Select a category for details"}
-          </StyledSummaryAmount>
+          </p>
         </StyledSummaryCard>
       </StyledCardWrapper>
     </>
@@ -124,10 +128,7 @@ const Card = styled.div`
   box-shadow: var(--shadow-brand);
   width: 300px;
   padding: 8px 16px;
-  font-size: var(--font-size-md);
 `;
-
-const CardContent = styled.div``;
 
 const ChartContainer = styled.div`
   display: flex;
@@ -153,12 +154,10 @@ const StyledSummaryCard = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 12px;
   align-items: center;
-  border: var(--border-brand);
   border-radius: 16px;
-  width: 16rem;
-  height: 4rem;
+  width: 250px;
+  height: 70px;
   background-color: var(--accent-color);
   box-shadow: var(--shadow-brand);
 `;
@@ -166,8 +165,4 @@ const StyledSummaryCard = styled.div`
 const StyledSummaryTitle = styled.h4`
   font-size: var(--font-size-md);
   font-weight: bold;
-`;
-
-const StyledSummaryAmount = styled.p`
-  margin: 4px 0 0;
 `;

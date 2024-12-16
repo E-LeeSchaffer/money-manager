@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import useLocalStorageState from "use-local-storage-state";
 import { useRouter } from "next/router";
+import BackButton from "@/components/BackButton";
 
 const avatars = [
   "/avatars/avatar1.png",
@@ -66,53 +67,76 @@ export default function UserProfile({
 
   return (
     <>
-      <StyledBackLink as="button" onClick={handleBack}>
-        <StyledImage
-          aria-hidden="true"
-          src="/images/arrow-return-left.svg"
-          alt="edit button"
-          width={15}
-          height={15}
-        />
-        Back
-      </StyledBackLink>
-      <StyledProfileContainer>
-        <StyledTitle>{title}</StyledTitle>
-        {!isEditing && (
-          <EditButton onClick={handleEdit}>
-            <StyledImage
-              aria-hidden="true"
-              src="/images/pencil.svg"
-              alt="edit button"
-              width={15}
-              height={15}
+      <BackButton />
+      <StyledPageLinks>
+        <>
+          <Link href={"/report"} aria-label="Report">
+            <Image
+              src={"/images/report.svg"}
+              alt="report button"
+              width={20}
+              height={20}
             />
-          </EditButton>
+          </Link>
+          <Link href={"/settings"} aria-label="Settings">
+            <Image
+              aria-hidden="true"
+              src={"/images/settings.svg"}
+              alt="filter button"
+              width={20}
+              height={20}
+            />
+          </Link>
+        </>
+      </StyledPageLinks>
+      <main>
+        <StyledProfileContainer>
+          <StyledTitle>{title}</StyledTitle>
+          {!isEditing && (
+            <EditButton onClick={handleEdit}>
+              <StyledImage
+                aria-hidden="true"
+                src="/images/pencil.svg"
+                alt="edit button"
+                width={15}
+                height={15}
+              />
+            </EditButton>
+          )}
+        </StyledProfileContainer>
+        <Container>
+          {!isEditing ? (
+            <ProfileView>
+              <Avatar src={profile.avatar} alt="Profile Avatar" />
+              <Name>
+                {`${profile.firstName} ${profile.lastName}` || "Your Name"}
+              </Name>
+            </ProfileView>
+          ) : (
+            <ProfileForm
+              initialProfile={profile}
+              avatars={avatars}
+              onSave={handleSave}
+              onCancel={handleCancel}
+            />
+          )}
+        </Container>
+        {successMessage && (
+          <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
         )}
-      </StyledProfileContainer>
-      <Container>
-        {!isEditing ? (
-          <ProfileView>
-            <Avatar src={profile.avatar} alt="Profile Avatar" />
-            <Name>
-              {`${profile.firstName} ${profile.lastName}` || "Your Name"}
-            </Name>
-          </ProfileView>
-        ) : (
-          <ProfileForm
-            initialProfile={profile}
-            avatars={avatars}
-            onSave={handleSave}
-            onCancel={handleCancel}
-          />
-        )}
-      </Container>
-      {successMessage && (
-        <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
-      )}
+      </main>
     </>
   );
 }
+
+const StyledPageLinks = styled.div`
+  display: flex;
+  gap: var(--gap-lg);
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  z-index: 2000;
+`;
 
 const StyledProfileContainer = styled.div`
   display: flex;

@@ -71,10 +71,19 @@ export default function SettingsPage({
             height={20}
           />
         </Link>
+        <Link href={"/profile"} aria-label="Profile">
+          <Image
+            aria-hidden="true"
+            src={"/images/profile.svg"}
+            alt="profile button"
+            width={20}
+            height={20}
+          />
+        </Link>
       </StyledPageLinks>
       <h2>Settings</h2>
       <StyledSettingsCard>
-        <StyledSubheading>Customize Categories</StyledSubheading>
+        <h3>Customize Categories</h3>
         <StyledCategoryContainer>
           {categories.map((category) => (
             <StyledCategory key={category._id}>
@@ -254,10 +263,6 @@ const StyledSettingsCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const StyledSubheading = styled.h3`
-  text-align: center;
 `;
 
 const StyledCategoryContainer = styled.div`
