@@ -56,6 +56,18 @@ export default function SettingsPage({ successMessage, setSuccessMessage }) {
   }
 
   async function handleSaveEditCategory(editedCategory) {
+    const normalizedUpdatedName = editedCategory.name.trim().toLowerCase();
+
+    const isDuplicate = categories.some(
+      (category) =>
+        category.id !== editedCategory.id &&
+        category.name.toLowerCase() === normalizedUpdatedName
+    );
+
+    if (isDuplicate) {
+      setIsDuplicateError(true);
+      return;
+    }
     const response = await fetch(`/api/categories/${editedCategory._id}`, {
       method: "PUT",
       headers: {
@@ -71,19 +83,6 @@ export default function SettingsPage({ successMessage, setSuccessMessage }) {
       setIsEditCategory(null);
     } else {
       console.error("Failed to update category.");
-    }
-
-    const normalizedUpdatedName = editedCategory.name.trim().toLowerCase();
-
-    const isDuplicate = categories.some(
-      (category) =>
-        category.id !== editedCategory.id &&
-        category.name.toLowerCase() === normalizedUpdatedName
-    );
-
-    if (isDuplicate) {
-      setIsDuplicateError(true);
-      return;
     }
   }
 

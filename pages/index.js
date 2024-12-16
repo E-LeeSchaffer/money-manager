@@ -67,7 +67,7 @@ export default function HomePage({ successMessage, setSuccessMessage }) {
   }
 
   function handleCancelDeleteDialogue() {
-    setIsDeletingId(false);
+    setIsDeletingId(null);
   }
 
   function toggleForm() {
@@ -87,7 +87,6 @@ export default function HomePage({ successMessage, setSuccessMessage }) {
 
     mutateTransactions();
     setSuccessMessage("Transaction successfully added!");
-    return newTransaction;
   }
 
   async function handleDeleteTransaction(id) {
