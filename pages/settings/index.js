@@ -151,6 +151,7 @@ export default function SettingsPage({
             <StyledAddCategoryInput
               type="text"
               maxLength={20}
+              placeholder="+ Add a new transaction"
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
                   handleAddCategory(event.target.value);
