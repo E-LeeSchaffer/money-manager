@@ -41,7 +41,7 @@ export default function TimelineFilter({
         )}`
       )
     ) : (
-      <Image
+      <StyledImage
         src="/images/calendar-week.svg"
         alt="Calendar Icon"
         width={16}
@@ -65,7 +65,7 @@ export default function TimelineFilter({
         </StyledTimelineFilterButton>
       ))}
 
-      <StyledCustomDateButtonContainer>
+      <>
         <StyledTimelineFilterButton
           $active={Boolean(customDateRange.start && customDateRange.end)}
           onClick={() => setIsCustomDatePickerOpen(!isCustomDatePickerOpen)}
@@ -87,7 +87,7 @@ export default function TimelineFilter({
             />
           </StyledDeselectButton>
         )}
-      </StyledCustomDateButtonContainer>
+      </>
 
       {isCustomDatePickerOpen && (
         <StyledDatePickerContainer>
@@ -107,45 +107,40 @@ export default function TimelineFilter({
 
 const StyledTimelineFilterContainer = styled.div`
   display: flex;
-  gap: 4px;
+  gap: var(--gap-sm);
+  position: relative;
 `;
 
 const StyledTimelineFilterButton = styled.button`
-  border: 0.1px solid var(--dark-grey-color);
-  border-radius: 8px;
   display: flex;
-  min-width: fit-content;
+  justify-content: center;
   align-items: center;
-  height: 2.1rem;
+  outline: var(--border-brand);
+  border-radius: 8px;
+  min-width: fit-content;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
+  height: 32px;
   padding: 4px 6px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  font-size: 0.8rem;
-  border: ${({ $active }) =>
-    $active
-      ? "2px solid var(--accent-color)"
-      : "0.1px solid var(--dark-grey-color)"};
+  box-shadow: var(--shadow-brand);
+  outline: var(--border-brand);
   background-color: ${({ $active }) =>
-    $active ? "var(--dark-grey-color)" : "var(--light-bg-color)"};
-`;
-
-const StyledCustomDateButtonContainer = styled.div`
-  position: relative;
+    $active ? "var(--dark-grey-color)" : "var(--white-bg-color)"};
 `;
 
 const StyledDatePickerContainer = styled.div`
   position: absolute;
-  top: 390px;
-  z-index: 1000;
+  top: 26px;
+  z-index: 100;
   margin-top: 10px;
 `;
 
 const StyledDeselectButton = styled.button`
-  border: none;
   background-color: transparent;
-  z-index: 9;
-  position: absolute;
-  top: -8px;
-  right: -12px;
+  position: relative;
+  top: -15px;
+  right: 15px;
+  z-index: 200;
 `;
 
 const StyledImage = styled(Image)`

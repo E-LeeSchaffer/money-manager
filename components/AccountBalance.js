@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { formatNumber } from "@/lib/utils";
 import styled from "styled-components";
 
 export default function AccountBalance({
@@ -60,59 +58,42 @@ export default function AccountBalance({
         });
 
   return (
-    <StyledPageContainer>
-      <StyledAccountBalanceContainer>
-        <StyledTitle>{title}</StyledTitle>
-        <StyledCurrentBalance
-          type={displayAmountType}
-          $filteredType={filteredTransactionType}
-        >
-          {formattedAmount}
-        </StyledCurrentBalance>
-        {filteredTransactionType !== "balance" && (
-          <StyledCurrentBalanceInfo>
-            Current Balance:{" "}
-            {formatNumberWithSign({
-              amount: currentBalance,
-              type: currentBalanceType,
-            })}
-          </StyledCurrentBalanceInfo>
-        )}
-      </StyledAccountBalanceContainer>
-    </StyledPageContainer>
+    <StyledAccountBalanceContainer>
+      <h4>{title}</h4>
+      <StyledCurrentBalance
+        type={displayAmountType}
+        $filteredType={filteredTransactionType}
+      >
+        {formattedAmount}
+      </StyledCurrentBalance>
+      {filteredTransactionType !== "balance" && (
+        <StyledCurrentBalanceInfo>
+          Current Balance:{" "}
+          {formatNumberWithSign({
+            amount: currentBalance,
+            type: currentBalanceType,
+          })}
+        </StyledCurrentBalanceInfo>
+      )}
+    </StyledAccountBalanceContainer>
   );
 }
-
-const StyledPageContainer = styled.div`
-  display: flex;
-
-  justify-content: center;
-  padding-block: 12px;
-  align-items: center;
-`;
 
 const StyledAccountBalanceContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: start;
-  padding-top: 12px;
+  justify-content: center;
   align-items: center;
-  border: 0.1px solid var(--dark-grey-color);
   border-radius: 16px;
-  width: 16rem;
-  height: 6rem;
+  width: 250px;
+  min-height: 120px;
   background-color: var(--accent-color);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  gap: 4px;
-`;
-
-const StyledTitle = styled.h3`
-  font-size: 0.8rem;
-  margin: 0;
+  box-shadow: var(--shadow-accent);
+  gap: var(--gap-sm);
 `;
 
 const StyledCurrentBalance = styled.div`
-  font-size: 1.3rem;
+  font-size: var(--font-size-md);
   color: ${(props) => {
     if (props.$filteredType === "income") return "var(--friendly-green-color)";
     if (props.$filteredType === "expense") return "var(--friendly-red-color)";
@@ -123,7 +104,6 @@ const StyledCurrentBalance = styled.div`
 `;
 
 const StyledCurrentBalanceInfo = styled.div`
-  font-size: 0.8rem;
-  color: var(--text-color-dark);
-  margin-top: 4px;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
 `;

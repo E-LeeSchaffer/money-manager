@@ -192,36 +192,29 @@ export default function HomePage({
 
   return (
     <>
-      {!showForm && (
-        <StyledLink href={"/settings"} aria-label="Settings">
-          <Image
-            aria-hidden="true"
-            src={"/images/settings.svg"}
-            alt="filter button"
-            width={15}
-            height={15}
-          />
-        </StyledLink>
-      )}
-      <StyledReportLink
-        href={{
-          pathname: "/report",
-          query: {
-            filteredTransactionType: "expense",
-            selectedCategory: "uncategorized",
-          },
-        }}
-        aria-label="Report"
-      >
-        <Image
-          src={"/images/report.svg"}
-          alt="report button"
-          width={15}
-          height={15}
-        />
-      </StyledReportLink>
-
-      <StyledTitle>Transactions</StyledTitle>
+      <StyledPageLinks>
+        {!showForm && (
+          <>
+            <Link href={"/report"} aria-label="Report">
+              <Image
+                src={"/images/report.svg"}
+                alt="report button"
+                width={20}
+                height={20}
+              />
+            </Link>
+            <Link href={"/settings"} aria-label="Settings">
+              <Image
+                aria-hidden="true"
+                src={"/images/settings.svg"}
+                alt="filter button"
+                width={20}
+                height={20}
+              />
+            </Link>
+          </>
+        )}
+      </StyledPageLinks>
 
       <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
         <TransactionForm
@@ -235,159 +228,140 @@ export default function HomePage({
         />
       </Modal>
 
-      <TransactionForm
-        variant="add"
-        onSubmit={handleAddTransaction}
-        showForm={showForm}
-        toggleForm={toggleForm}
-        categories={categories}
-      />
+      <main>
+        <h2>Transactions</h2>
 
-      {!showForm && (
-        <StyledBalanceContainer>
-          <IncomeExpense
-            transactions={filteredTransactions}
-            onFilterChange={setFilteredTransactionType}
-            filteredTransactionType={filteredTransactionType}
-          />
-          <AccountBalance
-            income={filteredIncome}
-            expense={filteredExpense}
-            total={profit}
-            currentBalance={currentBalance}
-            filteredTransactionType={filteredTransactionType}
-          />
-        </StyledBalanceContainer>
-      )}
-
-      <StyledSelectionBar>
-        {selectedCategory !== "" ? (
-          <StyledSelectedCategoryDisplay>
-            <StyledSelectedCategoryName>
-              {selectedCategoryName}
-            </StyledSelectedCategoryName>
-            <StyledDeselectButton
-              type="button"
-              onClick={() => handleCategorySelection("")}
-              aria-label="Deselect"
-            >
-              <StyledImage
-                aria-hidden="true"
-                src={"/images/x-square-fill.svg"}
-                alt="filter button"
-                width={10}
-                height={10}
-              />
-            </StyledDeselectButton>
-          </StyledSelectedCategoryDisplay>
-        ) : null}
-
-        <StyledControls>
-          {isSearching ? (
-            <StyledInput
-              type="text"
-              name="searchbar"
-              value={searchItem}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-              autoFocus
-            />
-          ) : null}
-          <Search handleSearch={handleSearch} isSearching={isSearching} />
-          <Filter
-            onFilterTransactions={handleCategorySelection}
-            openSelection={openSelection}
-            selectedCategory={selectedCategory}
-            closeSelection={closeSelection}
-            activeSelectionId={activeSelectionId}
-            closeSearch={closeSearch}
-            categories={categories}
-            transactionsList={transactionsList}
-          />
-        </StyledControls>
-      </StyledSelectionBar>
-
-      <StyledTimelineFilterContainer>
-        <TimelineFilter
-          selectedTimeframe={selectedTimeframe}
-          onTimeframeChange={handleTimeframeClick}
-          customDateRange={customDateRange}
-          onCustomDateChange={handleCustomDateChange}
-          isCustomDatePickerOpen={isCustomDatePickerOpen}
-          setIsCustomDatePickerOpen={setIsCustomDatePickerOpen}
+        <TransactionForm
+          variant="add"
+          onSubmit={handleAddTransaction}
+          showForm={showForm}
+          toggleForm={toggleForm}
+          categories={categories}
         />
-      </StyledTimelineFilterContainer>
 
-      {displayedTransactions.length > 0 ? (
-        <>
-          <StyledSortContainer>
-            <SortControl
-              sortOrder={sortOrder}
-              onToggleSortOrder={handleToggleSortOrder}
+        {!showForm && (
+          <StyledBalanceContainer>
+            <IncomeExpense
+              transactions={filteredTransactions}
+              onFilterChange={setFilteredTransactionType}
+              filteredTransactionType={filteredTransactionType}
             />
-          </StyledSortContainer>
-          <TransactionsList
-            handleEditTransaction={handleEditTransaction}
-            transactions={displayedTransactions}
-            selectedCategory={selectedCategory}
-            handleOpenEditMode={handleOpenEditMode}
-            openModal={openModal}
-            onCloseModal={closeModal}
-            handleOpenDeleteDialogue={handleOpenDeleteDialogue}
-            handleConfirmDelete={handleConfirmDelete}
-            handleCancelDeleteDialogue={handleCancelDeleteDialogue}
-            handleDeleteTransaction={handleDeleteTransaction}
-            isDeletingId={isDeletingId}
-            sortOrder={sortOrder}
-            activeSelectionId={activeSelectionId}
-            openSelection={openSelection}
-            closeSelection={closeSelection}
-            categories={categories}
-          />
-        </>
-      ) : (
-        <StyledNoTransactionsFoundMessage>
-          No transactions found.
-        </StyledNoTransactionsFoundMessage>
-      )}
+            <AccountBalance
+              income={filteredIncome}
+              expense={filteredExpense}
+              total={profit}
+              currentBalance={currentBalance}
+              filteredTransactionType={filteredTransactionType}
+            />
+          </StyledBalanceContainer>
+        )}
 
-      {successMessage && (
-        <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
-      )}
+        <StyledSelectionBar>
+          {selectedCategory !== "" ? (
+            <StyledSelectedCategoryDisplay>
+              <StyledSelectedCategoryName>
+                {selectedCategoryName}
+              </StyledSelectedCategoryName>
+              <StyledDeselectButton
+                type="button"
+                onClick={() => handleCategorySelection("")}
+                aria-label="Deselect"
+              >
+                <StyledImage
+                  aria-hidden="true"
+                  src={"/images/x-square-fill.svg"}
+                  alt="filter button"
+                  width={15}
+                  height={15}
+                />
+              </StyledDeselectButton>
+            </StyledSelectedCategoryDisplay>
+          ) : null}
+
+          <StyledControls>
+            {isSearching ? (
+              <StyledInput
+                type="text"
+                name="searchbar"
+                value={searchItem}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                autoFocus
+              />
+            ) : null}
+            <Search handleSearch={handleSearch} isSearching={isSearching} />
+            <Filter
+              onFilterTransactions={handleCategorySelection}
+              openSelection={openSelection}
+              selectedCategory={selectedCategory}
+              closeSelection={closeSelection}
+              activeSelectionId={activeSelectionId}
+              closeSearch={closeSearch}
+              categories={categories}
+              transactionsList={transactionsList}
+            />
+          </StyledControls>
+        </StyledSelectionBar>
+
+        <StyledTimelineFilterContainer>
+          <TimelineFilter
+            selectedTimeframe={selectedTimeframe}
+            onTimeframeChange={handleTimeframeClick}
+            customDateRange={customDateRange}
+            onCustomDateChange={handleCustomDateChange}
+            isCustomDatePickerOpen={isCustomDatePickerOpen}
+            setIsCustomDatePickerOpen={setIsCustomDatePickerOpen}
+          />
+        </StyledTimelineFilterContainer>
+
+        {displayedTransactions.length > 0 ? (
+          <>
+            <StyledSortContainer>
+              <SortControl
+                sortOrder={sortOrder}
+                onToggleSortOrder={handleToggleSortOrder}
+              />
+            </StyledSortContainer>
+            <TransactionsList
+              handleEditTransaction={handleEditTransaction}
+              transactions={displayedTransactions}
+              selectedCategory={selectedCategory}
+              handleOpenEditMode={handleOpenEditMode}
+              openModal={openModal}
+              onCloseModal={closeModal}
+              handleOpenDeleteDialogue={handleOpenDeleteDialogue}
+              handleConfirmDelete={handleConfirmDelete}
+              handleCancelDeleteDialogue={handleCancelDeleteDialogue}
+              handleDeleteTransaction={handleDeleteTransaction}
+              isDeletingId={isDeletingId}
+              sortOrder={sortOrder}
+              activeSelectionId={activeSelectionId}
+              openSelection={openSelection}
+              closeSelection={closeSelection}
+              categories={categories}
+            />
+          </>
+        ) : (
+          <StyledNoTransactionsFoundMessage>
+            No transactions found.
+          </StyledNoTransactionsFoundMessage>
+        )}
+
+        {successMessage && (
+          <StyledSuccessMessage>{successMessage}</StyledSuccessMessage>
+        )}
+      </main>
     </>
   );
 }
 
-const StyledLink = styled(Link)`
+const StyledPageLinks = styled.div`
+  display: flex;
+  gap: var(--gap-lg);
   position: absolute;
   right: 16px;
   top: 16px;
-  text-decoration: none;
-  color: inherit;
   z-index: 2000;
-  display: flex;
-  gap: 12px;
-`;
-
-const StyledReportLink = styled(Link)`
-  position: absolute;
-  right: 40px;
-  top: 16px;
-  text-decoration: none;
-  color: inherit;
-  z-index: 2000;
-  display: flex;
-  gap: 12px;
-`;
-
-const StyledTitle = styled.h2`
-  display: flex;
-  justify-content: center;
-  flex-grow: 1;
-  text-align: center;
-  font-size: 1.7rem;
-  font-weight: 700;
-  margin-top: 0;
 `;
 
 const StyledBalanceContainer = styled.div`
@@ -395,14 +369,15 @@ const StyledBalanceContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 20px 0;
+  padding-bottom: 20px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--dark-grey-color);
 `;
 
 const StyledSelectionBar = styled.div`
-  border-top: 1px solid var(--dark-grey-color);
-  margin: 12px 0 0 0;
-  padding: 12px 10px;
+  padding-left: 12px;
   display: grid;
+  align-items: center;
   grid-template-areas: "selectedCategory controls";
 `;
 
@@ -411,23 +386,21 @@ const StyledSelectedCategoryDisplay = styled.div`
   display: flex;
   align-items: center;
   width: fit-content;
-  height: 24px;
-  padding: 0 8px;
-  gap: 8px;
-  border: 1px solid var(--dark-grey-color);
+  padding: 6px 10px;
+  gap: var(--gap-md);
+  border: var(--border-brand);
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-brand);
 `;
 
 const StyledSelectedCategoryName = styled.div`
-  font-size: 0.8rem;
-  line-height: 1;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
 `;
 
 const StyledDeselectButton = styled.button`
   border: none;
   background-color: transparent;
-  padding: 0;
 `;
 
 const StyledImage = styled(Image)`
@@ -441,9 +414,13 @@ const StyledControls = styled.div`
 `;
 
 const StyledInput = styled.input`
+  padding-top: 10px;
+  height: 36px;
+  width: 100px;
   display: flex;
   border: none;
-  width: 8rem;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
   border-bottom: 1px solid var(--dark-grey-color);
   background-color: inherit;
 
@@ -454,22 +431,23 @@ const StyledInput = styled.input`
 
 const StyledTimelineFilterContainer = styled.div`
   display: flex;
-  padding: 0 12px;
+  padding-inline: 12px;
 `;
 
 const StyledSortContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  position: absolute;
-  right: 44px;
-  top: 428px;
+  position: relative;
+  top: 16px;
+  left: 300px;
+  width: fit-content;
+  z-index: 10;
 `;
 
 const StyledNoTransactionsFoundMessage = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 44px;
-  color: var(--dark-grey-color);
 `;
 
 const StyledSuccessMessage = styled.p`
@@ -477,14 +455,14 @@ const StyledSuccessMessage = styled.p`
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  color: var(--text-color-dark);
-  font-size: 0.8rem;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
   padding: 6px 4px;
   width: 220px;
   font-weight: 800;
   text-align: center;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-brand);
   z-index: 1000;
   background-color: var(--friendly-green-color);
 `;

@@ -81,6 +81,7 @@ export default function TransactionForm({
     setSelectedCategoryInForm(category.name);
     setSelectedCategory(category._id);
     setIsDropdownOpen(false);
+    setCategoryError(false);
   }
 
   if (!showForm && !isEditing && (amount || selectedCategoryInForm)) {
@@ -94,10 +95,10 @@ export default function TransactionForm({
         <StyledButtonContainer>
           <StyledCollapsableFormButton onClick={toggleForm}>
             {showForm ? "Hide Form" : "Add new transaction"}
-            <StyledArrowIcon
+            <StyledImage
               src={showForm ? "/images/arrow-up.svg" : "/images/arrow-down.svg"}
-              width={20}
-              height={20}
+              width={15}
+              height={15}
               alt={
                 showForm ? "arrow up to close form" : "arrow down to open form"
               }
@@ -141,20 +142,19 @@ export default function TransactionForm({
             </FormRow>
 
             <FormRow>
-              <StyledCategoryLabel htmlFor="category">
-                Category
-              </StyledCategoryLabel>
+              <StyledCategoryLabel>Category</StyledCategoryLabel>
               <DropdownContainer>
                 <StyledCategorySelect>
                   <DropdownButton
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    $active={isDropdownOpen}
                   >
                     {selectedCategoryInForm ? (
                       <>{selectedCategoryInForm}</>
                     ) : (
-                      "Please select a category"
+                      "Select a category"
                     )}
-                    <StyledArrowIcon
+                    <StyledImage
                       src={
                         isDropdownOpen
                           ? "/images/arrow-up.svg"
@@ -205,8 +205,8 @@ export default function TransactionForm({
                       aria-hidden="true"
                       src={"/images/settings.svg"}
                       alt="filter button"
-                      width={15}
-                      height={15}
+                      width={20}
+                      height={20}
                     />
                   </StyledLink>
                 </StyledCategorySelect>
@@ -223,7 +223,7 @@ export default function TransactionForm({
             <FormRow>
               <StyledTypeLabel htmlFor="type">Type</StyledTypeLabel>
               <StyledToggleButton id="type">
-                <StyledRadioInput
+                <input
                   id="income"
                   name="type"
                   type="radio"
@@ -234,7 +234,7 @@ export default function TransactionForm({
                   }}
                 />
                 <StyledRadioLabel htmlFor="income">Income</StyledRadioLabel>
-                <StyledRadioInput
+                <input
                   id="expense"
                   name="type"
                   type="radio"
@@ -271,99 +271,28 @@ export default function TransactionForm({
   );
 }
 
-const ErrorMessageCategory = styled.p`
-  grid-area: categoryErrorMessage;
-  color: red;
-  font-size: 0.6rem;
-`;
-
-const StyledCategorySelect = styled.div`
-  display: flex;
-`;
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-  padding: 0 2px 0 12px;
-  display: flex;
-  align-items: center;
-`;
-
-const DropdownContainer = styled.div`
-  display: flex;
-  grid-area: categoryInput;
-  justify-content: space-between;
-  flex-direction: column;
-  position: relative;
-  width: 100%;
-`;
-
-const DropdownButton = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 2px 12px;
-  border: 1px solid var(--dark-grey-color);
-  border-radius: 24px;
-  background-color: white;
-  color: #141414;
-  font-size: 0.8rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease-in-out;
-  width: 100%;
-  gap: 4px;
-`;
-
-const DropdownList = styled.div`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  max-height: 200px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  width: 88%;
-  border: 1px solid var(--dark-grey-color);
-  border-radius: 4px;
-  background-color: white;
-  color: var() (--text-color-dark);
-  padding: 4px;
-  font-size: 0.8rem;
-  z-index: 50;
-`;
-
-const DropdownItem = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 4px;
-  gap: 4px;
-`;
-
 const StyledButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
 `;
 
 const StyledCollapsableFormButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 0.8rem;
-  border-radius: 8px;
-  background-color: white;
-  padding: 4px 12px;
-  width: 12rem;
-  border: 1px solid var(--dark-grey-color);
-  color: var(--text-color-dark);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  gap: var(--gap-sm);
+  border: var(--border-brand);
+  border-radius: 10px;
+  background-color: var(--white-bg-color);
+  padding: 4px 6px;
+  width: 200px;
+  box-shadow: var(--shadow-brand);
 `;
 
-const StyledArrowIcon = styled(Image)`
+const StyledImage = styled(Image)`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 12px;
 `;
 
 const StyledForm = styled.form`
@@ -375,7 +304,7 @@ const StyledForm = styled.form`
 const StyledFieldset = styled.fieldset`
   border-radius: 16px;
   border-width: 1px;
-  border-color: var(--dark-grey-color);
+  border: var(--border-brand);
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-areas:
@@ -383,11 +312,19 @@ const StyledFieldset = styled.fieldset`
     "amountLabel amountInput"
     ". amountErrorMessage"
     "categoryLabel categoryInput"
+    ". categoryErrorMessage"
     "typeLabel typeToggleButton"
     ". typeErrorMessage"
     "dateLabel dateInput";
   padding: 12px 16px;
-  gap: 4px;
+  gap: var(--gap-sm);
+  margin-bottom: 20px;
+`;
+
+const StyledLegend = styled.legend`
+  font-size: var(--font-size-md);
+  padding-inline: 6px;
+  text-align: center;
 `;
 
 const FormRow = styled.div`
@@ -396,95 +333,151 @@ const FormRow = styled.div`
 
 const StyledNameLabel = styled.label`
   grid-area: nameLabel;
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+  font-weight: bold;
 `;
 
 const StyledNameInput = styled.input`
   grid-area: nameInput;
-  padding: 4px 12px;
-  border: 1px solid var(--dark-grey-color);
+  padding: 2px 12px;
+  border: var(--border-brand);
   border-radius: 24px;
-  background-color: white;
-  color: #141414;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease-in-out;
-
+  background-color: var(--white-bg-color);
+  box-shadow: var(--shadow-brand);
+  margin-bottom: 4px;
   &:focus {
-    border-color: var(--accent-color);
-    outline: none;
+    outline: var(--border-accent);
   }
 `;
 
 const StyledAmountLabel = styled.label`
   grid-area: amountLabel;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
 `;
 
 const StyledCurrencyInput = styled(CurrencyInput)`
   grid-area: amountInput;
-  padding: 4px 12px;
-  border: 1px solid var(--dark-grey-color);
+  padding: 2px 12px;
+  border: var(--border-brand);
   border-radius: 24px;
-  background-color: white;
-  color: var(--text-color-dark);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease-in-out;
+  background-color: var(--white-bg-color);
+  box-shadow: var(--shadow-brand);
 
   &:focus {
-    border-color: var(--accent-color);
-    outline: none;
+    outline: var(--border-accent);
   }
+`;
+
+const ErrorMessageAmount = styled.p`
+  grid-area: amountErrorMessage;
+  color: var(--friendly-red-color);
+  padding-left: 12px;
 `;
 
 const StyledCategoryLabel = styled.label`
   grid-area: categoryLabel;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+`;
+
+const DropdownContainer = styled.div`
+  display: flex;
+  grid-area: categoryInput;
+  flex-direction: column;
+  position: relative;
+`;
+
+const StyledCategorySelect = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const DropdownButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 12px;
+  outline: ${({ $active }) =>
+    $active ? "var(--border-accent)" : "var(--border-brand);"};
+  border-radius: 24px;
+  background-color: var(--white-bg-color);
+  box-shadow: var(--shadow-brand);
+  width: 210px;
+  gap: var(--gap-sm);
+`;
+
+const DropdownList = styled.div`
+  position: absolute;
+  top: 34px;
+  left: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  width: 210px;
+  border: var(--border-brand);
+  border-radius: 4px;
+  background-color: var(--white-bg-color);
+  padding: 4px 12px;
+  z-index: 50;
+`;
+
+const DropdownItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+`;
+
+const StyledLink = styled(Link)`
+  display: flex;
+  align-items: center;
+`;
+
+const ErrorMessageCategory = styled.p`
+  grid-area: categoryErrorMessage;
+  color: var(--friendly-red-color);
+  padding-left: 12px;
 `;
 
 const StyledTypeLabel = styled.label`
   grid-area: typeLabel;
-`;
-
-const StyledRadioInput = styled.input`
-  grid-area: typeInput;
-`;
-
-const StyledRadioLabel = styled.label`
-  grid-area: radioLabel;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
 `;
 
 const StyledToggleButton = styled.div`
   grid-area: typeToggleButton;
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  font-size: 1rem;
-  height: 24px;
-  background-color: var(--light-bg-color);
-  border: 1px solid var(--dark-grey-color);
+  background-color: var(--white-bg-color);
   border-radius: 30px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-brand);
 
   input {
     display: none;
   }
 
   label {
+    padding: 2px 12px;
     border-radius: 30px;
     width: 120px;
     text-align: center;
-    color: var(--text-color-dark);
+    background-color: var(--white-bg-color);
+    border: var(--border-brand);
   }
 
   label[for="income"] {
     border-radius: 30px 0 0 30px;
-    border: 0.1px solid var(--dark-grey-color);
-    background-color: white;
-    font-size: 0.875rem;
   }
 
   label[for="expense"] {
     border-radius: 0 30px 30px 0;
-    border: 0.1px solid var(--dark-grey-color);
-    background-color: white;
-    font-size: 0.875rem;
   }
 
   input:checked + label {
@@ -492,51 +485,44 @@ const StyledToggleButton = styled.div`
   }
 `;
 
-const ErrorMessageAmount = styled.p`
-  grid-area: amountErrorMessage;
-  color: red;
-  font-size: 0.6rem;
+const StyledRadioLabel = styled.label`
+  grid-area: radioLabel;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const ErrorMessageType = styled.p`
   grid-area: typeErrorMessage;
-  color: red;
-  font-size: 0.6rem;
+  color: var(--friendly-red-color);
+  padding-left: 12px;
 `;
 
 const StyledDateLabel = styled.label`
   grid-area: dateLabel;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
 `;
 
 const StyledDateInput = styled.input`
   grid-area: dateInput;
-  font-family: sofia-pro;
-  padding: 4px 12px;
-  border: 1px solid var(--dark-grey-color);
+  padding: 2px 12px;
+  border: var(--border-brand);
   border-radius: 24px;
-  background-color: white;
-  color: var(--text-color-dark);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease-in-out;
+  background-color: var(--white-bg-color);
+  box-shadow: var(--shadow-brand);
 
   &:focus {
-    border-color: var(--accent-color);
-    outline: none;
+    outline: var(--border-accent);
   }
-`;
-
-const StyledLegend = styled.legend`
-  padding: 6px;
-  text-align: center;
-  font-weight: 500;
 `;
 
 const StyledButton = styled.button`
   border-radius: 24px;
   background-color: var(--accent-color);
-  padding: 4px 16px;
+  padding: 4px 24px;
   color: var(--text-color-dark);
   border: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-top: 12px;
+  box-shadow: var(--shadow-brand);
 `;

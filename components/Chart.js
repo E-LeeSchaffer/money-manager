@@ -62,7 +62,7 @@ export default function BarChartPage() {
   return (
     <>
       <Card>
-        <StyledTitle>Expenses by Category</StyledTitle>
+        <h3>Expenses by Category</h3>
         <CardContent>
           <ChartContainer>
             <BarChart
@@ -110,47 +110,37 @@ export default function BarChartPage() {
   );
 }
 
-const StyledTitle = styled.h2`
-  text-align: center;
-  font-size: 1rem;
-  font-weight: 700;
-`;
-
 const StyledLabelText = styled.text`
   fill: black;
-  font-size: 12px;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
   text-anchor: start;
 `;
 
 const Card = styled.div`
-  background-color: #fff;
+  background-color: var(--white-bg-color);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 16px;
-  width: 100%;
+  box-shadow: var(--shadow-brand);
+  width: 300px;
+  padding: 8px 16px;
+  font-size: var(--font-size-md);
 `;
 
-const CardContent = styled.div`
-  margin-bottom: 16px;
-`;
+const CardContent = styled.div``;
 
 const ChartContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
 `;
 
 const CardFooter = styled.div`
-  font-size: 14px;
-  color: var(--text-color-dark);
+  margin-bottom: 20px;
 `;
 
 const FooterText = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 500;
+  color: var(--dark-grey-color);
+  font-size: var(--font-size-xs);
 `;
 
 const StyledCardWrapper = styled.div`
@@ -159,27 +149,24 @@ const StyledCardWrapper = styled.div`
 `;
 
 const StyledSummaryCard = styled.div`
-  margin-top: 16px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 12px;
   align-items: center;
-  border: 0.1px solid var(--dark-grey-color);
+  border: var(--border-brand);
   border-radius: 16px;
   width: 16rem;
   height: 4rem;
   background-color: var(--accent-color);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-brand);
 `;
 
-const StyledSummaryTitle = styled.h3`
-  margin: 0;
-  font-size: 1.2rem;
+const StyledSummaryTitle = styled.h4`
+  font-size: var(--font-size-md);
   font-weight: bold;
 `;
 
 const StyledSummaryAmount = styled.p`
   margin: 4px 0 0;
-  font-size: 1rem;
 `;

@@ -45,7 +45,7 @@ export default function TransactionItem({
 
   return (
     <StyledCardWrapper>
-      <StyledLink href={`/transactions/${transaction._id}`}>
+      <Link href={`/transactions/${transaction._id}`}>
         <StyledCard>
           <StyledName>{transaction.name}</StyledName>
           <StyledCategory>
@@ -61,7 +61,7 @@ export default function TransactionItem({
           </StyledCategory>
           <StyledAmount type={transaction.type}>{formattedAmount}</StyledAmount>
         </StyledCard>
-      </StyledLink>
+      </Link>
       <StyledOptionsContainer>
         <OptionsMenu
           handleOpenDeleteDialogue={() =>
@@ -84,35 +84,27 @@ const StyledCardWrapper = styled.div`
   width: 100%;
 `;
 const StyledCard = styled.div`
-  border: 0.1px solid var(--dark-grey-color);
+  border: var(--border-brand);
   border-radius: 16px;
   padding: 8px 16px;
   display: grid;
-  width: 100%;
-  min-height: 4rem;
   grid-template-areas: "name options" "category amount";
-  background-color: white;
+  background-color: var(--white-bg-color);
 `;
 
 const StyledOptionsContainer = styled.div`
   grid-area: options;
   position: absolute;
-  padding-top: 12px;
-  padding-bottom: 4px;
-  padding-inline: 12px;
+  padding: 12px 12px 8px;
   top: 0;
   right: 0;
-  z-index: 10;
+  z-index: 100;
   background-color: transparent;
-`;
-
-const StyledLink = styled(Link)`
-  color: inherit;
-  text-decoration: none;
 `;
 
 const StyledName = styled.div`
   grid-area: name;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   padding-bottom: 4px;
@@ -120,9 +112,11 @@ const StyledName = styled.div`
 
 const StyledCategory = styled.div`
   grid-area: category;
-  font-size: x-small;
   display: flex;
-  gap: 4px;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
+  display: flex;
+  gap: var(--gap-md);
   align-items: center;
 `;
 
@@ -140,20 +134,20 @@ const StyledConfirmActionContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 4px;
-  border: 0.1px solid var(--dark-grey-color);
+  gap: var(--gap-sm);
+  border: var(--border-brand);
   border-radius: 16px;
   padding: 8px 16px;
   width: 18rem;
   min-height: 4rem;
-  background-color: white;
+  background-color: var(--white-bg-color);
 `;
 
 const StyledCancelButton = styled.button`
   border: none;
   border-radius: 4px;
   background-color: var(--friendly-red-color);
-  color: white;
+  color: var(--light-bg-color);
   height: fit-content;
 `;
 

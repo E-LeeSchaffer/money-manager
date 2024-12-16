@@ -81,22 +81,22 @@ export default function Filter({
                 }}
                 $isSelected={selectedCategory === category._id}
               >
-                <StyledCategoryIcons>
-                  <StyledCategoryIconWrapper>
+                <StyledCategoryIconWrapper>
+                  <StyledCategoryIcons>
                     <Image
                       src={getCategoryIcon(category.name, categories)}
                       alt={`${category.name} icon`}
                       width={24}
                       height={24}
                     />
-                  </StyledCategoryIconWrapper>
+                  </StyledCategoryIcons>
                   <StyledCategoryName>
                     {capitalizeFirstLetter(category.name)}
                   </StyledCategoryName>
                   <StyledTransactionCount>
                     {category.count}
                   </StyledTransactionCount>
-                </StyledCategoryIcons>
+                </StyledCategoryIconWrapper>
               </StyledCategoryButton>
             ))}
           </StyledCategoryContainer>
@@ -108,16 +108,15 @@ export default function Filter({
 
 const StyledFilterContainer = styled.div`
   display: flex;
-  height: 24px;
   position: relative;
   right: 0;
-  padding-left: 0.5rem;
 `;
 
 const StyledFilterButton = styled.button`
-  background-color: transparent;
-  padding: 0;
   border: none;
+  height: 48px;
+  background-color: transparent;
+  padding-right: 12px;
 `;
 
 const StyledImage = styled(Image)`
@@ -128,14 +127,13 @@ const StyledCategoryContainer = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
-  top: 24px;
+  top: 40px;
   right: 0;
-  text-align: end;
-  z-index: 50;
-  background-color: white;
-  border: 0.1px solid var(--dark-grey-color);
+  z-index: 500;
+  padding-right: 4px;
+  background-color: var(--white-bg-color);
+  border: var(--border-brand);
   border-radius: 4px;
-  padding: 4px;
   width: 180px;
   max-height: 250px;
   overflow-y: auto;
@@ -146,22 +144,22 @@ const StyledCategoryButton = styled.button`
     $isSelected ? "var(--accent-color)" : "transparent"};
   color: ${({ $isSelected }) =>
     $isSelected ? "black" : "var(--text-color-dark)"};
-  padding: 0;
   border: none;
   text-align: end;
   border-radius: 2px;
   padding: 1px 2px;
-  font-size: 0.7rem;
-`;
-
-const StyledCategoryIcons = styled.div`
-  display: flex;
-  align-items: center;
-  height: 24px;
-  gap: 2px;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
 `;
 
 const StyledCategoryIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  height: 24px;
+  gap: var(--gap-xs);
+`;
+
+const StyledCategoryIcons = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,8 +171,12 @@ const StyledCategoryIconWrapper = styled.div`
 
 const StyledCategoryName = styled.span`
   flex: 1;
-  font-size: 0.85rem;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
   text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const StyledTransactionCount = styled.div`
@@ -186,6 +188,7 @@ const StyledTransactionCount = styled.div`
   background-color: var(--dark-grey-color);
   color: black;
   border-radius: 20%;
-  font-size: 0.75rem;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
   font-weight: bold;
 `;

@@ -89,17 +89,17 @@ const StyledListContainer = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 30px;
 `;
 
-const StyledDate = styled.h3`
-  font-size: 0.8rem;
-  margin: 0 0 8px 0;
+const StyledDate = styled.p`
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
+  margin-bottom: 8px;
 `;
 
 const StyledList = styled.li`
-  margin-bottom: 12px;
-  width: 18rem;
+  margin-bottom: 10px;
+  width: 300px;
 `;
 
 const StyledEmptyListMessage = styled.p`

@@ -31,11 +31,11 @@ const StyledModal = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100;
+  z-index: 500;
 `;
 
 const Content = styled.div`
-  background: white;
+  background: var(--white-bg-color);
   padding: 20px;
   border-radius: 16px;
   max-width: 500px;
