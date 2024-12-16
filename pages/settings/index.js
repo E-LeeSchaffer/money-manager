@@ -4,24 +4,116 @@ import Link from "next/link";
 import { getCategoryIcon } from "@/lib/utils";
 import Modal from "@/components/Modal";
 import { capitalizeFirstLetter } from "@/lib/utils";
+import { useState } from "react";
+import useSWR from "swr";
 
-export default function SettingsPage({
-  handleAddCategory,
-  categories,
-  isDuplicateError,
-  successMessage,
-  isEditCategory,
-  handleOpenEditModeCategory,
-  handleSaveEditCategory,
-  originalCategoryName,
-  handleDeleteCategory,
-  openModal,
-  isModalOpen,
-  closeModal,
-  categoryToDelete,
-  handleConfirmDeleteCategory,
-  handleCancelDeleteCategory,
-}) {
+export default function SettingsPage({ successMessage, setSuccessMessage }) {
+  const [isDuplicateError, setIsDuplicateError] = useState(false);
+  const { data: categories = [], mutate: mutateCategories } =
+    useSWR(`/api/categories`);
+  const { data: transactionsList = [], mutate: mutateTransactions } =
+    useSWR(`/api/transactions`);
+  const [isEditCategory, setIsEditCategory] = useState(null);
+  const [categoryToEdit, setcategoryToEdit] = useState(null);
+  const [originalCategoryName, setOriginalCategoryName] = useState("");
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  async function handleAddCategory(category) {
+    const correctFormat = {
+      name: category,
+    };
+    setIsDuplicateError(false);
+
+    const normalizedCategoryName = category.trim().toLowerCase();
+
+    const isDuplicate = categories.some(
+      (category) => category.name.toLowerCase() === normalizedCategoryName
+    );
+
+    if (isDuplicate) {
+      setIsDuplicateError(true);
+      return;
+    }
+
+    const response = await fetch("/api/categories", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(correctFormat),
+    });
+
+    if (response.ok) {
+      mutateCategories();
+    }
+  }
+
+  function handleOpenEditModeCategory(category) {
+    setOriginalCategoryName(category.name);
+    setIsEditCategory(category._id);
+    setcategoryToEdit(category);
+  }
+
+  async function handleSaveEditCategory(editedCategory) {
+    const response = await fetch(`/api/categories/${editedCategory._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editedCategory),
+    });
+
+    if (response.ok) {
+      mutateCategories();
+      mutateTransactions();
+      setSuccessMessage("Category successfully updated!");
+      setIsEditCategory(null);
+    } else {
+      console.error("Failed to update category.");
+    }
+
+    const normalizedUpdatedName = editedCategory.name.trim().toLowerCase();
+
+    const isDuplicate = categories.some(
+      (category) =>
+        category.id !== editedCategory.id &&
+        category.name.toLowerCase() === normalizedUpdatedName
+    );
+
+    if (isDuplicate) {
+      setIsDuplicateError(true);
+      return;
+    }
+  }
+
+  function openModal() {
+    setIsModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsModalOpen(false);
+  }
+
+  function handleDeleteCategory(category) {
+    setCategoryToDelete(category);
+  }
+
+  async function handleConfirmDeleteCategory(id) {
+    const response = await fetch(`/api/categories/${id}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      mutateCategories();
+      mutateTransactions();
+    }
+    setSuccessMessage("Note successfully deleted!");
+  }
+
+  function handleCancelDeleteCategory() {
+    setCategoryToDelete(null);
+    closeModal();
+  }
   return (
     <>
       <Modal isModalOpen={isModalOpen} onCloseModal={closeModal}>
@@ -47,6 +139,7 @@ export default function SettingsPage({
               type="button"
               onClick={() => {
                 handleConfirmDeleteCategory(categoryToDelete._id);
+                closeModal();
               }}
             >
               Really Delete

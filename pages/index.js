@@ -14,14 +14,11 @@ import Link from "next/link";
 import TimelineFilter from "@/components/TimelineFilter";
 import useSWR from "swr";
 
-export default function HomePage({
-  successMessage,
-  setSuccessMessage,
-
-  categories,
-}) {
+export default function HomePage({ successMessage, setSuccessMessage }) {
   const { data: transactionsList = [], mutate: mutateTransactions } =
     useSWR(`/api/transactions`);
+  const { data: categories = [], mutate: mutateCategories } =
+    useSWR(`/api/categories`);
   const [filteredTransactionType, setFilteredTransactionType] =
     useLocalStorageState("balance");
   const [selectedCategory, setSelectedCategory] = useLocalStorageState(
