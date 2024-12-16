@@ -1,17 +1,15 @@
 import Modal from "@/components/Modal";
 import TransactionForm from "@/components/TransactionForm";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { capitalizeFirstLetter, formatDate, formatNumber } from "@/lib/utils";
 import Link from "next/link";
 import useSWR from "swr";
-import useLocalStorageState from "use-local-storage-state";
 
 export default function TransactionDetailsPage({
   successMessage,
-
   setSuccessMessage,
 }) {
   const router = useRouter();
@@ -22,8 +20,7 @@ export default function TransactionDetailsPage({
     error: transactionError,
     mutate,
   } = useSWR(id ? `/api/transactions/${id}` : null);
-  const { data: transactionsList = [], mutate: mutateTransactions } =
-    useSWR(`/api/transactions`);
+  const { mutate: mutateTransactions } = useSWR(`/api/transactions`);
   const { data: categories = [] } = useSWR(`/api/categories`);
 
   const [isDeletingTransaction, setIsDeletingTransaction] = useState(false);
@@ -31,7 +28,7 @@ export default function TransactionDetailsPage({
 
   const [isNoteEdit, setIsNoteEdit] = useState(false);
   const [isNoteError, setIsNoteError] = useState(false);
-  const [isDeletingId, setIsDeletingId] = useState(false);
+
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editTransaction, setEditTransaction] = useState(null);
@@ -67,10 +64,6 @@ export default function TransactionDetailsPage({
   function handleOpenEditMode(transaction) {
     setIsEditing(true);
     setEditTransaction(transaction);
-    setIsModalOpen(true);
-  }
-
-  function openModal() {
     setIsModalOpen(true);
   }
 
