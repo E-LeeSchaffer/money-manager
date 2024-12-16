@@ -20,50 +20,10 @@ export default function App({ Component, pageProps }) {
     }
   }, [successMessage]);
 
-  async function handleDeleteNote(transaction) {
-    const response = await fetch(`/api/transactions/${transaction._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ...transaction, note: "" }),
-    });
-
-    if (response.ok) {
-      mutateTransactions();
-      setSuccessMessage("Note successfully deleted!");
-    } else {
-      console.error("Failed to delete note.");
-    }
-  }
-
-  async function handleAddNote(note, transaction) {
-    const response = await fetch(`/api/transactions/${transaction._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ...transaction, note }),
-    });
-
-    if (response.ok) {
-      mutateTransactions();
-      setSuccessMessage(
-        transaction.note
-          ? "Note successfully updated!"
-          : "Note successfully added!"
-      );
-    } else {
-      console.error("Failed to add note.");
-    }
-  }
-
   const componentProps = {
     successMessage,
     setSuccessMessage,
 
-    handleAddNote,
-    handleDeleteNote,
     ...pageProps,
   };
 

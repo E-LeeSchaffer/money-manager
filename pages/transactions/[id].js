@@ -11,8 +11,7 @@ import useLocalStorageState from "use-local-storage-state";
 
 export default function TransactionDetailsPage({
   successMessage,
-  handleAddNote,
-  handleDeleteNote,
+
   setSuccessMessage,
 }) {
   const router = useRouter();
@@ -89,6 +88,44 @@ export default function TransactionDetailsPage({
     await handleDeleteNote(transactionDetails);
     mutate();
     setIsDeletingNote(false);
+  }
+
+  async function handleDeleteNote(transaction) {
+    const response = await fetch(`/api/transactions/${transaction._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...transaction, note: "" }),
+    });
+
+    if (response.ok) {
+      mutateTransactions();
+      setSuccessMessage("Note successfully deleted!");
+    } else {
+      console.error("Failed to delete note.");
+    }
+  }
+
+  async function handleAddNote(note, transaction) {
+    const response = await fetch(`/api/transactions/${transaction._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...transaction, note }),
+    });
+
+    if (response.ok) {
+      mutateTransactions();
+      setSuccessMessage(
+        transaction.note
+          ? "Note successfully updated!"
+          : "Note successfully added!"
+      );
+    } else {
+      console.error("Failed to add note.");
+    }
   }
 
   async function handleNoteUpdate(event) {
