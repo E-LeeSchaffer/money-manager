@@ -8,7 +8,6 @@ const fetcher = (url) => fetch(url).then((response) => response.json());
 
 export default function App({ Component, pageProps }) {
   const [successMessage, setSuccessMessage] = useState("");
-
   const [showForm, setShowForm] = useState(false);
   const [activeSelectionId, setActiveSelectionId] = useState(null);
   const [isDuplicateError, setIsDuplicateError] = useState(false);
