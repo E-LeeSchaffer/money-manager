@@ -67,7 +67,7 @@ export default function UserProfile({
 
   return (
     <>
-      <BackButton />
+      <BackButton handleBack={handleBack} variant="profilepage" />
 
       <StyledPageLinks>
         <>
