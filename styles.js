@@ -30,12 +30,7 @@ export default createGlobalStyle`
     --font-size-md: 1.25rem;
     --font-size-lg: 1.5rem;
     --font-size-xl: 2rem;
-
-    /* border radius */
-    --border-radius-xs:
-    --border-radius-md:
-    --border-radius-xl:
-
+    
     /* gap */
     --gap-xs: 2px;
     --gap-sm: 4px;

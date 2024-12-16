@@ -90,6 +90,7 @@ const StyledCard = styled.div`
   display: grid;
   grid-template-areas: "name options" "category amount";
   background-color: var(--white-bg-color);
+  height: 70px;
 `;
 
 const StyledOptionsContainer = styled.div`
@@ -138,21 +139,26 @@ const StyledConfirmActionContainer = styled.div`
   border: var(--border-brand);
   border-radius: 16px;
   padding: 8px 16px;
-  width: 18rem;
-  min-height: 4rem;
+  width: 300px;
+  height: 70px;
   background-color: var(--white-bg-color);
 `;
 
 const StyledCancelButton = styled.button`
   border: none;
-  border-radius: 4px;
-  background-color: var(--friendly-red-color);
-  color: var(--light-bg-color);
+  background-color: transparent;
   height: fit-content;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
 `;
 
 const StyledConfirmButton = styled.button`
   border: none;
-  background-color: transparent;
+  border-radius: 4px;
+  background-color: var(--friendly-red-color);
+  color: var(--light-bg-color);
   height: fit-content;
+  padding: 4px 8px;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
 `;

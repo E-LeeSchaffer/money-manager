@@ -189,7 +189,7 @@ const StyledCategoryName = styled.span`
 `;
 
 const StyledCategoryToDelete = styled.p`
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-sm);
   padding: 0 0 8px 0;
 `;
 
@@ -204,24 +204,30 @@ const StyledConfirmActionContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: var(--gap-sm);
+  border-radius: 16px;
   padding: 8px 16px;
-  width: 18rem;
-  min-height: 4rem;
+  width: 300px;
+  height: 70px;
   background-color: var(--white-bg-color);
 `;
 
 const StyledCancelButton = styled.button`
   border: none;
-  border-radius: 4px;
-  background-color: var(--friendly-red-color);
-  color: var(--light-bg-color);
+  background-color: transparent;
   height: fit-content;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
 `;
 
 const StyledConfirmButton = styled.button`
   border: none;
-  background-color: transparent;
+  border-radius: 4px;
+  background-color: var(--friendly-red-color);
+  color: var(--light-bg-color);
   height: fit-content;
+  padding: 4px 8px;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
 `;
 
 const StyledContainer = styled.div`

@@ -90,4 +90,5 @@ const StyledOptionsSelectButton = styled.button`
   border: none;
   background-color: transparent;
   text-align: end;
+  font-size: var(--font-size-sm);
 `;

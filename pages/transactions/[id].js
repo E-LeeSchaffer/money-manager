@@ -372,10 +372,10 @@ const StyledConfirmActionContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: var(--gap-sm);
-  border: ${(props) => (props.$isNote ? "none" : "var(--border-brand)")};
   border-radius: 16px;
   padding: 8px 16px;
   width: 300px;
+  border: ${(props) => (props.$isNote ? "none" : "var(--border-brand)")};
   height: ${(props) => (props.$isNote ? "195px" : "250px")};
   background-color: ${(props) =>
     props.$isNote ? "var(--accent-color)" : "var(--white-bg-color)"};
@@ -383,16 +383,21 @@ const StyledConfirmActionContainer = styled.div`
 
 const StyledCancelButton = styled.button`
   border: none;
-  border-radius: 4px;
-  background-color: var(--friendly-red-color);
-  color: var(--light-bg-color);
+  background-color: transparent;
   height: fit-content;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
 `;
 
 const StyledConfirmButton = styled.button`
   border: none;
-  background-color: transparent;
+  border-radius: 4px;
+  background-color: var(--friendly-red-color);
+  color: var(--light-bg-color);
   height: fit-content;
+  padding: 4px 8px;
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
 `;
 
 const StyledDetailsContainer = styled.div`
