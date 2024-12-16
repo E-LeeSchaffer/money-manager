@@ -150,7 +150,6 @@ export default function SettingsPage({
             ))}
             <StyledAddCategoryInput
               type="text"
-              placeholder="+ Add a new category"
               maxLength={20}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
@@ -270,7 +269,7 @@ const StyledCategoryContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: var(--gap-xs);
+  gap: var(--gap-sm);
   width: 300px;
 `;
 
