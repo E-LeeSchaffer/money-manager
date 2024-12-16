@@ -17,11 +17,7 @@ import useSWR from "swr";
 export default function HomePage({
   successMessage,
   setSuccessMessage,
-  toggleForm,
-  showForm,
-  activeSelectionId,
-  openSelection,
-  closeSelection,
+
   categories,
 }) {
   const { data: transactionsList = [], mutate: mutateTransactions } =
@@ -45,6 +41,8 @@ export default function HomePage({
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editTransaction, setEditTransaction] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [activeSelectionId, setActiveSelectionId] = useState(null);
 
   function handleOpenEditMode(transaction) {
     setIsEditing(true);
@@ -60,12 +58,24 @@ export default function HomePage({
     setIsModalOpen(false);
   }
 
+  function openSelection(selectionId) {
+    setActiveSelectionId(selectionId);
+  }
+
+  function closeSelection() {
+    setActiveSelectionId(null);
+  }
+
   function handleOpenDeleteDialogue(id) {
     setIsDeletingId(id);
   }
 
   function handleCancelDeleteDialogue() {
     setIsDeletingId(false);
+  }
+
+  function toggleForm() {
+    setShowForm(!showForm);
   }
 
   async function handleAddTransaction(data) {

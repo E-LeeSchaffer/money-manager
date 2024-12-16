@@ -8,8 +8,7 @@ const fetcher = (url) => fetch(url).then((response) => response.json());
 
 export default function App({ Component, pageProps }) {
   const [successMessage, setSuccessMessage] = useState("");
-  const [showForm, setShowForm] = useState(false);
-  const [activeSelectionId, setActiveSelectionId] = useState(null);
+
   const [isDuplicateError, setIsDuplicateError] = useState(false);
   const { data: categories = [], mutate: mutateCategories } = useSWR(
     `/api/categories`,
@@ -29,18 +28,6 @@ export default function App({ Component, pageProps }) {
       return () => clearTimeout(timer);
     }
   }, [successMessage]);
-
-  function openSelection(selectionId) {
-    setActiveSelectionId(selectionId);
-  }
-
-  function closeSelection() {
-    setActiveSelectionId(null);
-  }
-
-  function toggleForm() {
-    setShowForm(!showForm);
-  }
 
   async function handleAddCategory(category) {
     const correctFormat = {
@@ -172,11 +159,7 @@ export default function App({ Component, pageProps }) {
     categories,
     successMessage,
     setSuccessMessage,
-    toggleForm,
-    showForm,
-    activeSelectionId,
-    openSelection,
-    closeSelection,
+
     handleAddCategory,
     isDuplicateError,
     isEditCategory,
