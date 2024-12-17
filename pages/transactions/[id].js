@@ -1,24 +1,16 @@
 import Modal from "@/components/Modal";
 import TransactionForm from "@/components/TransactionForm";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import Image from "next/image";
 import { capitalizeFirstLetter, formatDate, formatNumber } from "@/lib/utils";
 import Link from "next/link";
 import useSWR from "swr";
-import useLocalStorageState from "use-local-storage-state";
 
 export default function TransactionDetailsPage({
-  handleEditTransaction,
-  isModalOpen,
-  isEditing,
-  closeModal,
-  handleOpenEditMode,
-  handleDeleteTransaction,
   successMessage,
-  handleAddNote,
-  handleDeleteNote,
+  setSuccessMessage,
 }) {
   const router = useRouter();
   const { id } = router.query;
@@ -28,6 +20,7 @@ export default function TransactionDetailsPage({
     error: transactionError,
     mutate,
   } = useSWR(id ? `/api/transactions/${id}` : null);
+  const { mutate: mutateTransactions } = useSWR(`/api/transactions`);
   const { data: categories = [] } = useSWR(`/api/categories`);
 
   const [isDeletingTransaction, setIsDeletingTransaction] = useState(false);
@@ -35,6 +28,48 @@ export default function TransactionDetailsPage({
 
   const [isNoteEdit, setIsNoteEdit] = useState(false);
   const [isNoteError, setIsNoteError] = useState(false);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editTransaction, setEditTransaction] = useState(null);
+
+  async function handleDeleteTransaction(id) {
+    const response = await fetch(`/api/transactions/${id}`, {
+      method: "DELETE",
+    });
+    mutateTransactions();
+    setSuccessMessage("Transaction successfully deleted!");
+  }
+
+  async function handleEditTransaction(updatedTransaction) {
+    const response = await fetch(
+      `/api/transactions/${updatedTransaction._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTransaction),
+      }
+    );
+
+    if (response.ok) {
+      mutateTransactions();
+      setSuccessMessage("Transaction successfully updated!");
+    } else {
+      console.error("Failed to update transaction.");
+    }
+  }
+
+  function handleOpenEditMode(transaction) {
+    setIsEditing(true);
+    setEditTransaction(transaction);
+    setIsModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsModalOpen(false);
+  }
 
   function handleConfirmDeleteTransaction() {
     handleDeleteTransaction(transactionDetails._id);
@@ -46,6 +81,44 @@ export default function TransactionDetailsPage({
     await handleDeleteNote(transactionDetails);
     mutate();
     setIsDeletingNote(false);
+  }
+
+  async function handleDeleteNote(transaction) {
+    const response = await fetch(`/api/transactions/${transaction._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...transaction, note: "" }),
+    });
+
+    if (response.ok) {
+      mutateTransactions();
+      setSuccessMessage("Note successfully deleted!");
+    } else {
+      console.error("Failed to delete note.");
+    }
+  }
+
+  async function handleAddNote(note, transaction) {
+    const response = await fetch(`/api/transactions/${transaction._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...transaction, note }),
+    });
+
+    if (response.ok) {
+      mutateTransactions();
+      setSuccessMessage(
+        transaction.note
+          ? "Note successfully updated!"
+          : "Note successfully added!"
+      );
+    } else {
+      console.error("Failed to add note.");
+    }
   }
 
   async function handleNoteUpdate(event) {

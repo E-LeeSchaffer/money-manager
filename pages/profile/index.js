@@ -11,12 +11,7 @@ const avatars = [
   "/avatars/avatar3.png",
 ];
 
-export default function UserProfile({
-  isEditing,
-  setIsEditing,
-  successMessage,
-  setSuccessMessage,
-}) {
+export default function UserProfile({ successMessage, setSuccessMessage }) {
   const [profile, setProfile] = useLocalStorageState("userProfile", {
     defaultValue: {
       firstName: "",
@@ -24,6 +19,7 @@ export default function UserProfile({
       avatar: avatars[0],
     },
   });
+  const [isEditing, setIsEditing] = useState(false);
 
   const router = useRouter();
 

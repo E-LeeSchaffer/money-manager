@@ -18,7 +18,6 @@ export default function TransactionItem({
   activeSelectionId,
   openSelection,
   closeSelection,
-  categories,
 }) {
   const formattedAmount = formatNumber(transaction);
   const isDeleting = isDeletingId === transaction._id;
