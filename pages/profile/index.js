@@ -36,8 +36,8 @@ export default function UserProfile({
 
     setSuccessMessage(
       isNewProfile
-        ? "Profile successfully created."
-        : "Profile successfully updated."
+        ? "Profile successfully created!"
+        : "Profile successfully updated!"
     );
 
     router.push("/profile");
