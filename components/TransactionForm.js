@@ -150,9 +150,11 @@ export default function TransactionForm({
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     $active={isDropdownOpen}
                   >
-                    {selectedCategoryInForm
-                      ? { selectedCategoryInForm }
-                      : "Select a category"}
+                    {selectedCategoryInForm ? (
+                      <>{selectedCategoryInForm}</>
+                    ) : (
+                      "Select a category"
+                    )}
                     <StyledImage
                       src={
                         isDropdownOpen

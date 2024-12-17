@@ -30,6 +30,7 @@ export default function Header() {
           alt="report button"
           width={110}
           height={50}
+          priority
         />
       </Link>
     </StyledHeader>
