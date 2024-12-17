@@ -4,6 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
 import { format } from "date-fns";
 import { useState } from "react";
+import Backdrop from "./Backdrop";
 
 const timeframes = [
   { label: "7 D", value: 7 },
@@ -50,58 +51,63 @@ export default function TimelineFilter({
     );
 
   return (
-    <StyledTimelineFilterContainer>
-      {timeframes.map((timeframe) => (
-        <StyledTimelineFilterButton
-          key={timeframe.value}
-          $active={selectedTimeframe === timeframe.value}
-          onClick={() =>
-            onTimeframeChange(
-              selectedTimeframe === timeframe.value ? null : timeframe.value
-            )
-          }
-        >
-          {timeframe.label}
-        </StyledTimelineFilterButton>
-      ))}
-
-      <>
-        <StyledTimelineFilterButton
-          $active={Boolean(customDateRange.start && customDateRange.end)}
-          onClick={() => setIsCustomDatePickerOpen(!isCustomDatePickerOpen)}
-        >
-          {customDateLabel}
-        </StyledTimelineFilterButton>
-        {customDateRange.start !== null && customDateRange.end !== null && (
-          <StyledDeselectButton
-            type="button"
-            onClick={handleClearCustomDateRange}
-            aria-label="Deselect"
-          >
-            <StyledImage
-              aria-hidden="true"
-              src={"/images/x-square-fill.svg"}
-              alt="filter button"
-              width={15}
-              height={15}
-            />
-          </StyledDeselectButton>
-        )}
-      </>
-
+    <>
       {isCustomDatePickerOpen && (
-        <StyledDatePickerContainer>
-          <DatePicker
-            selected={customDateRange.start}
-            onChange={onCustomDateChange}
-            startDate={customDateRange.start}
-            endDate={customDateRange.end}
-            selectsRange
-            inline
-          />
-        </StyledDatePickerContainer>
+        <Backdrop closeSelection={() => setIsCustomDatePickerOpen(false)} />
       )}
-    </StyledTimelineFilterContainer>
+      <StyledTimelineFilterContainer>
+        {timeframes.map((timeframe) => (
+          <StyledTimelineFilterButton
+            key={timeframe.value}
+            $active={selectedTimeframe === timeframe.value}
+            onClick={() =>
+              onTimeframeChange(
+                selectedTimeframe === timeframe.value ? null : timeframe.value
+              )
+            }
+          >
+            {timeframe.label}
+          </StyledTimelineFilterButton>
+        ))}
+
+        <>
+          <StyledTimelineFilterButton
+            $active={Boolean(customDateRange.start && customDateRange.end)}
+            onClick={() => setIsCustomDatePickerOpen(!isCustomDatePickerOpen)}
+          >
+            {customDateLabel}
+          </StyledTimelineFilterButton>
+          {customDateRange.start !== null && customDateRange.end !== null && (
+            <StyledDeselectButton
+              type="button"
+              onClick={handleClearCustomDateRange}
+              aria-label="Deselect"
+            >
+              <StyledImage
+                aria-hidden="true"
+                src={"/images/x-square-fill.svg"}
+                alt="filter button"
+                width={15}
+                height={15}
+              />
+            </StyledDeselectButton>
+          )}
+        </>
+
+        {isCustomDatePickerOpen && (
+          <StyledDatePickerContainer>
+            <DatePicker
+              selected={customDateRange.start}
+              onChange={onCustomDateChange}
+              startDate={customDateRange.start}
+              endDate={customDateRange.end}
+              selectsRange
+              inline
+            />
+          </StyledDatePickerContainer>
+        )}
+      </StyledTimelineFilterContainer>
+    </>
   );
 }
 
