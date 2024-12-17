@@ -6,6 +6,7 @@ import Link from "next/link";
 import { getCategoryIcon } from "@/lib/utils";
 import { format } from "date-fns";
 import { capitalizeFirstLetter } from "@/lib/utils";
+import Backdrop from "./Backdrop";
 
 export default function TransactionForm({
   categories,
@@ -149,11 +150,9 @@ export default function TransactionForm({
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     $active={isDropdownOpen}
                   >
-                    {selectedCategoryInForm ? (
-                      <>{selectedCategoryInForm}</>
-                    ) : (
-                      "Select a category"
-                    )}
+                    {selectedCategoryInForm
+                      ? { selectedCategoryInForm }
+                      : "Select a category"}
                     <StyledImage
                       src={
                         isDropdownOpen
@@ -210,6 +209,9 @@ export default function TransactionForm({
                     />
                   </StyledLink>
                 </StyledCategorySelect>
+                {isDropdownOpen && (
+                  <Backdrop closeSelection={() => setIsDropdownOpen(false)} />
+                )}
                 <div>
                   {categoryError && (
                     <ErrorMessageCategory>
