@@ -49,12 +49,15 @@ export default function TransactionDetailsPage({
   }
 
   async function handleNoteUpdate(event) {
-    if (event.key !== "Enter") {
+    if (event.key !== "Enter" || event.shiftKey) {
       setIsNoteError(false);
       return;
     }
 
-    const noteContent = event.target.value.trim();
+    const noteContent = event.target.value
+      .split("\n")
+      .map((line) => line.trim())
+      .join("\n");
     if (noteContent.length <= 0) {
       setIsNoteError(true);
       return;
@@ -306,6 +309,8 @@ const StyledNoteContentButton = styled.button`
   display: flex;
   text-align: left;
   min-height: 100px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 `;
 
 const ErrorMessageNote = styled.p`
