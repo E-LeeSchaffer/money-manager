@@ -24,7 +24,14 @@ export default function Header() {
 
   return (
     <StyledHeader $isScrolled={isScrolled}>
-      <Link href={"/"}>Money Bin</Link>
+      <Link href={"/"}>
+        <StyledImage
+          src={"/images/logo.svg"}
+          alt="report button"
+          width={110}
+          height={50}
+        />
+      </Link>
     </StyledHeader>
   );
 }
@@ -35,12 +42,15 @@ const StyledHeader = styled.h1`
   left: 0;
   display: flex;
   align-items: center;
-
   height: 44px;
   width: 100vw;
-  padding-inline: 16px;
+  padding-right: 16px;
   background-color: ${(props) =>
     props.$isScrolled ? "rgba(245, 245, 245, 0.8)" : "var(--light-bg-color)"};
   transition: background-color 0.3s ease-in-out;
   z-index: 2000;
+`;
+
+const StyledImage = styled(Image)`
+  display: flex;
 `;
