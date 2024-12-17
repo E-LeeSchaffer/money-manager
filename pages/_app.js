@@ -212,6 +212,7 @@ export default function App({ Component, pageProps }) {
       mutateTransactions();
     }
     setSuccessMessage("Note successfully deleted!");
+    closeModal();
   }
 
   function handleCancelDeleteCategory() {
