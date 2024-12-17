@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { formatNumber } from "@/lib/utils";
 import styled from "styled-components";
 
 export default function AccountBalance({

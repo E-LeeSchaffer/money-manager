@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Image from "next/image";
-import { useState } from "react";
+
 import Backdrop from "./Backdrop";
 
 export default function OptionsMenu({
