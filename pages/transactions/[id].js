@@ -58,6 +58,7 @@ export default function TransactionDetailsPage({
       .split("\n")
       .map((line) => line.trim())
       .join("\n");
+
     if (noteContent.length <= 0) {
       setIsNoteError(true);
       return;
@@ -268,6 +269,9 @@ export default function TransactionDetailsPage({
                 </ErrorMessageNote>
               )}
               <StyledOptionsContainer>
+                {isNoteEdit && (
+                  <StyledSaveNote>Click Enter so save</StyledSaveNote>
+                )}
                 <StyledDeleteButton
                   type="button"
                   onClick={() => {
@@ -448,6 +452,12 @@ const StyledOptionsContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: var(--gap-md);
+  height: 16px;
+`;
+
+const StyledSaveNote = styled.span`
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
 `;
 
 const StyledEditButton = styled.button`
