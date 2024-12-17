@@ -11,7 +11,7 @@ export default function BackButton({ variant, handleBack }) {
     } else if (variant === "profilepage") {
       handleBack();
     } else {
-      window.history.back();
+      router.back();
     }
   }
 

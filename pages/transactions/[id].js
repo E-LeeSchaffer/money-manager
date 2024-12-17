@@ -8,6 +8,7 @@ import { capitalizeFirstLetter, formatDate, formatNumber } from "@/lib/utils";
 import Link from "next/link";
 import useSWR from "swr";
 import BackButton from "@/components/BackButton";
+import css from "styled-jsx/css";
 
 export default function TransactionDetailsPage({
   handleEditTransaction,
@@ -384,10 +385,17 @@ const StyledConfirmActionContainer = styled.div`
   border-radius: 16px;
   padding: 8px 16px;
   width: 300px;
-  border: ${(props) => (props.$isNote ? "none" : "var(--border-brand)")};
-  height: ${(props) => (props.$isNote ? "195px" : "250px")};
-  background-color: ${(props) =>
-    props.$isNote ? "var(--accent-color)" : "var(--white-bg-color)"};
+  border: var(--border-brand);
+  height: 250px;
+  background-color: var(--white-bg-color);
+
+  ${(props) =>
+    props.$isNote &&
+    css`
+      border: none;
+      height: 195px;
+      background-color: var(--accent-color);
+    `};
 `;
 
 const StyledCancelButton = styled.button`
