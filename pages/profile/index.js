@@ -175,9 +175,13 @@ const EditButton = styled.button`
   border: none;
   background-color: transparent;
   padding: 0;
-  position: absolute;
-  top: 127px;
-  right: 115px;
+  position: relative;
+  top: -60px;
+  right: -70px;
+
+  &:hover {
+    background-color: transparent;
+  }
 `;
 
 const StyledImage = styled(Image)`
@@ -346,12 +350,21 @@ const SaveButton = styled.button`
   padding: 4px 24px;
   border: none;
   box-shadow: var(--shadow-brand);
+
+  &:hover {
+    background-color: var(--accent-color);
+    outline: var(--border-brand);
+  }
 `;
 
 const CancelButton = styled.button`
   border-radius: 24px;
   background-color: transparent;
   padding: 4px 24px;
+
+  &:hover {
+    background-color: transparent;
+  }
 `;
 
 const StyledInput = styled.input`

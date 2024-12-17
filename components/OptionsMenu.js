@@ -69,6 +69,10 @@ const StyledToggleButton = styled.button`
   justify-content: end;
   border: none;
   height: fit-content;
+
+  &:hover {
+    background-color: transparent;
+  }
 `;
 
 const StyledOptionsMenu = styled.div`

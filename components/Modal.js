@@ -38,7 +38,7 @@ const Content = styled.div`
   background: var(--white-bg-color);
   padding: 20px;
   border-radius: 16px;
-  max-width: 500px;
+  max-width: 375px;
   width: 100%;
   position: relative;
   margin-inline: 16px;
@@ -50,6 +50,10 @@ const Backdrop = styled.button`
   width: 100%;
   height: 100%;
   border: none;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
 `;
 
 const StyledCancelButton = styled.button`

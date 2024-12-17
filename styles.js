@@ -12,6 +12,7 @@ export default createGlobalStyle`
     margin: 0;
     padding: 0;
     border: none;
+
   }
 
   :root {
@@ -50,7 +51,9 @@ export default createGlobalStyle`
   body {
     background: var(--light-bg-color);
     padding-inline: 16px;
-    margin-block: 44px;
+    width: 100%;
+    max-width: 400px;
+    margin: 44px auto;
   }
 
   li {
@@ -86,5 +89,9 @@ export default createGlobalStyle`
   a {
     text-decoration: none;
     color: inherit;
+  }
+
+  button:hover {
+    background-color: var(--accent-color)
   }
 `;

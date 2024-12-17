@@ -39,6 +39,10 @@ const StyledBackButton = styled.button`
   padding: 12px;
   margin-top: 60px;
   margin-bottom: 10px;
+
+  &:hover {
+    background-color: transparent;
+  }
 `;
 
 const StyledImage = styled(Image)`

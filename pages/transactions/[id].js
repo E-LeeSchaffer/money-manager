@@ -316,6 +316,10 @@ const StyledNoteContentButton = styled.button`
   min-height: 100px;
   white-space: pre-wrap;
   word-wrap: break-word;
+
+  &:hover {
+    background-color: transparent;
+  }
 `;
 
 const ErrorMessageNote = styled.p`
@@ -404,6 +408,10 @@ const StyledCancelButton = styled.button`
   height: fit-content;
   font-size: var(--font-size-xs);
   line-height: 1.4;
+
+  &:hover {
+    background-color: transparent;
+  }
 `;
 
 const StyledConfirmButton = styled.button`
@@ -415,6 +423,10 @@ const StyledConfirmButton = styled.button`
   padding: 4px 8px;
   font-size: var(--font-size-xs);
   line-height: 1.4;
+
+  &:hover {
+    background-color: var(--friendly-red-color);
+  }
 `;
 
 const StyledDetailsContainer = styled.div`
@@ -471,11 +483,19 @@ const StyledSaveNote = styled.span`
 const StyledEditButton = styled.button`
   border: none;
   background-color: transparent;
+
+  &:hover {
+    background-color: transparent;
+  }
 `;
 
 const StyledDeleteButton = styled.button`
   border: none;
   background-color: transparent;
+
+  &:hover {
+    background-color: transparent;
+  }
 `;
 
 const StyledImage = styled(Image)`

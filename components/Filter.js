@@ -117,6 +117,10 @@ const StyledFilterButton = styled.button`
   height: 48px;
   background-color: transparent;
   padding-right: 12px;
+
+  &:hover {
+    background-color: transparent;
+  }
 `;
 
 const StyledImage = styled(Image)`
@@ -134,7 +138,7 @@ const StyledCategoryContainer = styled.div`
   background-color: var(--white-bg-color);
   border: var(--border-brand);
   border-radius: 4px;
-  width: 180px;
+  max-width: 180px;
   max-height: 250px;
   overflow-y: auto;
 `;

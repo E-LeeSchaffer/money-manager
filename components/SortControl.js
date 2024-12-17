@@ -27,4 +27,8 @@ const StyledSortButton = styled.button`
   background-color: transparent;
   border: none;
   display: flex;
+
+  &:hover {
+    background-color: transparent;
+  }
 `;
