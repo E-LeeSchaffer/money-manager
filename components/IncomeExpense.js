@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useEffect, useMemo } from "react";
 
 export default function IncomeExpense({
   onFilterChange,

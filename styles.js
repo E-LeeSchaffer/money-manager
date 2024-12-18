@@ -91,7 +91,4 @@ export default createGlobalStyle`
     color: inherit;
   }
 
-  button:hover {
-    background-color: var(--accent-color)
-  }
 `;

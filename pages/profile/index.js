@@ -12,12 +12,7 @@ const avatars = [
   "/avatars/avatar3.png",
 ];
 
-export default function UserProfile({
-  isEditing,
-  setIsEditing,
-  successMessage,
-  setSuccessMessage,
-}) {
+export default function UserProfile({ successMessage, setSuccessMessage }) {
   const [profile, setProfile] = useLocalStorageState("userProfile", {
     defaultValue: {
       firstName: "",
@@ -25,6 +20,7 @@ export default function UserProfile({
       avatar: avatars[0],
     },
   });
+  const [isEditing, setIsEditing] = useState(false);
 
   const router = useRouter();
 
@@ -54,8 +50,9 @@ export default function UserProfile({
   function handleBack() {
     if (isEditing) {
       setIsEditing(false);
+      router.push("/profile");
     } else {
-      router.push("/");
+      router.back();
     }
   }
 
@@ -178,10 +175,6 @@ const EditButton = styled.button`
   position: relative;
   top: -60px;
   right: -70px;
-
-  &:hover {
-    background-color: transparent;
-  }
 `;
 
 const StyledImage = styled(Image)`
@@ -309,10 +302,6 @@ const AvatarLabel = styled.label`
   border-radius: 50%;
   transition: border-color 0.2s ease;
   box-shadow: var(--shadow-brand);
-
-  &:hover {
-    border-color: black;
-  }
 `;
 
 const StyledRadioInput = styled.input`
@@ -350,21 +339,12 @@ const SaveButton = styled.button`
   padding: 4px 24px;
   border: none;
   box-shadow: var(--shadow-brand);
-
-  &:hover {
-    background-color: var(--accent-color);
-    outline: var(--border-brand);
-  }
 `;
 
 const CancelButton = styled.button`
   border-radius: 24px;
   background-color: transparent;
   padding: 4px 24px;
-
-  &:hover {
-    background-color: transparent;
-  }
 `;
 
 const StyledInput = styled.input`

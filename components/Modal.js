@@ -50,10 +50,6 @@ const Backdrop = styled.button`
   width: 100%;
   height: 100%;
   border: none;
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.5);
-  }
 `;
 
 const StyledCancelButton = styled.button`

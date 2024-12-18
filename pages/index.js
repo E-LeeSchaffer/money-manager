@@ -12,38 +12,19 @@ import Search from "@/components/Search";
 import SortControl from "@/components/SortControl";
 import Link from "next/link";
 import TimelineFilter from "@/components/TimelineFilter";
+import useSWR from "swr";
 
-export default function HomePage({
-  transactionsList,
-  successMessage,
-  handleOpenEditMode,
-  openModal,
-  closeModal,
-  handleFormSubmit,
-  handleAddTransaction,
-  handleDeleteTransaction,
-  handleEditTransaction,
-  isModalOpen,
-  isEditing,
-  editTransaction,
-  toggleForm,
-  showForm,
-  handleOpenDeleteDialogue,
-  handleConfirmDelete,
-  handleCancelDeleteDialogue,
-  isDeletingId,
-  activeSelectionId,
-  openSelection,
-  closeSelection,
-  categories,
-}) {
+export default function HomePage({ successMessage, setSuccessMessage }) {
+  const { data: transactionsList = [], mutate: mutateTransactions } =
+    useSWR(`/api/transactions`);
+  const { data: categories = [] } = useSWR(`/api/categories`);
+
   const [filteredTransactionType, setFilteredTransactionType] =
     useLocalStorageState("balance");
   const [selectedCategory, setSelectedCategory] = useLocalStorageState(
     "selectedCategory",
     { defaultValue: "" }
   );
-  const [isCustomDatePickerOpen, setIsCustomDatePickerOpen] = useState(false);
 
   const [sortOrder, setSortOrder] = useState("desc");
   const [selectedTimeframe, setSelectedTimeframe] = useState(null);
@@ -53,6 +34,101 @@ export default function HomePage({
     start: null,
     end: null,
   });
+  const [isCustomDatePickerOpen, setIsCustomDatePickerOpen] = useState(false);
+  const [isDeletingId, setIsDeletingId] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editTransaction, setEditTransaction] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [activeSelectionId, setActiveSelectionId] = useState(null);
+
+  function handleOpenEditMode(transaction) {
+    setIsEditing(true);
+    setEditTransaction(transaction);
+    setIsModalOpen(true);
+  }
+
+  function openModal() {
+    setIsModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsModalOpen(false);
+  }
+
+  function openSelection(selectionId) {
+    setActiveSelectionId(selectionId);
+  }
+
+  function closeSelection() {
+    setActiveSelectionId(null);
+  }
+
+  function handleOpenDeleteDialogue(id) {
+    setIsDeletingId(id);
+  }
+
+  function handleCancelDeleteDialogue() {
+    setIsDeletingId(null);
+  }
+
+  function toggleForm() {
+    setShowForm(!showForm);
+  }
+
+  async function handleAddTransaction(data) {
+    const response = await fetch("/api/transactions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const newTransaction = await response.json();
+
+    mutateTransactions();
+    setSuccessMessage("Transaction successfully added!");
+  }
+
+  async function handleDeleteTransaction(id) {
+    const response = await fetch(`/api/transactions/${id}`, {
+      method: "DELETE",
+    });
+    mutateTransactions();
+    setSuccessMessage("Transaction successfully deleted!");
+  }
+
+  async function handleEditTransaction(updatedTransaction) {
+    const response = await fetch(
+      `/api/transactions/${updatedTransaction._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTransaction),
+      }
+    );
+
+    if (response.ok) {
+      mutateTransactions();
+      setSuccessMessage("Transaction successfully updated!");
+    } else {
+      console.error("Failed to update transaction.");
+    }
+  }
+
+  function handleFormSubmit(updatedTransaction) {
+    handleEditTransaction({ ...editTransaction, ...updatedTransaction });
+
+    closeModal();
+  }
+
+  function handleConfirmDelete(transaction) {
+    handleDeleteTransaction(transaction._id);
+    setIsDeletingId(false);
+  }
 
   function calculateDateRange(days) {
     const currentDate = new Date();

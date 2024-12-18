@@ -18,7 +18,6 @@ export default function TransactionItem({
   activeSelectionId,
   openSelection,
   closeSelection,
-  categories,
 }) {
   const formattedAmount = formatNumber(transaction);
   const isDeleting = isDeletingId === transaction._id;
@@ -150,10 +149,6 @@ const StyledCancelButton = styled.button`
   height: fit-content;
   font-size: var(--font-size-xs);
   line-height: 1.4;
-
-  &:hover {
-    background-color: transparent;
-  }
 `;
 
 const StyledConfirmButton = styled.button`
@@ -165,8 +160,4 @@ const StyledConfirmButton = styled.button`
   padding: 4px 8px;
   font-size: var(--font-size-xs);
   line-height: 1.4;
-
-  &:hover {
-    background-color: var(--friendly-red-color);
-  }
 `;

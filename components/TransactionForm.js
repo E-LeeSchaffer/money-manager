@@ -528,8 +528,4 @@ const StyledButton = styled.button`
   padding: 4px 24px;
   border: none;
   box-shadow: var(--shadow-brand);
-
-  &:hover {
-    outline: var(--border-brand);
-  }
 `;

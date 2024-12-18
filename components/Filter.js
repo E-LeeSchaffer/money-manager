@@ -117,10 +117,6 @@ const StyledFilterButton = styled.button`
   height: 48px;
   background-color: transparent;
   padding-right: 12px;
-
-  &:hover {
-    background-color: transparent;
-  }
 `;
 
 const StyledImage = styled(Image)`

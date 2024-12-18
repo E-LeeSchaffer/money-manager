@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Image from "next/image";
-import { useState } from "react";
+
 import Backdrop from "./Backdrop";
 
 export default function OptionsMenu({
@@ -69,10 +69,6 @@ const StyledToggleButton = styled.button`
   justify-content: end;
   border: none;
   height: fit-content;
-
-  &:hover {
-    background-color: transparent;
-  }
 `;
 
 const StyledOptionsMenu = styled.div`

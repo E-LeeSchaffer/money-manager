@@ -34,10 +34,6 @@ const StyledSearchButton = styled.button`
   border: none;
   height: 48px;
   padding-right: 12px;
-
-  &:hover {
-    background-color: transparent;
-  }
 `;
 
 const StyledImage = styled(Image)`
