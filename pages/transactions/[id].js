@@ -20,6 +20,7 @@ export default function TransactionDetailsPage({
   const {
     data: transactionDetails,
     error: transactionError,
+    isLoading,
     mutate,
   } = useSWR(id ? `/api/transactions/${id}` : null);
   const { mutate: mutateTransactions } = useSWR(`/api/transactions`);
@@ -144,8 +145,12 @@ export default function TransactionDetailsPage({
     mutate();
   }
 
-  if (!router.isReady) {
-    return null;
+  if (!router.isReady || isLoading) {
+    return (
+      <StyledLoadingMessage>
+        Loading transaction details...
+      </StyledLoadingMessage>
+    );
   }
 
   if (!transactionDetails || transactionError) {
@@ -405,6 +410,13 @@ const StyledTextArea = styled.textarea`
   outline: none;
   background-color: inherit;
   min-height: 100px;
+`;
+
+const StyledLoadingMessage = styled.p`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 `;
 
 const StyledPageNotFoundMessage = styled.p`
