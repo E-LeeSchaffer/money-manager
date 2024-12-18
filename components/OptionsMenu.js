@@ -67,7 +67,6 @@ const StyledToggleButton = styled.button`
   background-color: transparent;
   display: flex;
   justify-content: end;
-  padding: 0;
   border: none;
   height: fit-content;
 `;
@@ -77,12 +76,12 @@ const StyledOptionsMenu = styled.div`
   display: flex;
   justify-content: end;
   flex-direction: column;
-  background-color: white;
+  background-color: var(--white-bg-color);
   top: 30px;
   right: 14px;
-  border: 0.1px solid var(--dark-grey-color);
+  border: var(--border-brand);
   border-radius: 4px;
-  gap: 2px;
+  gap: var(--gap-xs);
   padding: 2px;
   z-index: 10;
 `;
@@ -91,4 +90,5 @@ const StyledOptionsSelectButton = styled.button`
   border: none;
   background-color: transparent;
   text-align: end;
+  font-size: var(--font-size-sm);
 `;

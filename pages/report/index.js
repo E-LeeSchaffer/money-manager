@@ -1,3 +1,4 @@
+import BackButton from "@/components/BackButton";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,45 +10,48 @@ const BarChartPage = dynamic(() => import("@/components/Chart"), {
 export default function ReportPage() {
   return (
     <>
-      <StyledBackLink href="/">
-        <StyledImage
-          aria-hidden="true"
-          src="/images/arrow-return-left.svg"
-          alt="edit button"
-          width={15}
-          height={15}
-        />
-        Back
-      </StyledBackLink>
-      <StyledTitle>Report</StyledTitle>
-      <BarChartPage />
+      <StyledPageLinks>
+        <Link href={"/settings"} aria-label="Settings">
+          <Image
+            aria-hidden="true"
+            src={"/images/settings.svg"}
+            alt="filter button"
+            width={20}
+            height={20}
+          />
+        </Link>
+        <Link href={"/profile"} aria-label="Profile">
+          <Image
+            aria-hidden="true"
+            src={"/images/profile.svg"}
+            alt="profile button"
+            width={20}
+            height={20}
+          />
+        </Link>
+      </StyledPageLinks>
+
+      <BackButton />
+      <StyledPageMain>
+        <h2>Report</h2>
+        <BarChartPage />
+      </StyledPageMain>
     </>
   );
 }
 
-const StyledBackLink = styled(Link)`
+const StyledPageLinks = styled.div`
   display: flex;
+  gap: var(--gap-lg);
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  z-index: 2000;
+`;
+
+const StyledPageMain = styled.main`
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  background-color: var(--accent-color);
-  text-decoration: none;
-  width: fit-content;
-  color: black;
-  position: relative;
-  top: 10px;
-  left: 10px;
-  border: var(--accent-color);
-  padding: 4px 8px;
-  border-radius: 4px;
-  display: flex;
-  gap: 0.5rem;
-`;
-
-const StyledImage = styled(Image)`
-  display: flex;
-`;
-
-const StyledTitle = styled.h2`
-  text-align: center;
-  font-size: 1.7rem;
-  font-weight: 700;
+  gap: var(--gap-md);
 `;

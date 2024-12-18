@@ -31,8 +31,9 @@ const StyledSearchContainer = styled.div`
 
 const StyledSearchButton = styled.button`
   background-color: transparent;
-  padding: 0;
   border: none;
+  height: 48px;
+  padding-right: 12px;
 `;
 
 const StyledImage = styled(Image)`

@@ -1,8 +1,6 @@
 import GlobalStyle from "../styles";
 import { useEffect, useState } from "react";
-
 import Layout from "@/components/Layout";
-import { useRouter } from "next/router";
 import { SWRConfig } from "swr";
 
 const fetcher = (url) => fetch(url).then((response) => response.json());
@@ -10,7 +8,6 @@ const fetcher = (url) => fetch(url).then((response) => response.json());
 export default function App({ Component, pageProps }) {
   const [successMessage, setSuccessMessage] = useState("");
 
-  const router = useRouter();
   useEffect(() => {
     if (successMessage !== "") {
       const timer = setTimeout(() => {
@@ -24,7 +21,6 @@ export default function App({ Component, pageProps }) {
   const componentProps = {
     successMessage,
     setSuccessMessage,
-
     ...pageProps,
   };
 
