@@ -1,34 +1,70 @@
 import styled from "styled-components";
+import useLocalStorageState from "use-local-storage-state";
 
 export default function IncomeExpense({
   onFilterChange,
   filteredTransactionType,
+  selectedCategory,
+  transactionsList,
 }) {
-  const handleToggleAccountFilter = (type) => {
-    onFilterChange(type === filteredTransactionType ? "balance" : type);
+  const [selectedType, setSelectedType] = useLocalStorageState(
+    "filteredTransactionType",
+    { defaultValue: "expense" }
+  );
+
+  const filteredTransactions = transactionsList.filter((transaction) => {
+    if (selectedCategory) {
+      return transaction?.category?.name === selectedCategory;
+    }
+    return true;
+  });
+
+  const incomeTotal = filteredTransactions
+    .filter((transaction) => transaction.type === "income")
+    .reduce((accumulator, transaction) => accumulator + transaction.amount, 0);
+
+  const expenseTotal = filteredTransactions
+    .filter((transaction) => transaction.type === "expense")
+    .reduce((accumulator, transaction) => accumulator + transaction.amount, 0);
+
+  const profit = incomeTotal - expenseTotal;
+
+  const handleFilterChange = (type) => {
+    onFilterChange(type);
+    setSelectedType(type);
   };
+
   return (
     <>
       <StyledButtonContainer>
         <StyledButton
-          onClick={() => handleToggleAccountFilter("total")}
+          onClick={() => handleFilterChange("total")}
           $active={filteredTransactionType === "total"}
         >
           Profit
         </StyledButton>
         <StyledButton
-          onClick={() => handleToggleAccountFilter("income")}
+          onClick={() => handleFilterChange("income")}
           $active={filteredTransactionType === "income"}
         >
           Income
         </StyledButton>
         <StyledButton
-          onClick={() => handleToggleAccountFilter("expense")}
+          onClick={() => handleFilterChange("expense")}
           $active={filteredTransactionType === "expense"}
         >
           Expense
         </StyledButton>
       </StyledButtonContainer>
+
+      <div>
+        {filteredTransactions.map((transaction) => (
+          <div key={transaction.id}>
+            <p>{transaction.name}</p>
+            <p>{transaction.amount} €</p>
+          </div>
+        ))}
+      </div>
     </>
   );
 }

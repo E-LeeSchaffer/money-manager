@@ -7,7 +7,6 @@ import { useState } from "react";
 import useLocalStorageState from "use-local-storage-state";
 import Image from "next/image";
 import AccountBalance from "@/components/AccountBalance";
-import IncomeExpense from "@/components/IncomeExpense";
 import Search from "@/components/Search";
 import SortControl from "@/components/SortControl";
 import Link from "next/link";
@@ -18,9 +17,6 @@ export default function HomePage({ successMessage, setSuccessMessage }) {
   const { data: transactionsList = [], mutate: mutateTransactions } =
     useSWR(`/api/transactions`);
   const { data: categories = [] } = useSWR(`/api/categories`);
-
-  const [filteredTransactionType, setFilteredTransactionType] =
-    useLocalStorageState("balance");
   const [selectedCategory, setSelectedCategory] = useLocalStorageState(
     "selectedCategory",
     { defaultValue: "" }
@@ -256,16 +252,6 @@ export default function HomePage({ successMessage, setSuccessMessage }) {
 
   const currentBalance = incomeTotal - expenseTotal;
 
-  const filteredIncome = filteredTransactions
-    .filter((transaction) => transaction.type === "income")
-    .reduce((accumulator, transaction) => accumulator + transaction.amount, 0);
-
-  const filteredExpense = filteredTransactions
-    .filter((transaction) => transaction.type === "expense")
-    .reduce((accumulator, transaction) => accumulator + transaction.amount, 0);
-
-  const profit = filteredIncome - filteredExpense;
-
   return (
     <>
       <StyledPageLinks>
@@ -326,18 +312,7 @@ export default function HomePage({ successMessage, setSuccessMessage }) {
 
         {!showForm && (
           <StyledBalanceContainer>
-            <IncomeExpense
-              transactions={filteredTransactions}
-              onFilterChange={setFilteredTransactionType}
-              filteredTransactionType={filteredTransactionType}
-            />
-            <AccountBalance
-              income={filteredIncome}
-              expense={filteredExpense}
-              total={profit}
-              currentBalance={currentBalance}
-              filteredTransactionType={filteredTransactionType}
-            />
+            <AccountBalance currentBalance={currentBalance} />
           </StyledBalanceContainer>
         )}
 
