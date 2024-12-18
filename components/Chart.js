@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { BarChart, YAxis, XAxis, Bar } from "recharts";
 import useSWR from "swr";
+import { capitalizeFirstLetter } from "@/lib/utils";
 
 export default function BarChartPage() {
   const { data: transactionsList = [] } = useSWR("/api/transactions");
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [transactionType, setTransactionType] = useState("expense");
+  const [transactionType, setTransactionType] = useState("income");
 
   const totalByCategory = (type) =>
     transactionsList
@@ -31,9 +32,9 @@ export default function BarChartPage() {
 
   const chartData = getChartData();
 
-  const renderCustomLabel = ({ x, y, width, value }) => {
+  const renderCustomLabel = ({ x, y, width, height, value }) => {
     return (
-      <StyledLabelText x={x + width + 10} y={y + 22}>
+      <StyledLabelText x={x + width + 10} y={y + height / 2 + 5}>
         {value} €
       </StyledLabelText>
     );
@@ -68,10 +69,6 @@ export default function BarChartPage() {
     );
   };
 
-  const handleTransactionTypeChange = (type) => {
-    setTransactionType(type);
-  };
-
   const totalAmountForSelectedCategory = selectedCategory
     ? totalByCategory(transactionType)[selectedCategory] || 0
     : Object.values(totalByCategory(transactionType)).reduce(
@@ -83,37 +80,33 @@ export default function BarChartPage() {
     <>
       <StyledButtonContainer>
         <StyledButton
-          onClick={() => handleTransactionTypeChange("expense")}
-          $active={transactionType === "expense"}
-        >
-          Expense
-        </StyledButton>
-        <StyledButton
-          onClick={() => handleTransactionTypeChange("income")}
+          onClick={() => setTransactionType("income")}
           $active={transactionType === "income"}
         >
           Income
         </StyledButton>
+        <StyledButton
+          onClick={() => setTransactionType("expense")}
+          $active={transactionType === "expense"}
+        >
+          Expense
+        </StyledButton>
       </StyledButtonContainer>
 
-      <StyledCardWrapper>
-        <StyledSummaryCard>
-          <StyledSummaryTitle>{selectedCategory}</StyledSummaryTitle>
-          <p>
-            {selectedCategory
-              ? `Total ${
-                  transactionType === "expense" ? "Expense" : "Income"
-                }: ${totalByCategory(transactionType)[selectedCategory] || 0} €`
-              : `Total ${
-                  transactionType === "expense" ? "Expense" : "Income"
-                }: ${totalAmountForSelectedCategory} €`}
-          </p>
-        </StyledSummaryCard>
-      </StyledCardWrapper>
+      <StyledSummaryCard>
+        <h4>
+          {selectedCategory
+            ? selectedCategory
+            : `Total ${capitalizeFirstLetter(transactionType)}`}
+        </h4>
+        <StyledAmount>
+          {selectedCategory
+            ? `${totalByCategory(transactionType)[selectedCategory] || 0} €`
+            : `${totalAmountForSelectedCategory} €`}
+        </StyledAmount>
+      </StyledSummaryCard>
       <Card>
-        <h3>
-          {transactionType === "expense" ? "Expenses" : "Income"} by Category
-        </h3>
+        <h3>{capitalizeFirstLetter(transactionType)} by Category</h3>
         <div>
           <ChartContainer>
             <BarChart
@@ -150,11 +143,16 @@ export default function BarChartPage() {
   );
 }
 
+const StyledAmount = styled.p`
+  font-size: var(--font-size-md);
+`;
+
 const StyledButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
   gap: var(--gap-md);
+  margin-bottom: 10px;
   width: 250px;
 `;
 
@@ -164,10 +162,10 @@ const StyledButton = styled.button`
   justify-content: center;
   align-items: center;
   padding: 6px 16px;
-  width: 120px;
+  width: 80px;
   box-shadow: var(--shadow-brand);
   font-size: var(--font-size-xs);
-  line-height: 0.6;
+  line-height: 1.4;
   outline: var(--border-brand);
   background-color: ${({ $active }) =>
     $active ? "var(--dark-grey-color)" : "var(--white-bg-color)"};
@@ -187,13 +185,13 @@ const Card = styled.div`
   box-shadow: var(--shadow-brand);
   width: 300px;
   padding: 8px 16px;
-  margin-top: 24px;
 `;
 
 const ChartContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 230px;
 `;
 
 const CardFooter = styled.div`
@@ -205,11 +203,6 @@ const FooterText = styled.div`
   font-size: var(--font-size-xs);
 `;
 
-const StyledCardWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
 const StyledSummaryCard = styled.div`
   display: flex;
   flex-direction: column;
@@ -217,12 +210,9 @@ const StyledSummaryCard = styled.div`
   align-items: center;
   border-radius: 16px;
   width: 250px;
-  height: 70px;
+  min-height: 80px;
   background-color: var(--accent-color);
-  box-shadow: var(--shadow-brand);
-`;
-
-const StyledSummaryTitle = styled.h4`
-  font-size: var(--font-size-md);
-  font-weight: bold;
+  box-shadow: var(--shadow-accent);
+  gap: var(--gap-sm);
+  margin-bottom: 20px;
 `;
