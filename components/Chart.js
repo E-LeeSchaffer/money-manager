@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { BarChart, YAxis, XAxis, Bar } from "recharts";
 import useSWR from "swr";
 import { capitalizeFirstLetter } from "@/lib/utils";
+import { formatNumber } from "@/lib/utils";
 
 export default function BarChartPage() {
   const { data: transactionsList = [] } = useSWR("/api/transactions");
@@ -32,14 +33,6 @@ export default function BarChartPage() {
 
   const chartData = getChartData();
 
-  const renderCustomLabel = ({ x, y, width, height, value }) => {
-    return (
-      <StyledLabelText x={x + width + 10} y={y + height / 2 + 5}>
-        {value} €
-      </StyledLabelText>
-    );
-  };
-
   const handleCategoryClick = (categoryName) => {
     setSelectedCategory((prev) =>
       prev === categoryName ? null : categoryName
@@ -48,7 +41,6 @@ export default function BarChartPage() {
 
   const CustomTick = ({ x, y, payload }) => {
     const isSelected = selectedCategory === payload.value;
-
     return (
       <text
         x={x + 5}
@@ -76,6 +68,10 @@ export default function BarChartPage() {
         0
       );
 
+  const formattedAmount = formatNumber({
+    amount: totalAmountForSelectedCategory,
+  });
+
   return (
     <>
       <StyledButtonContainer>
@@ -101,8 +97,10 @@ export default function BarChartPage() {
         </h4>
         <StyledAmount>
           {selectedCategory
-            ? `${totalByCategory(transactionType)[selectedCategory] || 0} €`
-            : `${totalAmountForSelectedCategory} €`}
+            ? formatNumber({
+                amount: totalByCategory(transactionType)[selectedCategory] || 0,
+              })
+            : formattedAmount}
         </StyledAmount>
       </StyledSummaryCard>
       <Card>
@@ -142,6 +140,14 @@ export default function BarChartPage() {
     </>
   );
 }
+
+const renderCustomLabel = ({ x, y, width, height, value }) => {
+  return (
+    <StyledLabelText x={x + width + 10} y={y + height / 2 + 5}>
+      {value} €
+    </StyledLabelText>
+  );
+};
 
 const StyledAmount = styled.p`
   font-size: var(--font-size-md);
