@@ -2,37 +2,36 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { BarChart, YAxis, XAxis, Bar } from "recharts";
 import useSWR from "swr";
+import { capitalizeFirstLetter } from "@/lib/utils";
+import { formatNumber } from "@/lib/utils";
 
 export default function BarChartPage() {
   const { data: transactionsList = [] } = useSWR("/api/transactions");
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [transactionType, setTransactionType] = useState("income");
 
-  const totalExpensesByCategory = transactionsList
-    .filter((transaction) => transaction.type === "expense")
-    .reduce((accumulator, transaction) => {
-      const categoryName = transaction.category?.name || "Uncategorized";
+  const totalByCategory = (type) =>
+    transactionsList
+      .filter((transaction) => transaction.type === type)
+      .reduce((accumulator, transaction) => {
+        const categoryName = transaction.category?.name || "Uncategorized";
+        accumulator[categoryName] =
+          (accumulator[categoryName] || 0) + transaction.amount;
+        return accumulator;
+      }, {});
 
-      accumulator[categoryName] =
-        (accumulator[categoryName] || 0) + transaction.amount;
-
-      return accumulator;
-    }, {});
-
-  const chartData = Object.entries(totalExpensesByCategory)
-    .map(([name, value]) => ({
-      name,
-      value,
-      fill: "var(--text-color-dark)",
-    }))
-    .sort((a, b) => b.value - a.value);
-
-  const renderCustomLabel = ({ x, y, width, value }) => {
-    return (
-      <StyledLabelText x={x + width + 10} y={y + 22}>
-        {value} €
-      </StyledLabelText>
-    );
+  const getChartData = () => {
+    const data = totalByCategory(transactionType);
+    return Object.entries(data)
+      .map(([name, value]) => ({
+        name,
+        value,
+        fill: "var(--text-color-dark)",
+      }))
+      .sort((a, b) => b.value - a.value);
   };
+
+  const chartData = getChartData();
 
   const handleCategoryClick = (categoryName) => {
     setSelectedCategory((prev) =>
@@ -42,7 +41,6 @@ export default function BarChartPage() {
 
   const CustomTick = ({ x, y, payload }) => {
     const isSelected = selectedCategory === payload.value;
-
     return (
       <text
         x={x + 5}
@@ -63,10 +61,50 @@ export default function BarChartPage() {
     );
   };
 
+  const totalAmountForSelectedCategory = selectedCategory
+    ? totalByCategory(transactionType)[selectedCategory] || 0
+    : Object.values(totalByCategory(transactionType)).reduce(
+        (a, b) => a + b,
+        0
+      );
+
+  const formattedAmount = formatNumber({
+    amount: totalAmountForSelectedCategory,
+  });
+
   return (
     <>
+      <StyledButtonContainer>
+        <StyledButton
+          onClick={() => setTransactionType("income")}
+          $active={transactionType === "income"}
+        >
+          Income
+        </StyledButton>
+        <StyledButton
+          onClick={() => setTransactionType("expense")}
+          $active={transactionType === "expense"}
+        >
+          Expense
+        </StyledButton>
+      </StyledButtonContainer>
+
+      <StyledSummaryCard>
+        <h4>
+          {selectedCategory
+            ? selectedCategory
+            : `Total ${capitalizeFirstLetter(transactionType)}`}
+        </h4>
+        <StyledAmount>
+          {selectedCategory
+            ? formatNumber({
+                amount: totalByCategory(transactionType)[selectedCategory] || 0,
+              })
+            : formattedAmount}
+        </StyledAmount>
+      </StyledSummaryCard>
       <Card>
-        <h3>Expenses by Category</h3>
+        <h3>{capitalizeFirstLetter(transactionType)} by Category</h3>
         <div>
           <ChartContainer>
             <BarChart
@@ -99,20 +137,45 @@ export default function BarChartPage() {
           <FooterText>Updated with recent transactions</FooterText>
         </CardFooter>
       </Card>
-
-      <StyledCardWrapper>
-        <StyledSummaryCard>
-          <StyledSummaryTitle>{selectedCategory}</StyledSummaryTitle>
-          <p>
-            {selectedCategory
-              ? `Total Expense: ${totalExpensesByCategory[selectedCategory]} €`
-              : "Select a category for details"}
-          </p>
-        </StyledSummaryCard>
-      </StyledCardWrapper>
     </>
   );
 }
+
+const renderCustomLabel = ({ x, y, width, height, value }) => {
+  return (
+    <StyledLabelText x={x + width + 10} y={y + height / 2 + 5}>
+      {value} €
+    </StyledLabelText>
+  );
+};
+
+const StyledAmount = styled.p`
+  font-size: var(--font-size-md);
+`;
+
+const StyledButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-md);
+  margin-bottom: 10px;
+  width: 250px;
+`;
+
+const StyledButton = styled.button`
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 16px;
+  width: 80px;
+  box-shadow: var(--shadow-brand);
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
+  outline: var(--border-brand);
+  background-color: ${({ $active }) =>
+    $active ? "var(--dark-grey-color)" : "var(--white-bg-color)"};
+`;
 
 const StyledLabelText = styled.text`
   fill: black;
@@ -134,6 +197,7 @@ const ChartContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 230px;
 `;
 
 const CardFooter = styled.div`
@@ -145,11 +209,6 @@ const FooterText = styled.div`
   font-size: var(--font-size-xs);
 `;
 
-const StyledCardWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
 const StyledSummaryCard = styled.div`
   display: flex;
   flex-direction: column;
@@ -157,12 +216,9 @@ const StyledSummaryCard = styled.div`
   align-items: center;
   border-radius: 16px;
   width: 250px;
-  height: 70px;
+  min-height: 80px;
   background-color: var(--accent-color);
-  box-shadow: var(--shadow-brand);
-`;
-
-const StyledSummaryTitle = styled.h4`
-  font-size: var(--font-size-md);
-  font-weight: bold;
+  box-shadow: var(--shadow-accent);
+  gap: var(--gap-sm);
+  margin-bottom: 20px;
 `;

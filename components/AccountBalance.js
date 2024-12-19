@@ -1,23 +1,10 @@
 import styled from "styled-components";
 
 export default function AccountBalance({
-  income,
-  expense,
-  total,
   currentBalance,
   filteredTransactionType,
 }) {
-  const currentBalanceType = currentBalance < 0 ? "expense" : "income";
-
-  const titleMap = {
-    income: "Total Income",
-    expense: "Total Expense",
-    total: "Profit",
-  };
-
-  const title = titleMap[filteredTransactionType] || "Current Balance";
-
-  function formatNumberWithoutSign({ amount, type }) {
+  function formatNumberWithoutSign(amount) {
     return new Intl.NumberFormat("de-DE", {
       style: "currency",
       currency: "EUR",
@@ -25,7 +12,7 @@ export default function AccountBalance({
     }).format(amount);
   }
 
-  function formatNumberWithSign({ amount, type }) {
+  function formatNumberWithSign(amount) {
     return new Intl.NumberFormat("de-DE", {
       style: "currency",
       currency: "EUR",
@@ -33,48 +20,15 @@ export default function AccountBalance({
     }).format(amount);
   }
 
-  const amountMap = {
-    income: income,
-    expense: expense,
-    total: total,
-  };
-
-  const displayAmount =
-    filteredTransactionType in amountMap
-      ? amountMap[filteredTransactionType]
-      : currentBalance;
-
-  const displayAmountType = displayAmount < 0 ? "expense" : "income";
-
   const formattedAmount =
     filteredTransactionType === "balance" || filteredTransactionType === "total"
-      ? formatNumberWithSign({
-          amount: displayAmount,
-          type: currentBalanceType,
-        })
-      : formatNumberWithoutSign({
-          amount: displayAmount,
-          type: currentBalanceType,
-        });
+      ? formatNumberWithSign(currentBalance)
+      : formatNumberWithoutSign(currentBalance);
 
   return (
     <StyledAccountBalanceContainer>
-      <h4>{title}</h4>
-      <StyledCurrentBalance
-        type={displayAmountType}
-        $filteredType={filteredTransactionType}
-      >
-        {formattedAmount}
-      </StyledCurrentBalance>
-      {filteredTransactionType !== "balance" && (
-        <StyledCurrentBalanceInfo>
-          Current Balance:{" "}
-          {formatNumberWithSign({
-            amount: currentBalance,
-            type: currentBalanceType,
-          })}
-        </StyledCurrentBalanceInfo>
-      )}
+      <h4>Current Balance</h4>
+      <StyledCurrentBalance>{formattedAmount}</StyledCurrentBalance>
     </StyledAccountBalanceContainer>
   );
 }
@@ -101,9 +55,4 @@ const StyledCurrentBalance = styled.div`
       ? "var(--friendly-red-color)"
       : "var(--friendly-green-color)";
   }};
-`;
-
-const StyledCurrentBalanceInfo = styled.div`
-  font-size: var(--font-size-xs);
-  line-height: 1.4;
 `;
